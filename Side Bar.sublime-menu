@@ -1,0 +1,11 @@
+[
+    { "caption": "-" },
+    {
+        "caption": "PHP CodeSniffer",
+        "children":
+        [
+            { "command": "phpcs_sniff_this_file", "args": { "paths": [] } },
+            { "command": "phpcs_sniff_all_files", "args": { "paths": [] } }
+        ]
+    }
+]

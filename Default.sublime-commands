@@ -1,0 +1,6 @@
+[
+    {
+        "caption": "PHP CodeSniffer: Sniff This File",
+        "command": "phpcs_sniff_this_file"
+    }
+]

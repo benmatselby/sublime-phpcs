@@ -1,0 +1,7 @@
+{
+    "phpcs_additional_args":
+    {
+        "--report": "checkstyle"
+    },
+    "phpcs_execute_on_save": true
+}

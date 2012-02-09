@@ -1,0 +1,35 @@
+Sublime PHP CodeSniffer
+=======================
+
+This plugin adds PHP CodeSniffer support to Sublime Text 2.
+
+Installation
+------------
+
+Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> PHP CodeSniffer) to install this plugin.
+
+PHP CodeSniffer Support For Sublime Text 2
+------------------------------------------
+
+This plugin adds support for running PHP CodeSniffer from inside Sublime Text 2.
+
+Right-click in the editor to:
+
+* Sniff the current file
+
+Right-click in the side-bar to:
+
+* Sniff all files in a folder
+
+You can also open up the Command Palette (CTRL + SHIFT + P on Linux), and type
+'PHP CodeSniffer' to see what you can do with PHP CodeSniffer in the currently open file.
+
+PHP CodeSniffer support is based on:
+[PHPUnit plugin](https://github.com/stuartherbert/sublime-phpunit) which is based on
+[Ruby Tests plugin](https://github.com/maltize/sublime-text-2-ruby-tests)_
+
+
+Contributions Welcome
+---------------------
+
+Requests for features, and pull requests with patches, are most welcome :)

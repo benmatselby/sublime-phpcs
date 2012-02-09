@@ -1,0 +1,10 @@
+[
+    { "caption": "-" },
+    {
+        "caption": "PHP CodeSniffer",
+        "children":
+        [
+            { "command": "phpcs_sniff_this_file" }
+         ]
+    }
+]
