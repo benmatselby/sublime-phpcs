@@ -8,6 +8,11 @@ Installation
 
 Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> PHP CodeSniffer) to install this plugin.
 
+Or
+
+Simply checkout the git repo into “~/Library/Application Support/Sublime Text 2/Packages/Phpcs or the equivalent folder on Windows or Linux.
+
+
 PHP CodeSniffer Support For Sublime Text 2
 ------------------------------------------
 
