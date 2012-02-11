@@ -4,7 +4,8 @@
         "caption": "PHP CodeSniffer",
         "children":
         [
-            { "command": "phpcs_sniff_this_file" }
-         ]
+            { "command": "phpcs_sniff_this_file" },
+            { "command": "phpcs_clear_sniffer_marks" }
+        ]
     }
 ]

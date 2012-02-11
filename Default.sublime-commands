@@ -2,5 +2,9 @@
     {
         "caption": "PHP CodeSniffer: Sniff This File",
         "command": "phpcs_sniff_this_file"
+    },
+    {
+        "caption": "PHP CodeSniffer: Clear Sniffer Marks",
+        "command": "phpcs_clear_sniffer_marks"
     }
 ]

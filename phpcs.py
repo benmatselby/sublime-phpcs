@@ -7,6 +7,7 @@ import time
 import thread
 import sublime
 import sublime_plugin
+from xml.dom.minidom import parse, parseString
 
 
 class Pref:
@@ -14,135 +15,10 @@ class Pref:
         settings = sublime.load_settings('phpcs.sublime-settings')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = settings.get('phpcs_execute_on_save', {})
+        Pref.phpcs_show_gutter_marks = settings.get('phpcs_show_gutter_marks')
+        Pref.phpcs_show_quick_panel = settings.get('phpcs_show_quick_panel')
 
 Pref().load()
-
-
-# the AsyncProcess class has been cribbed from:
-# https://github.com/maltize/sublime-text-2-ruby-tests/blob/master/run_ruby_test.py
-class AsyncProcess(object):
-    def __init__(self, cmd, listener):
-        self.cmd = cmd
-        self.listener = listener
-        print "DEBUG_EXEC: " + self.cmd
-        self.proc = subprocess.Popen([self.cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if self.proc.stdout:
-            thread.start_new_thread(self.read_stdout, ())
-        if self.proc.stderr:
-            thread.start_new_thread(self.read_stderr, ())
-
-    def read_stdout(self):
-        while True:
-            data = os.read(self.proc.stdout.fileno(), 2 ** 15)
-            if data != "":
-                sublime.set_timeout(functools.partial(self.listener.append_data, self.proc, data), 0)
-            else:
-                self.proc.stdout.close()
-                self.listener.is_running = False
-                break
-
-    def read_stderr(self):
-        while True:
-            data = os.read(self.proc.stderr.fileno(), 2 ** 15)
-            if data != "":
-                sublime.set_timeout(functools.partial(self.listener.append_data, self.proc, data), 0)
-            else:
-                self.proc.stderr.close()
-                self.listener.is_running = False
-                self.listener.append_data(self.proc, "\n--- PROCESS COMPLETE ---")
-                break
-
-
-# the StatusProcess class has been cribbed from:
-# https://github.com/maltize/sublime-text-2-ruby-tests/blob/master/run_ruby_test.py
-class StatusProcess(object):
-    def __init__(self, msg, listener):
-        self.msg = msg
-        self.listener = listener
-        thread.start_new_thread(self.run_thread, ())
-
-    def run_thread(self):
-        progress = ""
-        while True:
-            if self.listener.is_running:
-                if len(progress) >= 10:
-                    progress = ""
-                progress += "."
-                sublime.set_timeout(functools.partial(self.listener.update_status, self.msg, progress), 0)
-                time.sleep(1)
-            else:
-                break
-
-
-class OutputView(object):
-    def __init__(self, name, window):
-        self.output_name = name
-        self.window = window
-
-    def show_output(self):
-        self.ensure_output_view()
-        self.window.run_command("show_panel", {"panel": "output." + self.output_name})
-
-    def show_empty_output(self):
-        self.ensure_output_view()
-        self.clear_output_view()
-        self.show_output()
-
-    def ensure_output_view(self):
-        if not hasattr(self, 'output_view'):
-            self.output_view = self.window.get_output_panel(self.output_name)
-
-    def clear_output_view(self):
-        self.ensure_output_view()
-        self.output_view.set_read_only(False)
-        edit = self.output_view.begin_edit()
-        self.output_view.erase(edit, sublime.Region(0, self.output_view.size()))
-        self.output_view.end_edit(edit)
-        self.output_view.set_read_only(True)
-
-    def append_data(self, proc, data):
-        str = data.decode("utf-8")
-        str = str.replace('\r\n', '\n').replace('\r', '\n')
-
-        selection_was_at_end = (len(self.output_view.sel()) == 1
-          and self.output_view.sel()[0]
-            == sublime.Region(self.output_view.size()))
-        self.output_view.set_read_only(False)
-        edit = self.output_view.begin_edit()
-        self.output_view.insert(edit, self.output_view.size(), str)
-        if selection_was_at_end:
-            self.output_view.show(self.output_view.size())
-        self.output_view.end_edit(edit)
-        self.output_view.set_read_only(True)
-
-
-class CommandBase:
-    def __init__(self, window):
-        self.window = window
-
-    def show_output(self):
-        if not hasattr(self, 'output_view'):
-            self.output_view = OutputView('phpcs', self.window)
-
-        self.output_view.show_output()
-
-    def show_empty_output(self):
-        if not hasattr(self, 'output_view'):
-            self.output_view = OutputView('phpcs', self.window)
-
-        self.output_view.clear_output_view()
-        self.output_view.show_output()
-
-    def start_async(self, caption, executable):
-        self.is_running = True
-        self.proc = AsyncProcess(executable, self)
-        StatusProcess(caption, self)
-
-    def append_data(self, proc, data):
-        self.output_view.append_data(proc, data)
-
-    def update_status(self, msg, progress):
-        sublime.status_message(msg + " " + progress)
 
 
 class ActiveFile:
@@ -162,45 +38,26 @@ class ActiveView(ActiveFile):
         return self.view.file_name()
 
 
-class ActiveWindow(ActiveFile):
-    def file_name(self):
-        if hasattr(self, '_file_name'):
-            return self._file_name
-
-        return None
-
-    def determine_filename(self, args=[]):
-        if len(args) == 0:
-            active_view = self.window.active_view()
-            filename = active_view.file_name()
-        else:
-            filename = args[0]
-
-        self._file_name = filename
-
-    def is_php_buffer(self):
-        ext = os.path.splitext(self.file_name())[1]
-        if ext == 'php':
-            return True
-        return False
-
-
 class PhpcsTextBase(sublime_plugin.TextCommand, ActiveView):
     def run(self, args):
         print 'Not implemented'
 
 
-class PhpcsCommand(CommandBase):
-    def run(self, path):
-        self.show_empty_output()
+class PhpcsCommand():
+    def __init__(self, window):
+        self.window = window
+        self.checkstyleData = []
 
+    def run(self, path):
+
+        self.window.active_view().erase_regions("checkstyle")
         if os.path.isdir(path):
             dir = path
         else:
             dir = os.path.dirname(path)
         target = path
 
-        cmd = "cd '" + dir + "' && phpcs"
+        cmd = "cd '" + dir + "' && phpcs --report=checkstyle"
 
         # Add the additional arguments from the settings file to the command
         for key, value in Pref.phpcs_additional_args.items():
@@ -209,9 +66,49 @@ class PhpcsCommand(CommandBase):
                 cmd = cmd + "=" + value
 
         cmd = cmd + " '" + path + "'"
+        self.execute(cmd)
 
-        self.append_data(self, "$ " + cmd + "\n")
-        self.start_async("Running PHP CodeSniffer", cmd)
+    def execute(self, cmd):
+        print cmd
+        proc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
+        if proc.stdout:
+            regionSet = []
+            errorList = []
+            data = proc.communicate()[0]
+            print data
+            dataXml = parseString(data)
+
+            files = dataXml.getElementsByTagName("file")
+
+            for fileXml in files:
+                errors = fileXml.getElementsByTagName("error")
+                for errorXml in errors:
+                    line = errorXml.getAttribute("line")
+                    message = "(" + line + ") - " + errorXml.getAttribute("message")
+
+                    pt = self.window.active_view().text_point(int(line) - 1, 0)
+
+                    regionSet.append(sublime.Region(pt))
+                    errorList.append(message)
+                    self.checkstyleData.append([line, message, pt])
+
+            if data != "":
+                if Pref.phpcs_show_gutter_marks == True:
+                    self.window.active_view().add_regions("checkstyle", regionSet, "checkstyle", "dot", sublime.PERSISTENT)
+
+                if Pref.phpcs_show_quick_panel == True and len(errorList) > 0:
+                    self.window.active_view().window().show_quick_panel(errorList, self.on_quick_panel_done)
+            else:
+                print "no phpcs sniff errors"
+
+    def on_quick_panel_done(self, picked):
+        if picked == -1:
+            return
+
+        pt = self.checkstyleData[picked][2]
+        self.window.active_view().sel().clear()
+        self.window.active_view().sel().add(sublime.Region(pt))
+        self.window.active_view().show(pt)
 
 
 class PhpcsSniffThisFile(PhpcsTextBase):
@@ -232,18 +129,21 @@ class PhpcsSniffThisFile(PhpcsTextBase):
             return False
         return True
 
-class PhpcsWindowBase(sublime_plugin.WindowCommand, ActiveWindow):
-    def run(self, paths=[]):
-        print "not implemented"
 
-class PhpcsSniffAllFiles(PhpcsWindowBase):
-    def run(self, paths=[]):
-
-        cmd = PhpcsCommand(self.window)
-        cmd.run(paths[0])
+class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
+    def run(self, args):
+        self.view.erase_regions("checkstyle")
 
     def description(self):
-        return 'Sniff all files...'
+        if not self.is_php_buffer():
+            return "Invalid file format"
+        else:
+            return 'Clear sniffer marks...'
+
+    def is_enabled(self):
+        if not self.is_php_buffer():
+            return False
+        return True
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):

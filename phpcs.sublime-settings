@@ -1,7 +1,24 @@
 {
-    "phpcs_additional_args":
-    {
-        "--report": "checkstyle"
+    //
+    // Additional arguments you can specify into the application
+    //
+    // Example:
+    //
+    // {
+    //     "--standard": "zend",
+    //     "-n"
+    // }
+    //
+    "phpcs_additional_args": {
+        "-n": ""
     },
-    "phpcs_execute_on_save": true
+
+    // Execute the sniffer on file save
+    "phpcs_execute_on_save": true,
+
+    // Show the errors in the gutter
+    "phpcs_show_gutter_marks": true,
+
+    // Show the errors in the quick panel so you can then goto line
+    "phpcs_show_quick_panel": true
 }
