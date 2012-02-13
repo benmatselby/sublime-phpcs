@@ -22,10 +22,6 @@ Right-click in the editor to:
 
 * Sniff the current file
 
-Right-click in the side-bar to:
-
-* Sniff all files in a folder
-
 You can also open up the Command Palette (CTRL + SHIFT + P on Linux), and type
 'PHP CodeSniffer' to see what you can do with PHP CodeSniffer in the currently open file.
 
@@ -35,9 +31,10 @@ Configuration
 
 You can configure:
 
-* phpcs_additional_args - Arguments that you want appending to the phpcs command
-* phpcs_execute_on_save - Do you want the code sniffer to be run when you save a php file
-
+* phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
+* phpcs_execute_on_save - Do you want the code sniffer plugin to run on file save for php files?
+* phpcs_show_gutter_marks - Do you want the errors to be displayed in the gutter?
+* phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
 
 Contributions Welcome
 ---------------------
