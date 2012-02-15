@@ -10,15 +10,23 @@ import sublime_plugin
 from xml.dom.minidom import parse, parseString
 
 
+settings = sublime.load_settings('phpcs.sublime-settings')
+
 class Pref:
     def load(self):
-        settings = sublime.load_settings('phpcs.sublime-settings')
+
+        print "Loading phpcs settings"
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = settings.get('phpcs_execute_on_save', {})
         Pref.phpcs_show_gutter_marks = settings.get('phpcs_show_gutter_marks')
         Pref.phpcs_show_quick_panel = settings.get('phpcs_show_quick_panel')
 
 Pref().load()
+
+settings.add_on_change('phpcs_additional_args', lambda:Pref().load())
+settings.add_on_change('phpcs_execute_on_save', lambda:Pref().load())
+settings.add_on_change('phpcs_show_gutter_marks', lambda:Pref().load())
+settings.add_on_change('phpcs_show_quick_panel', lambda:Pref().load())
 
 
 class ActiveFile:

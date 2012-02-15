@@ -40,7 +40,7 @@ Contributions Welcome
 ---------------------
 
 PHP CodeSniffer support is based on:
-[PHPUnit plugin](https://github.com/stuartherbert/sublime-phpunit) which is based on
+_[PHPUnit plugin](https://github.com/stuartherbert/sublime-phpunit) which is based on
 [Ruby Tests plugin](https://github.com/maltize/sublime-text-2-ruby-tests)_
 
 Requests for features, and pull requests with patches, are most welcome :)

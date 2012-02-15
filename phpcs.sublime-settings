@@ -5,11 +5,12 @@
     // Example:
     //
     // {
-    //     "--standard": "zend",
+    //     "--standard": "PEAR",
     //     "-n"
     // }
     //
     "phpcs_additional_args": {
+        "--standard": "PEAR",
         "-n": ""
     },
 
