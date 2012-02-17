@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.0
+---
+* Changed the way the checkstyle report was parsed. due to [GH-2](https://github.com/benmatselby/sublime-phpcs/issues/2) which means it should now work on Linux machines
+
 1.1
 ---
 * Load the settings into memory if changed using _settings.add_on_change_. This only works on User settings rather than defaults, which is a limitation of the API from what I can see at the moment.
