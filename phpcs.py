@@ -7,8 +7,6 @@ import time
 import thread
 import sublime
 import sublime_plugin
-from xml.dom.minidom import parse, parseString
-
 
 settings = sublime.load_settings('phpcs.sublime-settings')
 
@@ -54,7 +52,9 @@ class PhpcsTextBase(sublime_plugin.TextCommand, ActiveView):
 class PhpcsCommand():
     def __init__(self, window):
         self.window = window
-        self.checkstyleData = []
+        self.checkstyle_report = []
+        self.error_list = []
+        self.region_set = []
 
     def run(self, path):
 
@@ -80,40 +80,38 @@ class PhpcsCommand():
         print cmd
         proc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
         if proc.stdout:
-            regionSet = []
-            errorList = []
-            data = proc.communicate()[0]
-            print data
-            dataXml = parseString(data)
+            report = proc.communicate()[0]
 
-            files = dataXml.getElementsByTagName("file")
+            self.parse_report(report)
 
-            for fileXml in files:
-                errors = fileXml.getElementsByTagName("error")
-                for errorXml in errors:
-                    line = errorXml.getAttribute("line")
-                    message = "(" + line + ") - " + errorXml.getAttribute("message")
-
-                    pt = self.window.active_view().text_point(int(line) - 1, 0)
-
-                    regionSet.append(sublime.Region(pt))
-                    errorList.append(message)
-                    self.checkstyleData.append([line, message, pt])
-
-            if data != "":
+            if len(self.error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
-                    self.window.active_view().add_regions("checkstyle", regionSet, "checkstyle", "dot", sublime.PERSISTENT)
+                    self.window.active_view().add_regions("checkstyle", self.region_set, "checkstyle", "dot", sublime.PERSISTENT)
 
-                if Pref.phpcs_show_quick_panel == True and len(errorList) > 0:
-                    self.window.active_view().window().show_quick_panel(errorList, self.on_quick_panel_done)
+                if Pref.phpcs_show_quick_panel == True:
+                    self.window.active_view().window().show_quick_panel(self.error_list, self.on_quick_panel_done)
             else:
                 print "no phpcs sniff errors"
+
+    def parse_report(self, report):
+        print report
+        lines = re.finditer('.*line="(?P<line>\d+)" column="(?P<column>\d+)" severity="(?P<severity>\w+)" message="(?P<message>.*)" source', report)
+
+        count = 0
+        for line in lines:
+            count += 1
+            pt = self.window.active_view().text_point(int(line.group('line')) - 1, 0)
+            self.region_set.append(sublime.Region(pt))
+            self.error_list.append('(' + line.group('line') + ') ' + line.group('message'))
+            self.checkstyle_report.append([line.group('line'), line.group('message'), pt])
+
+        "Phpcs found " + str(count) + " errors"
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
             return
 
-        pt = self.checkstyleData[picked][2]
+        pt = self.checkstyle_report[picked][2]
         self.window.active_view().sel().clear()
         self.window.active_view().sel().add(sublime.Region(pt))
         self.window.active_view().show(pt)
