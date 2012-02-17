@@ -1,10 +1,8 @@
 import datetime
-import functools
 import os
 import re
 import subprocess
 import time
-import thread
 import sublime
 import sublime_plugin
 
@@ -27,26 +25,15 @@ settings.add_on_change('phpcs_show_gutter_marks', lambda:Pref().load())
 settings.add_on_change('phpcs_show_quick_panel', lambda:Pref().load())
 
 
-class ActiveFile:
-    searched_folders = {}
-    search_results_cache = {}
-    last_search_time = None
+class PhpcsTextBase(sublime_plugin.TextCommand):
+    def run(self, args):
+        print 'Not implemented'
 
-
-class ActiveView(ActiveFile):
     def is_php_buffer(self):
         # is this a PHP buffer?
         if re.search('.+\PHP.tmLanguage', self.view.settings().get('syntax')):
             return True
         return False
-
-    def file_name(self):
-        return self.view.file_name()
-
-
-class PhpcsTextBase(sublime_plugin.TextCommand, ActiveView):
-    def run(self, args):
-        print 'Not implemented'
 
 
 class PhpcsCommand():
@@ -59,26 +46,29 @@ class PhpcsCommand():
     def run(self, path):
 
         self.window.active_view().erase_regions("checkstyle")
-        if os.path.isdir(path):
-            dir = path
-        else:
-            dir = os.path.dirname(path)
-        target = path
 
-        cmd = "cd '" + dir + "' && phpcs --report=checkstyle"
+        args = ['phpcs']
+        args.append("--report=checkstyle")
 
         # Add the additional arguments from the settings file to the command
         for key, value in Pref.phpcs_additional_args.items():
-            cmd = cmd + " " + key
+            arg = key
             if value != "":
-                cmd = cmd + "=" + value
+                arg += "=" + value
+            args.append(arg)
 
-        cmd = cmd + " '" + path + "'"
-        self.execute(cmd)
+        args.append(os.path.normpath(path))
+
+        self.execute(args)
 
     def execute(self, cmd):
-        print cmd
-        proc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
+        print ' '.join(cmd)
+
+        if sublime.platform() == "windows":
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+        else:
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+
         if proc.stdout:
             report = proc.communicate()[0]
 
@@ -91,7 +81,7 @@ class PhpcsCommand():
                 if Pref.phpcs_show_quick_panel == True:
                     self.window.active_view().window().show_quick_panel(self.error_list, self.on_quick_panel_done)
             else:
-                print "no phpcs sniff errors"
+                print "No phpcs sniff errors"
 
     def parse_report(self, report):
         print report
@@ -119,8 +109,6 @@ class PhpcsCommand():
 
 class PhpcsSniffThisFile(PhpcsTextBase):
     def run(self, args):
-        print "Running PhpcsSniffThisFile"
-
         cmd = PhpcsCommand(self.view.window())
         cmd.run(self.view.file_name())
 
