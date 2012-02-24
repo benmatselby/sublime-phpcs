@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0
+---
+* Enables the plugin to work on the Windows platform [GH-1](https://github.com/benmatselby/sublime-phpcs/issues/1)
+* Removed some redundant code
+
 2.0
 ---
 * Changed the way the checkstyle report was parsed. due to [GH-2](https://github.com/benmatselby/sublime-phpcs/issues/2) which means it should now work on Linux machines
