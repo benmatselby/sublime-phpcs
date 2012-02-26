@@ -6,31 +6,29 @@ import time
 import sublime
 import sublime_plugin
 
+
+def debug_message(msg):
+    print "[Phpcs] " + msg
+
+
 settings = sublime.load_settings('phpcs.sublime-settings')
 
 class Pref:
-    def load(self):
-
-        print "Loading phpcs settings"
+    @staticmethod
+    def load():
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = settings.get('phpcs_execute_on_save', {})
         Pref.phpcs_show_gutter_marks = settings.get('phpcs_show_gutter_marks')
         Pref.phpcs_show_quick_panel = settings.get('phpcs_show_quick_panel')
 
-Pref().load()
-
-settings.add_on_change('phpcs_additional_args', lambda:Pref().load())
-settings.add_on_change('phpcs_execute_on_save', lambda:Pref().load())
-settings.add_on_change('phpcs_show_gutter_marks', lambda:Pref().load())
-settings.add_on_change('phpcs_show_quick_panel', lambda:Pref().load())
+Pref.load()
 
 
 class PhpcsTextBase(sublime_plugin.TextCommand):
     def run(self, args):
-        print 'Not implemented'
+        debug_message('Not implemented')
 
     def is_php_buffer(self):
-        # is this a PHP buffer?
         if re.search('.+\PHP.tmLanguage', self.view.settings().get('syntax')):
             return True
         return False
@@ -62,7 +60,7 @@ class PhpcsCommand():
         self.execute(args)
 
     def execute(self, cmd):
-        print ' '.join(cmd)
+        debug_message(' '.join(cmd))
 
         if sublime.platform() == "windows":
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
@@ -81,10 +79,10 @@ class PhpcsCommand():
                 if Pref.phpcs_show_quick_panel == True:
                     self.window.active_view().window().show_quick_panel(self.error_list, self.on_quick_panel_done)
             else:
-                print "No phpcs sniff errors"
+                debug_message("No phpcs sniff errors")
 
     def parse_report(self, report):
-        print report
+        debug_message(report)
         lines = re.finditer('.*line="(?P<line>\d+)" column="(?P<column>\d+)" severity="(?P<severity>\w+)" message="(?P<message>.*)" source', report)
 
         count = 0
@@ -95,7 +93,7 @@ class PhpcsCommand():
             self.error_list.append('(' + line.group('line') + ') ' + line.group('message'))
             self.checkstyle_report.append([line.group('line'), line.group('message'), pt])
 
-        "Phpcs found " + str(count) + " errors"
+        debug_message("Phpcs found " + str(count) + " errors")
 
     def on_quick_panel_done(self, picked):
         if picked == -1:

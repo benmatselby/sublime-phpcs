@@ -1,5 +1,11 @@
-Changelog
-=========
+Sublime PHP_CodeSniffer Changelog
+=================================
+
+3.1
+---
+* Updated the loading of settings to use static method
+* Updated the debugging calls to prefix with "Phpcs"
+* Added a counter of errors in the console log
 
 3.0
 ---
