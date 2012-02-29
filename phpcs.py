@@ -172,3 +172,24 @@ class PhpcsEventListener(sublime_plugin.EventListener):
             if re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
 
                 view.window().run_command("phpcs_sniff_this_file")
+
+    def on_selection_modified(self, view):
+        # Only check in PHP contexts.
+        if not re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
+            return
+
+        cmd = PhpcsCommand.instance(view)
+
+        # Only run if there are regions.
+        if len(cmd.region_set) == 0:
+            return
+
+        for sel in view.sel():
+            debug_message('Selection is %s' % sel)
+            for error_id, error in enumerate(cmd.region_set):
+                debug_message('Error is %s' % error)
+                if view.line(error) == view.line(sel):
+                    error_msg = cmd.error_list[error_id]
+                    debug_message('Looks like we found the error: %s' % error_msg)
+                    return
+        debug_message('Bummer')
