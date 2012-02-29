@@ -35,6 +35,15 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
 
 class PhpcsCommand():
+    # Previous run's error list.
+    last_errors = None
+
+    # Previous run's report.
+    last_report = None
+
+    # Previous run's region set.
+    last_region_set = None
+
     def __init__(self, window):
         self.window = window
         self.checkstyle_report = []
@@ -72,6 +81,9 @@ class PhpcsCommand():
 
             self.parse_report(report)
 
+            # Record the errors up at the class level.
+            PhpcsCommand.last_errors = self.error_list
+
             if len(self.error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
                     self.window.active_view().add_regions("checkstyle", self.region_set, "checkstyle", "dot", sublime.PERSISTENT)
@@ -92,6 +104,9 @@ class PhpcsCommand():
             self.region_set.append(sublime.Region(pt))
             self.error_list.append('(' + line.group('line') + ') ' + line.group('message'))
             self.checkstyle_report.append([line.group('line'), line.group('message'), pt])
+
+        PhpcsCommand.last_report = self.checkstyle_report
+        PhpcsCommand.last_region_set = self.region_set
 
         debug_message("Phpcs found " + str(count) + " errors")
 
@@ -136,6 +151,29 @@ class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
         if not self.is_php_buffer():
             return False
         return True
+
+
+class PhpcsShowPreviousErrorsCommand(PhpcsTextBase):
+    def run(self, args):
+        self.view.window().show_quick_panel(PhpcsCommand.last_errors, self.on_quick_panel_done)
+
+    def description(self):
+        if not self.is_php_buffer():
+            return 'Invalid file format'
+        else:
+            return 'Show previous sniffer errors...'
+
+    def is_enabled(self):
+        return self.is_php_buffer() and PhpcsCommand.last_errors is not None
+
+    def on_quick_panel_done(self, picked):
+        if picked == -1:
+            return
+
+        pt = PhpcsCommand.last_report[picked][2]
+        self.view.sel().clear()
+        self.view.sel().add(sublime.Region(pt))
+        self.view.show(pt)
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
