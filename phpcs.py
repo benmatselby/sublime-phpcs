@@ -35,24 +35,24 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
 
 class PhpcsCommand():
-    # Previous run's error list.
-    last_errors = None
+    # Instances, indexed on the view id.
+    instances = {}
 
-    # Previous run's report.
-    last_report = None
+    # Return an existing instance for the given view, or create a new one.
+    @staticmethod
+    def instance(view):
+        if view.id() not in PhpcsCommand.instances:
+            PhpcsCommand.instances[view.id()] = PhpcsCommand(view)
+        return PhpcsCommand.instances[view.id()]
 
-    # Previous run's region set.
-    last_region_set = None
-
-    def __init__(self, window):
-        self.window = window
+    def __init__(self, view):
+        self.view = view
         self.checkstyle_report = []
         self.error_list = []
         self.region_set = []
 
-    def run(self, path):
-
-        self.window.active_view().erase_regions("checkstyle")
+    def run(self):
+        self.view.erase_regions("checkstyle")
 
         args = ['phpcs']
         args.append("--report=checkstyle")
@@ -64,7 +64,7 @@ class PhpcsCommand():
                 arg += "=" + value
             args.append(arg)
 
-        args.append(os.path.normpath(path))
+        args.append(os.path.normpath(self.view.file_name()))
 
         self.execute(args)
 
@@ -81,49 +81,45 @@ class PhpcsCommand():
 
             self.parse_report(report)
 
-            # Record the errors up at the class level.
-            PhpcsCommand.last_errors = self.error_list
-
             if len(self.error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
-                    self.window.active_view().add_regions("checkstyle", self.region_set, "checkstyle", "dot", sublime.PERSISTENT)
+                    self.view.add_regions("checkstyle", self.region_set, "checkstyle", "dot", sublime.PERSISTENT)
 
                 if Pref.phpcs_show_quick_panel == True:
-                    self.window.active_view().window().show_quick_panel(self.error_list, self.on_quick_panel_done)
+                    self.show_quick_panel()
             else:
                 debug_message("No phpcs sniff errors")
 
     def parse_report(self, report):
-        debug_message(report)
+        # debug_message(report)
         lines = re.finditer('.*line="(?P<line>\d+)" column="(?P<column>\d+)" severity="(?P<severity>\w+)" message="(?P<message>.*)" source', report)
 
         count = 0
         for line in lines:
             count += 1
-            pt = self.window.active_view().text_point(int(line.group('line')) - 1, 0)
+            pt = self.view.text_point(int(line.group('line')) - 1, 0)
             self.region_set.append(sublime.Region(pt))
             self.error_list.append('(' + line.group('line') + ') ' + line.group('message'))
             self.checkstyle_report.append([line.group('line'), line.group('message'), pt])
 
-        PhpcsCommand.last_report = self.checkstyle_report
-        PhpcsCommand.last_region_set = self.region_set
-
         debug_message("Phpcs found " + str(count) + " errors")
+
+    def show_quick_panel(self):
+        self.view.window().show_quick_panel(self.error_list, self.on_quick_panel_done)
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
             return
 
         pt = self.checkstyle_report[picked][2]
-        self.window.active_view().sel().clear()
-        self.window.active_view().sel().add(sublime.Region(pt))
-        self.window.active_view().show(pt)
+        self.view.sel().clear()
+        self.view.sel().add(sublime.Region(pt))
+        self.view.show(pt)
 
 
 class PhpcsSniffThisFile(PhpcsTextBase):
     def run(self, args):
-        cmd = PhpcsCommand(self.view.window())
-        cmd.run(self.view.file_name())
+        PhpcsCommand.instance(self.view).run()
 
     def description(self):
         if not self.is_php_buffer():
@@ -155,7 +151,7 @@ class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
 
 class PhpcsShowPreviousErrorsCommand(PhpcsTextBase):
     def run(self, args):
-        self.view.window().show_quick_panel(PhpcsCommand.last_errors, self.on_quick_panel_done)
+        PhpcsCommand.instance(self.view).show_quick_panel()
 
     def description(self):
         if not self.is_php_buffer():
@@ -164,16 +160,8 @@ class PhpcsShowPreviousErrorsCommand(PhpcsTextBase):
             return 'Show previous sniffer errors...'
 
     def is_enabled(self):
-        return self.is_php_buffer() and PhpcsCommand.last_errors is not None
-
-    def on_quick_panel_done(self, picked):
-        if picked == -1:
-            return
-
-        pt = PhpcsCommand.last_report[picked][2]
-        self.view.sel().clear()
-        self.view.sel().add(sublime.Region(pt))
-        self.view.show(pt)
+        return self.is_php_buffer() and \
+            len(PhpcsCommand.instance(self.view).last_errors) > 0
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
