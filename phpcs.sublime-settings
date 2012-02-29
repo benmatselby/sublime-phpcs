@@ -21,5 +21,11 @@
     "phpcs_show_gutter_marks": true,
 
     // Show the errors in the quick panel so you can then goto line
-    "phpcs_show_quick_panel": true
+    "phpcs_show_quick_panel": true,
+
+    // Are we going to run php -l over the file?
+    "phpcs_linter_run": false,
+
+    // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
+    "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)"
 }

@@ -1,6 +1,12 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.2
+---
+* Added the ability to run the PHP linter alongside the PHP_CodeSniffer
+* You can specify if you want the linter to run
+* You can specify the regex of the linter output, as it seems to differ on different systems
+
 3.1
 ---
 * Updated the loading of settings to use static method
