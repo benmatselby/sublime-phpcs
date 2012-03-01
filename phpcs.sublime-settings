@@ -17,6 +17,9 @@
     // Execute the sniffer on file save
     "phpcs_execute_on_save": true,
 
+    // Show the error list on file save
+    "phpcs_display_errors_on_save": true,
+
     // Show the errors in the gutter
     "phpcs_show_gutter_marks": true,
 
