@@ -173,7 +173,7 @@ class PhpcsShowPreviousErrorsCommand(PhpcsTextBase):
 
     def is_enabled(self):
         return self.is_php_buffer() and \
-            len(PhpcsCommand.instance(self.view).last_errors) > 0
+            len(PhpcsCommand.instance(self.view).error_list) > 0
 
 
 def update_statusbar(view, lineno, cmd):
