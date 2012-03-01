@@ -20,6 +20,7 @@ class Pref:
         Pref.phpcs_execute_on_save = settings.get('phpcs_execute_on_save', {})
         Pref.phpcs_show_gutter_marks = settings.get('phpcs_show_gutter_marks')
         Pref.phpcs_show_quick_panel = settings.get('phpcs_show_quick_panel')
+        Pref.phpcs_show_errors_in_status = settings.get('phpcs_show_errors_in_status')
 
 Pref.load()
 
@@ -191,6 +192,9 @@ class PhpcsEventListener(sublime_plugin.EventListener):
                 view.window().run_command("phpcs_sniff_this_file")
 
     def on_selection_modified(self, view):
+        if not Pref.phpcs_show_errors_in_status:
+            return
+
         if view.is_scratch():
             return
 
