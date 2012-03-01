@@ -21,6 +21,7 @@ class Pref:
         Pref.phpcs_show_gutter_marks = settings.get('phpcs_show_gutter_marks')
         Pref.phpcs_show_quick_panel = settings.get('phpcs_show_quick_panel')
         Pref.phpcs_show_errors_in_status = settings.get('phpcs_show_errors_in_status')
+        Pref.phpcs_display_errors_on_save = settings.get('phpcs_display_errors_on_save')
 
 Pref.load()
 
@@ -56,8 +57,9 @@ class PhpcsCommand():
         self.region_set = []
         self.error_lines = {}
 
-    def run(self):
+    def run(self, event=None):
         self.clear()
+        self.event = event
         self.view.erase_regions("checkstyle")
 
         args = ['phpcs']
@@ -92,6 +94,8 @@ class PhpcsCommand():
                     self.view.add_regions("checkstyle", self.region_set, "checkstyle", "dot", sublime.PERSISTENT)
 
                 if Pref.phpcs_show_quick_panel == True:
+                    if self.event == 'on_post_save' and not Pref.phpcs_display_errors_on_save:
+                        return
                     self.show_quick_panel()
             else:
                 debug_message("No phpcs sniff errors")
@@ -126,7 +130,7 @@ class PhpcsCommand():
 
 
 class PhpcsSniffThisFile(PhpcsTextBase):
-    def run(self, args):
+    def run(self, edit):
         PhpcsCommand.instance(self.view).run()
 
     def description(self):
@@ -186,10 +190,9 @@ def update_statusbar(view, lineno, cmd):
 
 class PhpcsEventListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
-
         if Pref.phpcs_execute_on_save == True:
             if re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
-                view.window().run_command("phpcs_sniff_this_file")
+                PhpcsCommand.instance(view).run('on_post_save')
 
     def on_selection_modified(self, view):
         if not Pref.phpcs_show_errors_in_status:
