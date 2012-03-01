@@ -10,8 +10,8 @@ import sublime_plugin
 def debug_message(msg):
     print "[Phpcs] " + msg
 
-
 settings = sublime.load_settings('phpcs.sublime-settings')
+
 
 class Pref:
     @staticmethod
@@ -47,11 +47,16 @@ class PhpcsCommand():
 
     def __init__(self, view):
         self.view = view
+        self.clear()
+
+    def clear(self):
         self.checkstyle_report = []
         self.error_list = []
         self.region_set = []
+        self.error_lines = {}
 
     def run(self):
+        self.clear()
         self.view.erase_regions("checkstyle")
 
         args = ['phpcs']
@@ -96,11 +101,13 @@ class PhpcsCommand():
 
         count = 0
         for line in lines:
+            line_no = int(line.group('line')) - 1
             count += 1
             pt = self.view.text_point(int(line.group('line')) - 1, 0)
             self.region_set.append(sublime.Region(pt))
             self.error_list.append('(' + line.group('line') + ') ' + line.group('message'))
             self.checkstyle_report.append([line.group('line'), line.group('message'), pt])
+            self.error_lines[line_no] = line.group('message')
 
         debug_message("Phpcs found " + str(count) + " errors")
 
@@ -164,32 +171,35 @@ class PhpcsShowPreviousErrorsCommand(PhpcsTextBase):
             len(PhpcsCommand.instance(self.view).last_errors) > 0
 
 
+def update_statusbar(view, lineno, cmd):
+    errors = []
+
+    if lineno in cmd.error_lines:
+        errors.append(cmd.error_lines[lineno])
+
+    if errors:
+        view.set_status('Phpcs', '; '.join(errors))
+    else:
+        view.erase_status('Phpcs')
+
+
 class PhpcsEventListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
 
         if Pref.phpcs_execute_on_save == True:
-
             if re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
-
                 view.window().run_command("phpcs_sniff_this_file")
 
     def on_selection_modified(self, view):
+        if view.is_scratch():
+            return
+
         # Only check in PHP contexts.
         if not re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
             return
 
+        lastSelectedLineNo = view.rowcol(view.sel()[0].end())[0]
+
         cmd = PhpcsCommand.instance(view)
 
-        # Only run if there are regions.
-        if len(cmd.region_set) == 0:
-            return
-
-        for sel in view.sel():
-            debug_message('Selection is %s' % sel)
-            for error_id, error in enumerate(cmd.region_set):
-                debug_message('Error is %s' % error)
-                if view.line(error) == view.line(sel):
-                    error_msg = cmd.error_list[error_id]
-                    debug_message('Looks like we found the error: %s' % error_msg)
-                    return
-        debug_message('Bummer')
+        update_statusbar(view, lastSelectedLineNo, cmd)
