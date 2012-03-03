@@ -41,7 +41,18 @@ You can configure:
 * phpcs_linter_regex - The regex for the PHP linter output
 
 
-Contributions Welcome
----------------------
+Requirements
+------------
 
-Requests for features, and pull requests with patches, are most welcome :)
+Requirements for this plugin:
+
+* PHP_CodeSniffer 1.3.* (potentially works with lower versions, but this hasn't been tested)
+* Python 2.6
+
+This plugin has been tested on:
+
+* Mac OS X 10.6.8 (2.6.1 r261:67515, Jun 24 2010, 21:47:49) and 10.7.3 (2.6.7 r267:88850, Jul 31 2011, 19:30:54)
+* Ubuntu 11.10 (2.6.6 r266:84292, Jun 16 2011, 22:35:51)
+* Windows XP (2.6.5 r265:79096, Mar 19 2010, 21:48:26)
+
+
