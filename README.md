@@ -39,6 +39,7 @@ You can configure:
 * phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
 * phpcs_linter_run - Do you want the PHP linter to run?
 * phpcs_linter_regex - The regex for the PHP linter output
+* phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 
 
 Requirements

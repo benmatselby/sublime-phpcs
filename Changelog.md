@@ -1,6 +1,10 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.3
+---
+* Allow the user to specify the location of the phpcs application [GH-4](https://github.com/benmatselby/sublime-phpcs/issues/4)
+
 3.2
 ---
 * Added the ability to run the PHP linter alongside the PHP_CodeSniffer

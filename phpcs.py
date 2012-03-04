@@ -18,6 +18,7 @@ class Pref:
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
         Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
         Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
+        Pref.phpcs_executable_path = settings.get('phpcs_executable_path')
 
 Pref.load()
 
@@ -82,7 +83,11 @@ class ShellCommand():
 class Sniffer(ShellCommand):
     """Concrete class for PHP_CodeSniffer"""
     def execute(self, path):
-        args = ['phpcs']
+        if Pref.phpcs_executable_path != "":
+            args = [Pref.phpcs_executable_path]
+        else:
+            args = ['phpcs']
+
         args.append("--report=checkstyle")
 
         # Add the additional arguments from the settings file to the command
