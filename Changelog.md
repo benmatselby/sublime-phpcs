@@ -1,9 +1,14 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.5
+---
+* Ability to show the errors in the status bar (configurable with on/off setting) thanks to [Drarok](https://github.com/Drarok)
+* Bug fix with clearing the sniffer marks
+
 3.4
 ---
-* Ability to not show the quick_panel errors on save, (errors shown by default)
+* Ability to not show the quick_panel errors on save, (errors shown by default) thanks to [Drarok](https://github.com/Drarok)
 
 3.3
 ---

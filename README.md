@@ -41,6 +41,7 @@ You can configure:
 * phpcs_linter_regex - The regex for the PHP linter output
 * phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 * phpcs_show_errors_on_save - Do you want the errors to be displayed in quick_panel on save?
+* phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
 
 
 Requirements
