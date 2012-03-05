@@ -27,6 +27,9 @@
     // Show the errors in the gutter
     "phpcs_show_gutter_marks": true,
 
+    // Show the errors in the status bar
+    "phpcs_show_errors_in_status": true,
+
     // Show the errors in the quick panel so you can then goto line
     "phpcs_show_quick_panel": true,
 
