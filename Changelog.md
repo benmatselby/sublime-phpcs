@@ -1,6 +1,10 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.4
+---
+* Ability to not show the quick_panel errors on save, (errors shown by default)
+
 3.3
 ---
 * Allow the user to specify the location of the phpcs application [GH-4](https://github.com/benmatselby/sublime-phpcs/issues/4)

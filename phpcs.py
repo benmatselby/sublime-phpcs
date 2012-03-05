@@ -136,13 +136,11 @@ class Linter(ShellCommand):
 
 class PhpcsCommand():
     """Main plugin class for building the checkstyle report"""
-
-    event = None
-
     def __init__(self, window):
         self.window = window
         self.checkstyle_reports = []
         self.report = []
+        self.event = None
 
     def run(self, path, event=None):
         self.event = event
