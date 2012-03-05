@@ -161,6 +161,7 @@ class PhpcsCommand():
 
     def run(self, path, event=None):
         self.event = event
+        self.checkstyle_reports = []
         self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
         self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
         self.generate()
