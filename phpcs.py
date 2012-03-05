@@ -25,6 +25,7 @@ Pref.load()
 
 settings.add_on_change('phpcs_additional_args', lambda:Pref().load())
 settings.add_on_change('phpcs_execute_on_save', lambda:Pref().load())
+settings.add_on_change('phpcs_show_errors_on_save', lambda:Pref().load())
 settings.add_on_change('phpcs_show_gutter_marks', lambda:Pref().load())
 settings.add_on_change('phpcs_show_quick_panel', lambda:Pref().load())
 settings.add_on_change('phpcs_linter_run', lambda:Pref().load())
