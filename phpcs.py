@@ -138,6 +138,20 @@ class Linter(ShellCommand):
 
 class PhpcsCommand():
     """Main plugin class for building the checkstyle report"""
+
+    # Class variable, stores the instances.
+    instances = {}
+
+    @staticmethod
+    def instance(view, allow_new=True):
+        '''Return the last-used instance for a given view.'''
+        view_id = view.id()
+        if view_id not in PhpcsCommand.instances:
+            if not allow_new:
+                return False
+            PhpcsCommand.instances[view_id] = PhpcsCommand(view.window())
+        return PhpcsCommand.instances[view_id]
+
     def __init__(self, window):
         self.window = window
         self.checkstyle_reports = []
@@ -200,7 +214,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 class PhpcsSniffThisFile(PhpcsTextBase):
     """Command to sniff the open file"""
     def run(self, args):
-        cmd = PhpcsCommand(self.view.window())
+        cmd = PhpcsCommand.instance(self.view)
         cmd.run(self.view.file_name())
 
     def description(self):
@@ -232,10 +246,27 @@ class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
+    def is_php_view(self, view):
+        return re.search('.+\PHP.tmLanguage', view.settings().get('syntax'))
+
     def on_post_save(self, view):
-
         if Pref.phpcs_execute_on_save == True:
+            if self.is_php_view(view):
+                PhpcsCommand.instance(view).run(view.file_name(), 'on_save')
 
-            if re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
+    def on_selection_modified(self, view):
+        if not Pref.phpcs_show_errors_in_status:
+            return
 
-                PhpcsCommand(view.window()).run(view.file_name(), 'on_save')
+        if view.is_scratch():
+            return
+
+        if not self.is_php_view(view):
+            return
+
+        cmd = PhpcsCommand.instance(view, False)
+        if not cmd:
+            return
+
+        sublime.status_message('heh')
+        pass
