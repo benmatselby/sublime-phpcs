@@ -40,6 +40,7 @@ You can configure:
 * phpcs_linter_run - Do you want the PHP linter to run?
 * phpcs_linter_regex - The regex for the PHP linter output
 * phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
+* phpcs_show_errors_on_save - Do you want the errors to be displayed in quick_panel on save?
 
 
 Requirements
