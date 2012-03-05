@@ -2,6 +2,7 @@ import datetime
 import os
 import re
 import subprocess
+import threading
 import time
 import sublime
 import sublime_plugin
@@ -165,7 +166,7 @@ class PhpcsCommand():
         self.checkstyle_reports = []
         self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
         self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
-        self.generate()
+        sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):
         for region in self.shell_commands:
@@ -274,7 +275,9 @@ class PhpcsEventListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
         if Pref.phpcs_execute_on_save == True:
             if self.is_php_view(view):
-                PhpcsCommand.instance(view).run(view.file_name(), 'on_save')
+                cmd = PhpcsCommand.instance(view)
+                thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
+                thread.start()
 
     def on_selection_modified(self, view):
         if not Pref.phpcs_show_errors_in_status:
