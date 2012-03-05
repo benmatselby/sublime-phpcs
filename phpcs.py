@@ -157,6 +157,7 @@ class PhpcsCommand():
         self.checkstyle_reports = []
         self.report = []
         self.event = None
+        self.error_lines = {}
 
     def run(self, path, event=None):
         self.event = event
@@ -167,6 +168,7 @@ class PhpcsCommand():
     def generate(self):
         error_list = []
         region_set = []
+        self.error_lines = {}
 
         for shell_command, report, icon in self.checkstyle_reports:
             self.window.active_view().erase_regions('checkstyle')
@@ -174,11 +176,15 @@ class PhpcsCommand():
 
             debug_message(shell_command + ' found ' + str(len(report)) + ' errors')
             for error in report:
-                pt = self.window.active_view().text_point(int(error.get_line()) - 1, 0)
+                line = int(error.get_line())
+                pt = self.window.active_view().text_point(line - 1, 0)
                 region_set.append(sublime.Region(pt))
-                error_list.append('(' + error.get_line() + ') ' + error.get_message())
+                error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
+                if line not in self.error_lines:
+                    self.error_lines[line - 1] = []
+                self.error_lines[line - 1].append(error.get_message())
 
             if len(error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
@@ -198,6 +204,13 @@ class PhpcsCommand():
         self.window.active_view().sel().clear()
         self.window.active_view().sel().add(sublime.Region(pt))
         self.window.active_view().show(pt)
+
+    def get_errors(self, line):
+        '''Get the error messages, if any, for a given line number.'''
+        if not line in self.error_lines:
+            return False
+
+        return ', '.join(self.error_lines[line])
 
 
 class PhpcsTextBase(sublime_plugin.TextCommand):
@@ -268,5 +281,9 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         if not cmd:
             return
 
-        sublime.status_message('heh')
-        pass
+        line = view.rowcol(view.sel()[0].end())[0]
+        errors = cmd.get_errors(line)
+        if errors:
+            view.set_status('Phpcs', errors)
+        else:
+            view.erase_status('Phpcs')
