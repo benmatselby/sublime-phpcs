@@ -28,7 +28,7 @@
     "phpcs_show_quick_panel": true,
 
     // Are we going to run php -l over the file?
-    "phpcs_linter_run": false,
+    "phpcs_linter_run": true,
 
     // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
     "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)"
