@@ -6,5 +6,9 @@
     {
         "caption": "PHP CodeSniffer: Clear Sniffer Marks",
         "command": "phpcs_clear_sniffer_marks"
+    },
+    {
+        "caption": "PHP CodeSniffer: Show Previous Errors",
+        "command": "phpcs_show_previous_errors"
     }
 ]

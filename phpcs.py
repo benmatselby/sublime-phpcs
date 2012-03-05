@@ -158,6 +158,7 @@ class PhpcsCommand():
         self.report = []
         self.event = None
         self.error_lines = {}
+        self.error_list = []
         self.shell_commands = ['Linter', 'Sniffer']
 
     def run(self, path, event=None):
@@ -192,6 +193,9 @@ class PhpcsCommand():
                     self.error_lines[line - 1] = []
                 self.error_lines[line - 1].append(error.get_message())
 
+            # Store the errors for later.
+            self.error_list = error_list
+
             if len(error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
                     self.window.active_view().add_regions(shell_command, region_set, shell_command, icon)
@@ -200,7 +204,10 @@ class PhpcsCommand():
             # Skip showing the errors if we ran on save, and the option isn't set.
             if self.event == 'on_save' and not Pref.phpcs_show_errors_on_save:
                 return
-            self.window.active_view().window().show_quick_panel(error_list, self.on_quick_panel_done)
+            self.show_quick_panel()
+
+    def show_quick_panel(self):
+        self.window.show_quick_panel(self.error_list, self.on_quick_panel_done)
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
@@ -246,6 +253,25 @@ class PhpcsSniffThisFile(PhpcsTextBase):
         if not self.is_php_buffer():
             return False
         return True
+
+
+class PhpcsShowPreviousErrors(PhpcsTextBase):
+    '''Command to show the previous sniff errors.'''
+    def run(self, args):
+        cmd = PhpcsCommand.instance(self.view, False)
+        cmd.show_quick_panel()
+
+    def description(self):
+        if not self.is_php_buffer():
+            return "Invalid file format"
+        else:
+            return 'Display sniff errors...'
+
+    def is_enabled(self):
+        '''This command is only enabled if it's a PHP buffer with previous errors.'''
+        return self.is_php_buffer() \
+            and PhpcsCommand.instance(self.view, False) \
+            and len(PhpcsCommand.instance(self.view, False).error_list)
 
 
 class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
