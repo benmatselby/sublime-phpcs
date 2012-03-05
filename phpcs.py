@@ -14,6 +14,7 @@ class Pref:
     def load():
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
+        Pref.phpcs_show_errors_on_save = bool(settings.get('phpcs_show_errors_on_save'))
         Pref.phpcs_show_gutter_marks = bool(settings.get('phpcs_show_gutter_marks'))
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
         Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
@@ -134,12 +135,16 @@ class Linter(ShellCommand):
 
 class PhpcsCommand():
     """Main plugin class for building the checkstyle report"""
+
+    event = None
+
     def __init__(self, window):
         self.window = window
         self.checkstyle_reports = []
         self.report = []
 
-    def run(self, path):
+    def run(self, path, event=None):
+        self.event = event
         self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
         self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
         self.generate()
@@ -165,6 +170,9 @@ class PhpcsCommand():
                     self.window.active_view().add_regions(shell_command, region_set, shell_command, icon)
 
         if Pref.phpcs_show_quick_panel == True:
+            # Skip showing the errors if we ran on save, and the option isn't set.
+            if self.event == 'on_save' and not Pref.phpcs_show_errors_on_save:
+                return
             self.window.active_view().window().show_quick_panel(error_list, self.on_quick_panel_done)
 
     def on_quick_panel_done(self, picked):
@@ -229,4 +237,4 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
             if re.search('.+\PHP.tmLanguage', view.settings().get('syntax')):
 
-                view.window().run_command("phpcs_sniff_this_file")
+                PhpcsCommand(view.window()).run(view.file_name(), 'on_save')
