@@ -1,14 +1,22 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.6
+* Added the ability to show previous errors without generating the report again. Thanks to [Drarok](https://github.com/Drarok) [GH-9](https://github.com/benmatselby/sublime-phpcs/pull/9)
+* Put the processing back to being threaded which helps with large files. Thanks to [Drarok](https://github.com/Drarok) [GH-10](https://github.com/benmatselby/sublime-phpcs/pull/10)
+* Removed Side Bar Menu, as it doesn't make sense to run report against a non-open file
+* When selecting an error from the quick panel, also set the status bar message
+* Added "Show previous errors" to the context menu to be consistent
+* Added keymap for Mac OSX, cannot get the keys right when using Virtual Box to define for Windows and Linux, so leaving for the time being
+
 3.5
 ---
-* Ability to show the errors in the status bar (configurable with on/off setting) thanks to [Drarok](https://github.com/Drarok)
+* Ability to show the errors in the status bar (configurable with on/off setting). Thanks to [Drarok](https://github.com/Drarok)
 * Bug fix with clearing the sniffer marks
 
 3.4
 ---
-* Ability to not show the quick_panel errors on save, (errors shown by default) thanks to [Drarok](https://github.com/Drarok)
+* Ability to not show the quick_panel errors on save, (errors shown by default). Thanks to [Drarok](https://github.com/Drarok)
 
 3.3
 ---
