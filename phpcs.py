@@ -175,8 +175,23 @@ class PhpcsCommand():
         for region in self.shell_commands:
             self.window.active_view().erase_regions(region)
 
+    def set_status_bar(self):
+        if not Pref.phpcs_show_errors_in_status:
+            return
+
+        if self.window.active_view().is_scratch():
+            return
+
+        line = self.window.active_view().rowcol(self.window.active_view().sel()[0].end())[0]
+        errors = self.get_errors(line)
+        if errors:
+            self.window.active_view().set_status('Phpcs', errors)
+        else:
+            self.window.active_view().erase_status('Phpcs')
+
+
     def generate(self):
-        error_list = []
+        self.error_list = []
         region_set = []
         self.error_lines = {}
 
@@ -189,17 +204,14 @@ class PhpcsCommand():
                 line = int(error.get_line())
                 pt = self.window.active_view().text_point(line - 1, 0)
                 region_set.append(sublime.Region(pt))
-                error_list.append('(' + str(line) + ') ' + error.get_message())
+                self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
                 if line not in self.error_lines:
                     self.error_lines[line - 1] = []
                 self.error_lines[line - 1].append(error.get_message())
 
-            # Store the errors for later.
-            self.error_list = error_list
-
-            if len(error_list) > 0:
+            if len(self.error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
                     self.window.active_view().add_regions(shell_command, region_set, shell_command, icon)
 
@@ -220,6 +232,7 @@ class PhpcsCommand():
         self.window.active_view().sel().clear()
         self.window.active_view().sel().add(sublime.Region(pt))
         self.window.active_view().show(pt)
+        self.set_status_bar()
 
     def get_errors(self, line):
         '''Get the error messages, if any, for a given line number.'''
@@ -231,8 +244,16 @@ class PhpcsCommand():
 
 class PhpcsTextBase(sublime_plugin.TextCommand):
     """Base class for Text commands in the plugin, mainly here to check php files"""
+    description = ''
+
     def run(self, args):
         debug_message('Not implemented')
+
+    def description(self):
+        if not self.is_php_buffer():
+            return "Invalid file format"
+        else:
+            return description
 
     def is_php_buffer(self):
         if re.search('.+\PHP.tmLanguage', self.view.settings().get('syntax')):
@@ -242,15 +263,11 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
 class PhpcsSniffThisFile(PhpcsTextBase):
     """Command to sniff the open file"""
+    description = 'Sniff this file...'
+
     def run(self, args):
         cmd = PhpcsCommand.instance(self.view)
         cmd.run(self.view.file_name())
-
-    def description(self):
-        if not self.is_php_buffer():
-            return "Invalid file format"
-        else:
-            return 'Sniff this file...'
 
     def is_enabled(self):
         if not self.is_php_buffer():
@@ -260,15 +277,11 @@ class PhpcsSniffThisFile(PhpcsTextBase):
 
 class PhpcsShowPreviousErrors(PhpcsTextBase):
     '''Command to show the previous sniff errors.'''
+    description = 'Display sniff errors...'
+
     def run(self, args):
         cmd = PhpcsCommand.instance(self.view, False)
         cmd.show_quick_panel()
-
-    def description(self):
-        if not self.is_php_buffer():
-            return "Invalid file format"
-        else:
-            return 'Display sniff errors...'
 
     def is_enabled(self):
         '''This command is only enabled if it's a PHP buffer with previous errors.'''
@@ -279,15 +292,11 @@ class PhpcsShowPreviousErrors(PhpcsTextBase):
 
 class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
     """Command to clear the sniffer marks from the view"""
+    description = 'Clear sniffer marks...'
+
     def run(self, args):
         cmd = PhpcsCommand.instance(self.view)
         cmd.clear_sniffer_marks()
-
-    def description(self):
-        if not self.is_php_buffer():
-            return "Invalid file format"
-        else:
-            return 'Clear sniffer marks...'
 
     def is_enabled(self):
         if not self.is_php_buffer():
@@ -308,22 +317,9 @@ class PhpcsEventListener(sublime_plugin.EventListener):
                 thread.start()
 
     def on_selection_modified(self, view):
-        if not Pref.phpcs_show_errors_in_status:
-            return
-
-        if view.is_scratch():
-            return
-
         if not self.is_php_view(view):
             return
 
         cmd = PhpcsCommand.instance(view, False)
-        if not cmd:
-            return
-
-        line = view.rowcol(view.sel()[0].end())[0]
-        errors = cmd.get_errors(line)
-        if errors:
-            view.set_status('Phpcs', errors)
-        else:
-            view.erase_status('Phpcs')
+        if isinstance(cmd, PhpcsCommand):
+            cmd.set_status_bar()
