@@ -1,7 +1,12 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.7
+---
+* Updated Main.sublime-menu so we can change the key bindings from within the Preferences panel
+
 3.6
+---
 * Added the ability to show previous errors without generating the report again. Thanks to [Drarok](https://github.com/Drarok) [GH-9](https://github.com/benmatselby/sublime-phpcs/pull/9)
 * Put the processing back to being threaded which helps with large files. Thanks to [Drarok](https://github.com/Drarok) [GH-10](https://github.com/benmatselby/sublime-phpcs/pull/10)
 * Removed Side Bar Menu, as it doesn't make sense to run report against a non-open file
