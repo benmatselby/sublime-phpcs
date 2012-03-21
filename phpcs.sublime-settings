@@ -3,16 +3,13 @@
     // If empty, then use PATH version of phpcs, else use the set value
     "phpcs_executable_path": "",
 
-    //
     // Additional arguments you can specify into the application
     //
     // Example:
-    //
     // {
     //     "--standard": "PEAR",
     //     "-n"
     // }
-    //
     "phpcs_additional_args": {
         "--standard": "PEAR",
         "-n": ""
@@ -37,5 +34,22 @@
     "phpcs_linter_run": true,
 
     // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
-    "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)"
+    "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)",
+
+    // Execute phpmd
+    "phpmd_run": false,
+
+    // It seems python/sublime cannot always find the phpmd application
+    // If empty, then use PATH version of phpmd, else use the set value
+    "phpmd_executable_path": "",
+
+    // Additional arguments you can specify into the application
+    //
+    // Example:
+    // {
+    //     "codesize,unusedcode"
+    // }
+    "phpmd_additional_args": {
+        "codesize,unusedcode,naming": ""
+    }
 }

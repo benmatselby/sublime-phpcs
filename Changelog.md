@@ -1,6 +1,10 @@
 Sublime PHP_CodeSniffer Changelog
 =================================
 
+3.8
+---
+* Support added for running [phpmd](http://phpmd.org/) - Currently off by default
+
 3.7
 ---
 * Updated Main.sublime-menu so we can change the key bindings from within the Preferences panel

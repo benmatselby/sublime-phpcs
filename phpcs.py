@@ -22,6 +22,9 @@ class Pref:
         Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
         Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
         Pref.phpcs_executable_path = settings.get('phpcs_executable_path')
+        Pref.phpmd_run = settings.get('phpmd_run')
+        Pref.phpmd_executable_path = settings.get('phpmd_executable_path')
+        Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
 
 Pref.load()
 
@@ -34,7 +37,10 @@ Pref.load()
     'phpcs_show_quick_panel',
     'phpcs_linter_run',
     'phpcs_linter_regex',
-    'phpcs_executable_path']]
+    'phpcs_executable_path',
+    'phpmd_run',
+    'phpmd_executable_path',
+    'phpmd_additional_args']]
 
 
 def debug_message(msg):
@@ -117,6 +123,38 @@ class Sniffer(ShellCommand):
             self.error_list.append(error)
 
 
+class MessDetector(ShellCommand):
+    """Concrete class for PHP Mess Detector"""
+    def execute(self, path):
+        if Pref.phpmd_run != True:
+            return
+
+        if Pref.phpmd_executable_path != "":
+            args = [Pref.phpmd_executable_path]
+        else:
+            args = ['phpmd']
+
+        args.append(os.path.normpath(path))
+        args.append('text')
+
+        for key, value in Pref.phpmd_additional_args.items():
+            arg = key
+            if value != "":
+                arg += "=" + value
+            args.append(arg)
+
+        self.parse_report(args)
+
+    def parse_report(self, args):
+        report = self.shell_out(args)
+        debug_message(report)
+        lines = re.finditer('.*:(?P<line>\d+)[ \t]+(?P<message>.*)', report)
+
+        for line in lines:
+            error = CheckstyleError(line.group('line'), line.group('message'))
+            self.error_list.append(error)
+
+
 class Linter(ShellCommand):
     """Content class for php -l"""
     def execute(self, path):
@@ -162,13 +200,14 @@ class PhpcsCommand():
         self.event = None
         self.error_lines = {}
         self.error_list = []
-        self.shell_commands = ['Linter', 'Sniffer']
+        self.shell_commands = ['Linter', 'Sniffer', 'MessDetector']
 
     def run(self, path, event=None):
         self.event = event
         self.checkstyle_reports = []
         self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
         self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
+        self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
         sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):

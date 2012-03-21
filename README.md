@@ -1,7 +1,7 @@
 Sublime PHP CodeSniffer
 =======================
 
-This plugin adds PHP CodeSniffer support to Sublime Text 2.
+This plugin adds PHP CodeSniffer, the PHP Linter and phpmd support to Sublime Text 2.
 
 Installation
 ------------
@@ -16,7 +16,7 @@ Simply checkout the git repo into “~/Library/Application Support/Sublime Text 
 PHP CodeSniffer Support For Sublime Text 2
 ------------------------------------------
 
-This plugin adds support for running PHP CodeSniffer and the PHP linter from inside Sublime Text 2.
+This plugin adds support for running PHP CodeSniffer, the PHP linter and PHPMD from inside Sublime Text 2.
 
 Right-click in the editor to:
 
@@ -42,6 +42,9 @@ You can configure:
 * phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 * phpcs_show_errors_on_save - Do you want the errors to be displayed in quick_panel on save?
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
+* phpmd_run - Do you want the PHPMD to run? Off by default
+* phpmd_executable_path - The path to the phpmd executable. If empty string, use PATH to find it
+* phpmd_additional_args - This is the extra information you want to pass to the phpcs command. For example which "rulesets" you want to run
 
 
 Requirements
