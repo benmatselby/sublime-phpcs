@@ -1,5 +1,5 @@
-Sublime PHP CodeSniffer
-=======================
+Sublime PHP CodeSniffer, Linter and Mess Detector Plugin
+========================================================
 
 This plugin adds PHP CodeSniffer, the PHP Linter and phpmd support to Sublime Text 2.
 
