@@ -6,6 +6,7 @@ import threading
 import time
 import sublime
 import sublime_plugin
+import HTMLParser
 
 
 settings = sublime.load_settings('phpcs.sublime-settings')
@@ -57,7 +58,7 @@ class CheckstyleError():
         return self.line
 
     def get_message(self):
-        return self.message
+        return HTMLParser.HTMLParser().unescape(self.message)
 
     def set_point(self, point):
         self.point = point
@@ -246,9 +247,7 @@ class PhpcsCommand():
                 self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
-                if line not in self.error_lines:
-                    self.error_lines[line - 1] = []
-                self.error_lines[line - 1].append(error.get_message())
+                self.error_lines[line] = error.get_message()
 
             if len(self.error_list) > 0:
                 if Pref.phpcs_show_gutter_marks == True:
@@ -274,11 +273,10 @@ class PhpcsCommand():
         self.set_status_bar()
 
     def get_errors(self, line):
-        '''Get the error messages, if any, for a given line number.'''
-        if not line in self.error_lines:
+        if not line + 1 in self.error_lines:
             return False
 
-        return ', '.join(self.error_lines[line])
+        return self.error_lines[line + 1]
 
 
 class PhpcsTextBase(sublime_plugin.TextCommand):

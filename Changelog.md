@@ -1,5 +1,11 @@
-Sublime PHP_CodeSniffer Changelog
-=================================
+Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
+==================================================================
+
+3.9
+---
+* Bug fix for [GH-12](https://github.com/benmatselby/sublime-phpcs/issues/12)
+* Bug fix for incorrectly mismatching sublime line numbers to line numbers from a report *if* there was only one error reported
+* Updated name of change log
 
 3.8
 ---
