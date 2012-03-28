@@ -22,9 +22,9 @@ class Pref:
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
         Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
         Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
-        Pref.phpcs_executable_path = settings.get('phpcs_executable_path')
+        Pref.phpcs_executable_path = settings.get('phpcs_executable_path', '')
         Pref.phpmd_run = settings.get('phpmd_run')
-        Pref.phpmd_executable_path = settings.get('phpmd_executable_path')
+        Pref.phpmd_executable_path = settings.get('phpmd_executable_path', '')
         Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
 
 Pref.load()
