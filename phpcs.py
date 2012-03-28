@@ -14,6 +14,7 @@ settings = sublime.load_settings('phpcs.sublime-settings')
 class Pref:
     @staticmethod
     def load():
+        Pref.phpcs_php_path = settings.get('phpcs_php_path')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
         Pref.phpcs_show_errors_on_save = bool(settings.get('phpcs_show_errors_on_save'))
@@ -30,6 +31,7 @@ class Pref:
 Pref.load()
 
 [settings.add_on_change(setting, Pref.load) for setting in [
+    'phpcs_php_path',
     'phpcs_additional_args',
     'phpcs_execute_on_save',
     'phpcs_show_errors_on_save',
@@ -162,7 +164,7 @@ class Linter(ShellCommand):
         if Pref.phpcs_linter_run != True:
             return
 
-        args = ["php"]
+        args = [Pref.phpcs_php_path]
         args.append("-l")
         args.append("-d display_errors=On")
         args.append(os.path.normpath(path))
