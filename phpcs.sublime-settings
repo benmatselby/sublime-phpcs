@@ -3,7 +3,7 @@
     // If empty, then use PATH version of phpcs, else use the set value
     "phpcs_executable_path": "",
 
-    "phpcs_php_path": "c:\\wamp\\bin\\php\\php5.3.10\\php.exe",
+    "phpcs_php_path": "",
 
     // Additional arguments you can specify into the application
     //
