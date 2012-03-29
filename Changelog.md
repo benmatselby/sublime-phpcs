@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+3.11
+----
+* Support added to configure the php path [GH-16](https://github.com/benmatselby/sublime-phpcs/issues/16). Thanks to [Dan Previte](https://github.com/dprevite)
+
 3.10
 ----
 * Bug fix for [GH-13](https://github.com/benmatselby/sublime-phpcs/issues/13) which seems to be apparent when Sublime cannot find/load the settings file
