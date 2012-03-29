@@ -4,6 +4,7 @@ Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 3.11
 ----
 * Support added to configure the php path [GH-16](https://github.com/benmatselby/sublime-phpcs/issues/16). Thanks to [Dan Previte](https://github.com/dprevite)
+* Added support for multiple file extensions, rather than using Sublimes syntax checker [GH-15](https://github.com/benmatselby/sublime-phpcs/issues/15)
 
 3.10
 ----

@@ -1,4 +1,8 @@
 {
+    // Which file types (file extensions), do you want the plugin to
+    // execute for
+    "extensions_to_execute": ["php"],
+
     // It seems python/sublime cannot always find the php application
     // If empty, then use PATH version of php, else use the set value
     "phpcs_php_path": "",

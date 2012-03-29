@@ -14,6 +14,7 @@ settings = sublime.load_settings('phpcs.sublime-settings')
 class Pref:
     @staticmethod
     def load():
+        Pref.extensions_to_execute = settings.get('extensions_to_execute', ['php'])
         Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
@@ -31,6 +32,7 @@ class Pref:
 Pref.load()
 
 [settings.add_on_change(setting, Pref.load) for setting in [
+    'extensions_to_execute',
     'phpcs_php_path',
     'phpcs_additional_args',
     'phpcs_execute_on_save',
@@ -293,14 +295,18 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
         debug_message('Not implemented')
 
     def description(self):
-        if not self.is_php_buffer():
+        if not PhpcsTextBase.should_execute(self.view):
             return "Invalid file format"
         else:
             return description
 
-    def is_php_buffer(self):
-        if re.search('.+\PHP.tmLanguage', self.view.settings().get('syntax')):
-            return True
+    @staticmethod
+    def should_execute(view):
+        if view.file_name() != None:
+            ext = os.path.splitext(view.file_name())[1]
+            result = ext[1:] in Pref.extensions_to_execute
+            return result
+
         return False
 
 
@@ -313,9 +319,7 @@ class PhpcsSniffThisFile(PhpcsTextBase):
         cmd.run(self.view.file_name())
 
     def is_enabled(self):
-        if not self.is_php_buffer():
-            return False
-        return True
+        return PhpcsTextBase.should_execute(self.view)
 
 
 class PhpcsShowPreviousErrors(PhpcsTextBase):
@@ -328,7 +332,7 @@ class PhpcsShowPreviousErrors(PhpcsTextBase):
 
     def is_enabled(self):
         '''This command is only enabled if it's a PHP buffer with previous errors.'''
-        return self.is_php_buffer() \
+        return PhpcsTextBase.should_execute(self.view) \
             and PhpcsCommand.instance(self.view, False) \
             and len(PhpcsCommand.instance(self.view, False).error_list)
 
@@ -342,25 +346,20 @@ class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
         cmd.clear_sniffer_marks()
 
     def is_enabled(self):
-        if not self.is_php_buffer():
-            return False
-        return True
+        return PhpcsTextBase.should_execute(self.view)
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
-    def is_php_view(self, view):
-        return re.search('.+\PHP.tmLanguage', view.settings().get('syntax'))
-
     def on_post_save(self, view):
         if Pref.phpcs_execute_on_save == True:
-            if self.is_php_view(view):
+            if PhpcsTextBase.should_execute(view):
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
 
     def on_selection_modified(self, view):
-        if not self.is_php_view(view):
+        if not PhpcsTextBase.should_execute(view):
             return
 
         cmd = PhpcsCommand.instance(view, False)
