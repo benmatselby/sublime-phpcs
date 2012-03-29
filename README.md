@@ -33,7 +33,7 @@ Configuration
 
 You can configure:
 
-* phpmd_executable_path - The path to the PHP executable. If empty string, use PATH to find it
+* phpcs_php_path - The path to the PHP executable. If empty string, use PATH to find it
 * phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
 * phpcs_execute_on_save - Do you want the code sniffer plugin to run on file save for php files?
 * phpcs_show_gutter_marks - Do you want the errors to be displayed in the gutter?
