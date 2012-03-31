@@ -1,6 +1,11 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+3.12
+----
+* Bug fix for [GH-18](https://github.com/benmatselby/sublime-phpcs/issues/18) which meant the plugin would fail to work when coming across non ascii characters
+* Added a show_debug setting for console output. Off by default
+
 3.11
 ----
 * Support added to configure the php path [GH-16](https://github.com/benmatselby/sublime-phpcs/issues/16). Thanks to [Dan Previte](https://github.com/dprevite)

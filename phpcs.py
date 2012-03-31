@@ -14,6 +14,7 @@ settings = sublime.load_settings('phpcs.sublime-settings')
 class Pref:
     @staticmethod
     def load():
+        Pref.show_debug = settings.get('show_debug', False)
         Pref.extensions_to_execute = settings.get('extensions_to_execute', ['php'])
         Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
@@ -32,6 +33,7 @@ class Pref:
 Pref.load()
 
 [settings.add_on_change(setting, Pref.load) for setting in [
+    'show_debug',
     'extensions_to_execute',
     'phpcs_php_path',
     'phpcs_additional_args',
@@ -49,7 +51,8 @@ Pref.load()
 
 
 def debug_message(msg):
-    print "[Phpcs] " + msg
+    if Pref.show_debug == True:
+        print "[Phpcs] " + msg
 
 
 class CheckstyleError():
@@ -62,7 +65,12 @@ class CheckstyleError():
         return self.line
 
     def get_message(self):
-        return HTMLParser.HTMLParser().unescape(self.message)
+        data = self.message
+        try:
+            data = data.decode('utf-8')
+        except UnicodeDecodeError:
+            data = data.decode(sublime.active_window().active_view().settings().get('fallback_encoding'))
+        return HTMLParser.HTMLParser().unescape(data)
 
     def set_point(self, point):
         self.point = point

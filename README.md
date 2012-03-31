@@ -33,6 +33,7 @@ Configuration
 
 You can configure:
 
+* show_debug - Do you want the debug information to be sent to the console?
 * extensions_to_execute - Which filetypes do you want the plugin to execute for?
 * phpcs_php_path - The path to the PHP executable. If empty string, use PATH to find it
 * phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not

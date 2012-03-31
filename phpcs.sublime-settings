@@ -1,4 +1,7 @@
 {
+    // Turn the debug output on/off
+    "show_debug": false,
+
     // Which file types (file extensions), do you want the plugin to
     // execute for
     "extensions_to_execute": ["php"],
