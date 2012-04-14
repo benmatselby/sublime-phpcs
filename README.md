@@ -65,3 +65,14 @@ This plugin has been tested on:
 * Windows XP (2.6.5 r265:79096, Mar 19 2010, 21:48:26)
 
 
+FAQ
+---
+
+###What do I do when I get "No such file or directory" error?
+```
+OSError: [Error 2] No such file or directory
+```
+
+* Well, first of all you need to check that you have PHP_CodeSniffer, and if being used, the phpmd application.
+* If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path" and "phpmd_executable_path" with the actual paths to those applications
+
