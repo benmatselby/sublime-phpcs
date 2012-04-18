@@ -28,7 +28,7 @@
     // PHP_CodeSniffer settings
 
     // Do you want to run the phpcs checker?
-    "phpcs_sniffer_run": false,
+    "phpcs_sniffer_run": true,
 
     // It seems python/sublime cannot always find the phpcs application
     // If empty, then use PATH version of phpcs, else use the set value
