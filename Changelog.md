@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+3.13
+----
+* Setting to configure if phpcs is run when the plugin is invoked [GH-20](https://github.com/benmatselby/sublime-phpcs/issues/20). Thanks to [grEvenX](https://github.com/grEvenX)
+
 3.12
 ----
 * Bug fix for [GH-18](https://github.com/benmatselby/sublime-phpcs/issues/18) which meant the plugin would fail to work when coming across non ascii characters
