@@ -6,6 +6,9 @@
     // execute for
     "extensions_to_execute": ["php"],
 
+    // Do you want to run the phpcs checker?
+    "phpcs_sniffer_run": false,
+
     // It seems python/sublime cannot always find the php application
     // If empty, then use PATH version of php, else use the set value
     "phpcs_php_path": "",
