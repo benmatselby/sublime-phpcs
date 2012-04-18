@@ -33,19 +33,30 @@ Configuration
 
 You can configure:
 
+**Plugin**
+
 * show_debug - Do you want the debug information to be sent to the console?
 * extensions_to_execute - Which filetypes do you want the plugin to execute for?
-* phpcs_php_path - The path to the PHP executable. If empty string, use PATH to find it
-* phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
 * phpcs_execute_on_save - Do you want the code sniffer plugin to run on file save for php files?
-* phpcs_show_gutter_marks - Do you want the errors to be displayed in the gutter?
-* phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
-* phpcs_sniffer_run - Do you want the PHPCS cheker to run?
-* phpcs_linter_run - Do you want the PHP linter (syntax errors) to run?
-* phpcs_linter_regex - The regex for the PHP linter output
-* phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 * phpcs_show_errors_on_save - Do you want the errors to be displayed in quick_panel on save?
+* phpcs_show_gutter_marks - Do you want the errors to be displayed in the gutter?
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
+* phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
+
+**PHP_CodeSniffer**
+
+* phpcs_sniffer_run - Do you want the PHPCS cheker to run?
+* phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
+* phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
+
+**PHP Linter**
+
+* phpcs_linter_run - Do you want the PHP linter (syntax errors) to run?
+* phpcs_php_path - The path to the PHP executable. If empty string, use PATH to find it
+* phpcs_linter_regex - The regex for the PHP linter output
+
+**PHP Mess Detector**
+
 * phpmd_run - Do you want the PHPMD to run? Off by default
 * phpmd_executable_path - The path to the phpmd executable. If empty string, use PATH to find it
 * phpmd_additional_args - This is the extra information you want to pass to the phpcs command. For example which "rulesets" you want to run

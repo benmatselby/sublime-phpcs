@@ -1,4 +1,6 @@
 {
+    // Plugin settings
+
     // Turn the debug output on/off
     "show_debug": false,
 
@@ -6,12 +8,27 @@
     // execute for
     "extensions_to_execute": ["php"],
 
+    // Execute the sniffer on file save
+    "phpcs_execute_on_save": true,
+
+    // Show the error list after save.
+    "phpcs_show_errors_on_save": true,
+
+    // Show the errors in the gutter
+    "phpcs_show_gutter_marks": true,
+
+    // Show the errors in the status bar
+    "phpcs_show_errors_in_status": true,
+
+    // Show the errors in the quick panel so you can then goto line
+    "phpcs_show_quick_panel": true,
+
+
+
+    // PHP_CodeSniffer settings
+
     // Do you want to run the phpcs checker?
     "phpcs_sniffer_run": false,
-
-    // It seems python/sublime cannot always find the php application
-    // If empty, then use PATH version of php, else use the set value
-    "phpcs_php_path": "",
 
     // It seems python/sublime cannot always find the phpcs application
     // If empty, then use PATH version of phpcs, else use the set value
@@ -29,26 +46,23 @@
         "-n": ""
     },
 
-    // Execute the sniffer on file save
-    "phpcs_execute_on_save": true,
 
-    // Show the error list after save.
-    "phpcs_show_errors_on_save": true,
 
-    // Show the errors in the gutter
-    "phpcs_show_gutter_marks": true,
-
-    // Show the errors in the status bar
-    "phpcs_show_errors_in_status": true,
-
-    // Show the errors in the quick panel so you can then goto line
-    "phpcs_show_quick_panel": true,
+    // PHP Linter settings
 
     // Are we going to run php -l over the file?
     "phpcs_linter_run": true,
 
+    // It seems python/sublime cannot always find the php application
+    // If empty, then use PATH version of php, else use the set value
+    "phpcs_php_path": "",
+
     // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
     "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)",
+
+
+
+    // PHP Mess Detector settings
 
     // Execute phpmd
     "phpmd_run": false,
