@@ -1,18 +1,18 @@
 [
     {
-        "caption": "PHP CodeSniffer: Sniff This File",
+        "caption": "PHP Code Sniffer: Sniff this file",
         "command": "phpcs_sniff_this_file"
     },
     {
-        "caption": "PHP CodeSniffer: Clear Sniffer Marks",
+        "caption": "PHP Code Sniffer: Clear sniffer marks",
         "command": "phpcs_clear_sniffer_marks"
     },
     {
-        "caption": "PHP CodeSniffer: Show Previous Errors",
+        "caption": "PHP Code Sniffer: Show previous errors",
         "command": "phpcs_show_previous_errors"
     },
     {
-        "caption": "PHP CodeSniffer Fixer: Fix This File",
+        "caption": "PHP Code Sniffer Fixer: Fix this file",
         "command": "phpcs_fix_this_file"
     }
 ]

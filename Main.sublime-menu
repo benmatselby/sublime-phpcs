@@ -5,9 +5,9 @@
         "children":
         [
             {
-                "caption": "PHP CodeSniffer...",
+                "caption": "PHP Code Sniffer...",
                 "command": "show_overlay",
-                "args": {"overlay": "command_palette", "text": "PHP CodeSniffer: " }
+                "args": {"overlay": "command_palette", "text": "PHP Code Sniffer: " }
             }
         ]
     },
@@ -24,7 +24,7 @@
                 "children":
                 [
                     {
-                        "caption": "PHP CodeSniffer",
+                        "caption": "PHP Code Sniffer",
                         "children":
                         [
                             {

@@ -1,6 +1,11 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.1
+---
+* Added support to use php-cs-fixer on a directory in the side bar
+* Now displays the php-cs-fixer changes in the quick panel
+
 4.0
 ---
 * Added basic support for [php-cs-fixer](https://github.com/fabpot/PHP-CS-Fixer) based on the work by [Jeremy Romey](https://github.com/jeremyFreeAgent/sublime-php-cs-fixer/)

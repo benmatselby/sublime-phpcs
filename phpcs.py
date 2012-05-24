@@ -158,6 +158,7 @@ class Fixer(ShellCommand):
             return
 
         args.append("fix")
+        args.append("--verbose")
 
         # Add the additional arguments from the settings file to the command
         for key, value in Pref.php_cs_fixer_additional_args.items():
@@ -172,6 +173,11 @@ class Fixer(ShellCommand):
     def parse_report(self, args):
         report = self.shell_out(args)
         debug_message(report)
+        lines = re.finditer('.*(?P<line>\d+)\) (?P<file>.*)', report)
+
+        for line in lines:
+            error = CheckstyleError(line.group('line'), line.group('file'))
+            self.error_list.append(error)
 
 
 class MessDetector(ShellCommand):
@@ -316,17 +322,26 @@ class PhpcsCommand():
         self.window.show_quick_panel(self.error_list, self.on_quick_panel_done)
 
     def fix_standards_errors(self, path):
-        Fixer().execute(path)
+        self.error_lines = {}
+        self.error_list = []
+        self.report = []
+        fixes = Fixer().get_errors(path)
+
+        for fix in fixes:
+            self.error_list.append(fix.get_message())
+
+        self.show_quick_panel()
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
             return
 
-        pt = self.report[picked].get_point()
-        self.window.active_view().sel().clear()
-        self.window.active_view().sel().add(sublime.Region(pt))
-        self.window.active_view().show(pt)
-        self.set_status_bar()
+        if (len(self.report) > 0):
+            pt = self.report[picked].get_point()
+            self.window.active_view().sel().clear()
+            self.window.active_view().sel().add(sublime.Region(pt))
+            self.window.active_view().show(pt)
+            self.set_status_bar()
 
     def get_errors(self, line):
         if not line + 1 in self.error_lines:
@@ -411,6 +426,28 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
             return PhpcsTextBase.should_execute(self.view)
         else:
             return False
+
+
+class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
+    """Command to use php-cs-fixer to 'fix' the directory"""
+    def run(self, paths=[]):
+        cmd = PhpcsCommand.instance(self.window.active_view())
+        cmd.fix_standards_errors(os.path.normpath(paths[0]))
+
+    def is_enabled(self):
+        if Pref.php_cs_fixer_executable_path != '':
+            return True
+        else:
+            return False
+
+    def is_visible(self, paths=[]):
+        if Pref.php_cs_fixer_executable_path != '':
+            return True
+        else:
+            return False
+
+    def description(self, paths=[]):
+        return 'Fix this directory (PHP-CS-Fixer)'
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
