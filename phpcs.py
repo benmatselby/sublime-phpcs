@@ -102,10 +102,8 @@ class ShellCommand():
         data = None
         debug_message(' '.join(cmd))
 
-        if sublime.platform() == "windows":
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-        else:
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        shell = sublime.platform() == "windows"
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=shell)
 
         if proc.stdout:
             data = proc.communicate()[0]
