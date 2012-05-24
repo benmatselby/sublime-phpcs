@@ -4,7 +4,7 @@
         "caption": "PHP Code Sniffer",
         "children":
         [
-            { "command": "phpcs_fix_this_directory", "args": { "paths": [] } }
+            { "command": "phpcs_fix_this_directory", "args": { "paths": [] }, "caption": "Fix this file/directory (PHP-CS-Fixer)" }
         ]
     }
 ]

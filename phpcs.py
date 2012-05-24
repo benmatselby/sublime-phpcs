@@ -419,7 +419,6 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
     def run(self, args):
         cmd = PhpcsCommand.instance(self.view)
         cmd.fix_standards_errors(self.view.file_name())
-        sublime.status_message("php-cs-fixer executed")
 
     def is_enabled(self):
         if Pref.php_cs_fixer_executable_path != '':
