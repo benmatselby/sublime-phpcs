@@ -48,6 +48,23 @@
 
 
 
+    // PHP-CS-Fixer settings
+
+    // Path to where you have the php-cs-fixer installed
+    "php_cs_fixer_executable_path": "/Users/bselby/git/external/PHP-CS-Fixer/php-cs-fixer",
+
+    // Additional arguments you can specify into the application
+    //
+    // Example:
+    // {
+    //     "--level": "all"
+    // }
+    "php_cs_fixer_additional_args": {
+        "--level": "all"
+    },
+
+
+
     // PHP Linter settings
 
     // Are we going to run php -l over the file?

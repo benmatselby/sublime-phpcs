@@ -10,5 +10,9 @@
     {
         "caption": "PHP CodeSniffer: Show Previous Errors",
         "command": "phpcs_show_previous_errors"
+    },
+    {
+        "caption": "PHP CodeSniffer Fixer: Fix This File",
+        "command": "phpcs_fix_this_file"
     }
 ]

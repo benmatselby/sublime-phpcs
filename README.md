@@ -45,9 +45,14 @@ You can configure:
 
 **PHP_CodeSniffer**
 
-* phpcs_sniffer_run - Do you want the PHPCS cheker to run?
+* phpcs_sniffer_run - Do you want the PHPCS checker to run?
 * phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 * phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
+
+**PHP CodeSniffer Fixer**
+
+* php_cs_fixer_executable_path - The path to the php-cs-fixer application.
+* php_cs_fixer_additional_args - This is the extra information you want to pass to the php-cs-fixer command. For example which "fixers" you want to run
 
 **PHP Linter**
 

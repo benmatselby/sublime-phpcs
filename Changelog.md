@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.0
+---
+* Added basic support for [php-cs-fixer](https://github.com/fabpot/PHP-CS-Fixer) based on the work by [Jeremy Romey](https://github.com/jeremyFreeAgent/sublime-php-cs-fixer/)
+
 3.13
 ----
 * Setting to configure if phpcs is run when the plugin is invoked [GH-20](https://github.com/benmatselby/sublime-phpcs/issues/20). Thanks to [grEvenX](https://github.com/grEvenX)

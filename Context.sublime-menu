@@ -6,7 +6,8 @@
         [
             { "command": "phpcs_sniff_this_file" },
             { "command": "phpcs_show_previous_errors" },
-            { "command": "phpcs_clear_sniffer_marks" }
+            { "command": "phpcs_clear_sniffer_marks" },
+            { "command": "phpcs_fix_this_file" }
         ]
     }
 ]

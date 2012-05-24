@@ -16,17 +16,23 @@ class Pref:
     def load():
         Pref.show_debug = settings.get('show_debug', False)
         Pref.extensions_to_execute = settings.get('extensions_to_execute', ['php'])
-        Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
-        Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
         Pref.phpcs_show_errors_on_save = bool(settings.get('phpcs_show_errors_on_save'))
         Pref.phpcs_show_gutter_marks = bool(settings.get('phpcs_show_gutter_marks'))
         Pref.phpcs_show_errors_in_status = bool(settings.get('phpcs_show_errors_in_status'))
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
+
         Pref.phpcs_sniffer_run = bool(settings.get('phpcs_sniffer_run'))
-        Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
-        Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
         Pref.phpcs_executable_path = settings.get('phpcs_executable_path', '')
+        Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
+
+        Pref.php_cs_fixer_executable_path = settings.get('php_cs_fixer_executable_path', '')
+        Pref.php_cs_fixer_additional_args = settings.get('php_cs_fixer_additional_args', {})
+
+        Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
+        Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
+        Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
+
         Pref.phpmd_run = settings.get('phpmd_run')
         Pref.phpmd_executable_path = settings.get('phpmd_executable_path', '')
         Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
@@ -36,17 +42,19 @@ Pref.load()
 [settings.add_on_change(setting, Pref.load) for setting in [
     'show_debug',
     'extensions_to_execute',
-    'phpcs_php_path',
-    'phpcs_additional_args',
     'phpcs_execute_on_save',
     'phpcs_show_errors_on_save',
     'phpcs_show_gutter_marks',
     'phpcs_show_errors_in_status',
     'phpcs_show_quick_panel',
     'phpcs_sniffer_run',
-    'phpcs_linter_run',
-    'phpcs_linter_regex',
     'phpcs_executable_path',
+    'phpcs_additional_args',
+    'php_cs_fixer_executable_path',
+    'php_cs_fixer_additional_args',
+    'phpcs_linter_run',
+    'phpcs_php_path',
+    'phpcs_linter_regex',
     'phpmd_run',
     'phpmd_executable_path',
     'phpmd_additional_args']]
@@ -139,6 +147,33 @@ class Sniffer(ShellCommand):
         for line in lines:
             error = CheckstyleError(line.group('line'), line.group('message'))
             self.error_list.append(error)
+
+
+class Fixer(ShellCommand):
+    """Concrete class for PHP-CS-Fixer"""
+    def execute(self, path):
+
+        if Pref.php_cs_fixer_executable_path != "":
+            args = [Pref.php_cs_fixer_executable_path]
+        else:
+            debug_message("php_cs_fixer_executable_path is not set, therefore cannot execute")
+            return
+
+        args.append("fix")
+
+        # Add the additional arguments from the settings file to the command
+        for key, value in Pref.php_cs_fixer_additional_args.items():
+            arg = key
+            if value != "":
+                arg += "=" + value
+            args.append(arg)
+
+        args.append(os.path.normpath(path))
+        self.parse_report(args)
+
+    def parse_report(self, args):
+        report = self.shell_out(args)
+        debug_message(report)
 
 
 class MessDetector(ShellCommand):
@@ -250,7 +285,6 @@ class PhpcsCommand():
         else:
             self.window.active_view().erase_status('Phpcs')
 
-
     def generate(self):
         self.error_list = []
         region_set = []
@@ -282,6 +316,9 @@ class PhpcsCommand():
 
     def show_quick_panel(self):
         self.window.show_quick_panel(self.error_list, self.on_quick_panel_done)
+
+    def fix_standards_errors(self, path):
+        Fixer().execute(path)
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
@@ -360,6 +397,22 @@ class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
 
     def is_enabled(self):
         return PhpcsTextBase.should_execute(self.view)
+
+
+class PhpcsFixThisFileCommand(PhpcsTextBase):
+    """Command to use php-cs-fixer to 'fix' the file"""
+    description = 'Fix coding standard issues (php-cs-fixer)'
+
+    def run(self, args):
+        cmd = PhpcsCommand.instance(self.view)
+        cmd.fix_standards_errors(self.view.file_name())
+        sublime.status_message("php-cs-fixer executed")
+
+    def is_enabled(self):
+        if Pref.php_cs_fixer_executable_path != '':
+            return PhpcsTextBase.should_execute(self.view)
+        else:
+            return False
 
 
 class PhpcsEventListener(sublime_plugin.EventListener):
