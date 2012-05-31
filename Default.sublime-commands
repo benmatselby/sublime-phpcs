@@ -12,7 +12,7 @@
         "command": "phpcs_show_previous_errors"
     },
     {
-        "caption": "PHP Code Sniffer Fixer: Fix this file",
+        "caption": "PHP Coding Standards Fixer: Fix this file",
         "command": "phpcs_fix_this_file"
     }
 ]
