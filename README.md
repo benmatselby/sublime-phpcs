@@ -1,7 +1,7 @@
-Sublime PHP CodeSniffer, PHP Coding Standard Fixer, Linter and Mess Detector Plugin
-===================================================================================
+Sublime PHP CodeSniffer, PHP Coding Standards Fixer, Linter and Mess Detector Plugin
+====================================================================================
 
-This plugin adds PHP CodeSniffer, PHP Coding Standard Fixer, the PHP Linter and phpmd support to Sublime Text 2.
+This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter and phpmd support to Sublime Text 2.
 
 Installation
 ------------
@@ -16,7 +16,7 @@ Simply checkout the git repo into “~/Library/Application Support/Sublime Text 
 PHP CodeSniffer Support For Sublime Text 2
 ------------------------------------------
 
-This plugin adds support for running PHP CodeSniffer, PHP Coding Standard Fixer, the PHP linter and PHPMD from inside Sublime Text 2.
+This plugin adds support for running PHP CodeSniffer, PHP Coding Standards Fixer, the PHP linter and PHPMD from inside Sublime Text 2.
 
 Right-click in the editor to:
 
