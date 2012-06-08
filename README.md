@@ -6,7 +6,7 @@ This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter and
 Installation
 ------------
 
-Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> PHP CodeSniffer) to install this plugin.
+Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> Phpcs) to install this plugin.
 
 Or
 
