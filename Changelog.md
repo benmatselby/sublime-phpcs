@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.1.1
+-----
+* Small patch to be consistent with the naming of the tools. Thanks to [Beau Simensen](https://github.com/simensen)
+
 4.1
 ---
 * Added support to use php-cs-fixer on a directory in the side bar
