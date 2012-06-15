@@ -19,6 +19,7 @@ class Pref:
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
         Pref.phpcs_show_errors_on_save = bool(settings.get('phpcs_show_errors_on_save'))
         Pref.phpcs_show_gutter_marks = bool(settings.get('phpcs_show_gutter_marks'))
+        Pref.phpcs_outline_for_errors = bool(settings.get('phpcs_outline_for_errors'))
         Pref.phpcs_show_errors_in_status = bool(settings.get('phpcs_show_errors_in_status'))
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
 
@@ -45,6 +46,7 @@ Pref.load()
     'phpcs_execute_on_save',
     'phpcs_show_errors_on_save',
     'phpcs_show_gutter_marks',
+    'phpcs_outline_for_errors',
     'phpcs_show_errors_in_status',
     'phpcs_show_quick_panel',
     'phpcs_sniffer_run',
@@ -302,15 +304,19 @@ class PhpcsCommand():
             for error in report:
                 line = int(error.get_line())
                 pt = self.window.active_view().text_point(line - 1, 0)
-                region_set.append(sublime.Region(pt))
+                region_line = self.window.active_view().line(pt)
+                region_set.append(region_line)
                 self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
                 self.error_lines[line] = error.get_message()
 
             if len(self.error_list) > 0:
-                if Pref.phpcs_show_gutter_marks == True:
-                    self.window.active_view().add_regions(shell_command, region_set, shell_command, icon)
+                icon = icon if Pref.phpcs_show_gutter_marks else ''
+                outline = sublime.DRAW_OUTLINED if Pref.phpcs_outline_for_errors else sublime.HIDDEN
+                if Pref.phpcs_show_gutter_marks or Pref.phpcs_outline_for_errors:
+                    self.window.active_view().add_regions(shell_command,
+                        region_set, shell_command, icon, outline)
 
         if Pref.phpcs_show_quick_panel == True:
             # Skip showing the errors if we ran on save, and the option isn't set.
