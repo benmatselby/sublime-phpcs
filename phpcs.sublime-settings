@@ -18,7 +18,7 @@
     "phpcs_show_gutter_marks": true,
 
     // Show outline for errors
-    "phpcs_outline_for_errors": false,
+    "phpcs_outline_for_errors": true,
 
     // Show the errors in the status bar
     "phpcs_show_errors_in_status": true,
