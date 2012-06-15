@@ -40,6 +40,7 @@ You can configure:
 * phpcs_execute_on_save - Do you want the code sniffer plugin to run on file save for php files?
 * phpcs_show_errors_on_save - Do you want the errors to be displayed in quick_panel on save?
 * phpcs_show_gutter_marks - Do you want the errors to be displayed in the gutter?
+* phpcs_outline_for_errors - Do you want the errors to be highlighted in the editor?
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
 * phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
 

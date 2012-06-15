@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.2
+---
+* Ability to configure if you want the errors to be highlighted in the editor. Thanks to [Aleksandr Gornostal](https://github.com/gornostal)
+
 4.1.1
 -----
 * Small patch to be consistent with the naming of the tools. Thanks to [Beau Simensen](https://github.com/simensen)
