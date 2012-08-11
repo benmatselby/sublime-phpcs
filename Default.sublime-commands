@@ -12,6 +12,10 @@
         "command": "phpcs_show_previous_errors"
     },
     {
+        "caption": "PHP Code Sniffer: Goto next error",
+        "command": "phpcs_goto_next_error"
+    },
+    {
         "caption": "PHP Coding Standards Fixer: Fix this file",
         "command": "phpcs_fix_this_file"
     }

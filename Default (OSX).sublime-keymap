@@ -1,4 +1,5 @@
 [
     { "keys": ["ctrl+super+s"], "command": "phpcs_show_previous_errors" },
-    { "keys": ["shift+ctrl+super+s"], "command": "phpcs_sniff_this_file" }
+    { "keys": ["shift+ctrl+super+s"], "command": "phpcs_sniff_this_file" },
+    { "keys": ["ctrl+super+n"], "command": "phpcs_goto_next_error" }
 ]

@@ -6,6 +6,7 @@
         [
             { "command": "phpcs_sniff_this_file", "caption": "Sniff this file" },
             { "command": "phpcs_show_previous_errors", "caption": "Show previous errors" },
+            { "command": "phpcs_goto_next_error", "caption": "Goto Next Error" },
             { "command": "phpcs_clear_sniffer_marks", "caption": "Clear sniffer marks" },
             { "command": "phpcs_fix_this_file", "caption": "Fix this file (PHP-CS-Fixer)" }
         ]
