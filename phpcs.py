@@ -27,6 +27,7 @@ class Pref:
         Pref.phpcs_executable_path = settings.get('phpcs_executable_path', '')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
 
+        Pref.php_cs_fixer_on_save = settings.get('php_cs_fixer_on_save')
         Pref.php_cs_fixer_executable_path = settings.get('php_cs_fixer_executable_path', '')
         Pref.php_cs_fixer_additional_args = settings.get('php_cs_fixer_additional_args', {})
 
@@ -52,6 +53,7 @@ Pref.load()
     'phpcs_sniffer_run',
     'phpcs_executable_path',
     'phpcs_additional_args',
+    'php_cs_fixer_on_save',
     'php_cs_fixer_executable_path',
     'php_cs_fixer_additional_args',
     'phpcs_linter_run',
@@ -493,6 +495,10 @@ class PhpcsEventListener(sublime_plugin.EventListener):
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
+
+        if Pref.php_cs_fixer_on_save == True:
+            cmd = PhpcsCommand.instance(view)
+            cmd.fix_standards_errors(view.file_name())
 
     def on_selection_modified(self, view):
         if not PhpcsTextBase.should_execute(view):

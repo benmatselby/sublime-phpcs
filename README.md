@@ -52,6 +52,7 @@ You can configure:
 
 **PHP CodeSniffer Fixer**
 
+* php_cs_fixer_on_save - Do you want to run the fixer on file save?
 * php_cs_fixer_executable_path - The path to the php-cs-fixer application.
 * php_cs_fixer_additional_args - This is the extra information you want to pass to the php-cs-fixer command. For example which "fixers" you want to run
 

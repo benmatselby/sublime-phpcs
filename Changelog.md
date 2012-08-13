@@ -4,6 +4,7 @@ Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 4.3
 ---
 * Ehancement for [GH-34](https://github.com/benmatselby/sublime-phpcs/issues/34) which provides a command to "Goto Next Error" which can also have a shortcut key assigned to it. Thanks to [Casey Becking](https://github.com/caseybecking) for raising the feature request
+* Ability to fun PHP-CS-Fixer on save now. Thanks to [Cedric Lombardot](https://github.com/cedriclombardot) for raising the feature request
 
 4.2
 ---
