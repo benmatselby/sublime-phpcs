@@ -24,6 +24,7 @@ class Pref:
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
 
         Pref.phpcs_sniffer_run = bool(settings.get('phpcs_sniffer_run'))
+        Pref.phpcs_command_on_save = bool(settings.get('phpcs_command_on_save'))
         Pref.phpcs_executable_path = settings.get('phpcs_executable_path', '')
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
 
@@ -32,10 +33,12 @@ class Pref:
         Pref.php_cs_fixer_additional_args = settings.get('php_cs_fixer_additional_args', {})
 
         Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
+        Pref.phpcs_linter_command_on_save = bool(settings.get('phpcs_linter_command_on_save'))
         Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
         Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
 
         Pref.phpmd_run = settings.get('phpmd_run')
+        Pref.phpmd_command_on_save = settings.get('phpmd_command_on_save')
         Pref.phpmd_executable_path = settings.get('phpmd_executable_path', '')
         Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
 
@@ -51,15 +54,18 @@ Pref.load()
     'phpcs_show_errors_in_status',
     'phpcs_show_quick_panel',
     'phpcs_sniffer_run',
+    'phpcs_command_on_save',
     'phpcs_executable_path',
     'phpcs_additional_args',
     'php_cs_fixer_on_save',
     'php_cs_fixer_executable_path',
     'php_cs_fixer_additional_args',
     'phpcs_linter_run',
+    'phpcs_linter_command_on_save',
     'phpcs_php_path',
     'phpcs_linter_regex',
     'phpmd_run',
+    'phpmd_command_on_save',
     'phpmd_executable_path',
     'phpmd_additional_args']]
 
@@ -270,9 +276,19 @@ class PhpcsCommand():
     def run(self, path, event=None):
         self.event = event
         self.checkstyle_reports = []
-        self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
-        self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
-        self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
+
+        if event != 'on_save':
+            self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
+            self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
+            self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
+        else:
+            if Pref.phpcs_linter_command_on_save == True:
+                self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
+            if Pref.phpcs_command_on_save == True:
+                self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
+            if Pref.phpmd_command_on_save == True:
+                self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
+
         sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):

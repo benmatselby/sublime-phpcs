@@ -47,6 +47,7 @@ You can configure:
 **PHP_CodeSniffer**
 
 * phpcs_sniffer_run - Do you want the PHPCS checker to run?
+* phpcs_command_on_save - Do you want the command to execute on save?
 * phpcs_executable_path - The path to the phpcs executable. If empty string, use PATH to find it
 * phpcs_additional_args - This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not
 
@@ -59,12 +60,14 @@ You can configure:
 **PHP Linter**
 
 * phpcs_linter_run - Do you want the PHP linter (syntax errors) to run?
+* phpcs_linter_command_on_save - Do you want the command to execute on save?
 * phpcs_php_path - The path to the PHP executable. If empty string, use PATH to find it
 * phpcs_linter_regex - The regex for the PHP linter output
 
 **PHP Mess Detector**
 
 * phpmd_run - Do you want the PHPMD to run? Off by default
+* phpmd_command_on_save - Do you want the command to execute on save?
 * phpmd_executable_path - The path to the phpmd executable. If empty string, use PATH to find it
 * phpmd_additional_args - This is the extra information you want to pass to the phpcs command. For example which "rulesets" you want to run
 

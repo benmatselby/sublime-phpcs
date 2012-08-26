@@ -33,6 +33,9 @@
     // Do you want to run the phpcs checker?
     "phpcs_sniffer_run": true,
 
+    // Execute the sniffer on file save
+    "phpcs_command_on_save": true,
+
     // It seems python/sublime cannot always find the phpcs application
     // If empty, then use PATH version of phpcs, else use the set value
     "phpcs_executable_path": "",
@@ -76,6 +79,9 @@
     // Are we going to run php -l over the file?
     "phpcs_linter_run": true,
 
+    // Execute the linter on file save
+    "phpcs_linter_command_on_save": true,
+
     // It seems python/sublime cannot always find the php application
     // If empty, then use PATH version of php, else use the set value
     "phpcs_php_path": "",
@@ -89,6 +95,9 @@
 
     // Execute phpmd
     "phpmd_run": false,
+
+    // Execute the phpmd on file save
+    "phpmd_command_on_save": true,
 
     // It seems python/sublime cannot always find the phpmd application
     // If empty, then use PATH version of phpmd, else use the set value
