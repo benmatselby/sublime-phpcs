@@ -60,7 +60,7 @@
     "php_cs_fixer_on_save": false,
 
     // Path to where you have the php-cs-fixer installed
-    "php_cs_fixer_executable_path": "/Users/bselby/git/external/PHP-CS-Fixer/php-cs-fixer",
+    "php_cs_fixer_executable_path": "",
 
     // Additional arguments you can specify into the application
     //
