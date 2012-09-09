@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.4.1
+-----
+* Blank out the default setting for php_cs_fixer_executable_path. Thanks to [Eric Lewis](https://github.com/ericandrewlewis/) for the pull request.
+
 4.4
 ---
 * Provide configuration options for each command to execute on save. Thanks to [Jeremy Romey](https://github.com/jeremyFreeAgent) for the [suggestion](https://github.com/benmatselby/sublime-phpcs/issues/36)
