@@ -7,7 +7,7 @@ import time
 import sublime
 import sublime_plugin
 import HTMLParser
-
+import functools
 
 settings = sublime.load_settings('phpcs.sublime-settings')
 
@@ -518,6 +518,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         if Pref.php_cs_fixer_on_save == True:
             cmd = PhpcsCommand.instance(view)
             cmd.fix_standards_errors(view.file_name())
+            sublime.set_timeout(functools.partial(view.run_command, 'revert'), 0)
 
 
     def on_selection_modified(self, view):
