@@ -7,7 +7,7 @@ import time
 import sublime
 import sublime_plugin
 import HTMLParser
-
+import functools
 
 settings = sublime.load_settings('phpcs.sublime-settings')
 
@@ -29,6 +29,7 @@ class Pref:
         Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
 
         Pref.php_cs_fixer_on_save = settings.get('php_cs_fixer_on_save')
+        Pref.php_cs_fixer_show_quick_panel = settings.get('php_cs_fixer_show_quick_panel')
         Pref.php_cs_fixer_executable_path = settings.get('php_cs_fixer_executable_path', '')
         Pref.php_cs_fixer_additional_args = settings.get('php_cs_fixer_additional_args', {})
 
@@ -58,6 +59,7 @@ Pref.load()
     'phpcs_executable_path',
     'phpcs_additional_args',
     'php_cs_fixer_on_save',
+    'php_cs_fixer_show_quick_panel',
     'php_cs_fixer_executable_path',
     'php_cs_fixer_additional_args',
     'phpcs_linter_run',
@@ -354,7 +356,8 @@ class PhpcsCommand():
         for fix in fixes:
             self.error_list.append(fix.get_message())
 
-        self.show_quick_panel()
+        if Pref.php_cs_fixer_show_quick_panel == True:
+            self.show_quick_panel()
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
@@ -515,6 +518,8 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         if Pref.php_cs_fixer_on_save == True:
             cmd = PhpcsCommand.instance(view)
             cmd.fix_standards_errors(view.file_name())
+            sublime.set_timeout(functools.partial(view.run_command, 'revert'), 0)
+
 
     def on_selection_modified(self, view):
         if not PhpcsTextBase.should_execute(view):

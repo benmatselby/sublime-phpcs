@@ -59,6 +59,9 @@
     // Fix the issues on save
     "php_cs_fixer_on_save": false,
 
+    // Show the quick panel
+    "php_cs_fixer_show_quick_panel": false,
+
     // Path to where you have the php-cs-fixer installed
     "php_cs_fixer_executable_path": "",
 
