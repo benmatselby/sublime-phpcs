@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.5
+---
+* Define a setting "php_cs_fixer_show_quick_panel" that stops quick panel displaying for php-cs-fixer. Thanks to [Kevin Perrine](https://github.com/kevinsperrine/) for the pull request
+
 4.4.1
 -----
 * Blank out the default setting for php_cs_fixer_executable_path. Thanks to [Eric Lewis](https://github.com/ericandrewlewis/) for the pull request.
