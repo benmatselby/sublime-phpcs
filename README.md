@@ -6,11 +6,25 @@ This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter and
 Installation
 ------------
 
-Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> Phpcs) to install this plugin.
+Use Sublime Text 2's [Package Control](http://wbond.net/sublime_packages/package_control) (Preferences -> Package Control -> Install Package -> Phpcs) to install this plugin. This is the recommended installation path.
 
 Or
 
-Simply checkout the git repo into “~/Library/Application Support/Sublime Text 2/Packages/Phpcs or the equivalent folder on Windows or Linux.
+Simply checkout the git repo into “~/Library/Application Support/Sublime Text 2/Packages/ or the equivalent folder on Windows or Linux.
+
+```bash
+$ cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
+$ git clone git://github.com/benmatselby/sublime-phpcs.git Phpcs
+```
+
+In both cases, you may need to then configure the following with the actual path to the application:
+
+* "phpcs_php_path"
+* "phpcs_executable_path"
+* "phpmd_executable_path"
+* "php_cs_fixer_executable_path"
+
+They are optional for the plugin. The path needs to include the application such as "/usr/local/bin/phpcs".
 
 
 PHP CodeSniffer Support For Sublime Text 2
@@ -54,6 +68,7 @@ You can configure:
 **PHP CodeSniffer Fixer**
 
 * php_cs_fixer_on_save - Do you want to run the fixer on file save?
+* php_cs_fixer_show_quick_panel - Do you want the quick panel to display on execution?
 * php_cs_fixer_executable_path - The path to the php-cs-fixer application.
 * php_cs_fixer_additional_args - This is the extra information you want to pass to the php-cs-fixer command. For example which "fixers" you want to run
 
@@ -91,10 +106,11 @@ FAQ
 ---
 
 ###What do I do when I get "No such file or directory" error?
+
 ```
 OSError: [Error 2] No such file or directory
 ```
 
 * Well, first of all you need to check that you have PHP_CodeSniffer, and if being used, the phpmd application.
-* If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path" and "phpmd_executable_path" with the actual paths to those applications
+* If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path", "phpmd_executable_path" and "php_cs_fixer_executable_path" with the actual paths to those applications
 
