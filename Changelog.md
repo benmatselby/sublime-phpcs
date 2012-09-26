@@ -1,6 +1,12 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.5.1
+-----
+* Minor changes to the README to better explain non package control installation.
+* Minor change to README for naming of the plugin
+* Minor change to when the "Goto Next Error" context menu is enabled
+
 4.5
 ---
 * Define a setting "php_cs_fixer_show_quick_panel" that stops quick panel displaying for php-cs-fixer. Thanks to [Kevin Perrine](https://github.com/kevinsperrine/) for the pull request
