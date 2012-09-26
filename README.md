@@ -27,8 +27,8 @@ In both cases, you may need to then configure the following with the actual path
 They are optional for the plugin. The path needs to include the application such as "/usr/local/bin/phpcs".
 
 
-PHP CodeSniffer Support For Sublime Text 2
-------------------------------------------
+How to use the plugin
+---------------------
 
 This plugin adds support for running PHP CodeSniffer, PHP Coding Standards Fixer, the PHP linter and PHPMD from inside Sublime Text 2.
 
@@ -37,7 +37,7 @@ Right-click in the editor to:
 * Sniff the current file
 
 You can also open up the Command Palette (CTRL + SHIFT + P on Linux), and type
-'PHP CodeSniffer' to see what you can do with PHP CodeSniffer in the currently open file.
+'PHP Code Sniffer' to see what you can do with the PHP Code Sniffer plugin in the currently open file.
 
 For more information on how to run this plugin, visit [here](http://soulbroken.co.uk/code/sublimephpcs)
 
