@@ -455,6 +455,12 @@ class PhpcsGotoNextErrorCommand(PhpcsTextBase):
         cmd = PhpcsCommand.instance(self.view)
         next_line = cmd.get_next_error(line)
 
+    def is_enabled(self):
+        '''This command is only enabled if it's a PHP buffer with previous errors.'''
+        return PhpcsTextBase.should_execute(self.view) \
+            and PhpcsCommand.instance(self.view, False) \
+            and len(PhpcsCommand.instance(self.view, False).error_list)
+
 
 class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
     """Command to clear the sniffer marks from the view"""
