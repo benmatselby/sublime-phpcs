@@ -26,6 +26,14 @@ In both cases, you may need to then configure the following with the actual path
 
 They are optional for the plugin. The path needs to include the application such as "/usr/local/bin/phpcs".
 
+In order to get the path of the application (On a Mac/Linux based environment), you can use:
+
+```bash
+$ which phpcs
+$ which phpmd
+$ which php-cs-fixer
+```
+
 
 How to use the plugin
 ---------------------
