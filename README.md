@@ -3,6 +3,24 @@ Sublime PHP CodeSniffer, PHP Coding Standards Fixer, Linter and Mess Detector Pl
 
 This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter and phpmd support to Sublime Text 2.
 
+
+Requirements
+------------
+
+Requirements for this plugin, should you want all the options to work:
+
+* PHP_CodeSniffer 1.3+ (potentially works with lower versions, but this hasn't been tested)
+* PHPMD 1.4+ (potentially works with lower versions, but this hasn't been tested)
+* PHP CS Fixer version 0.2+ (potentially works with lower versions, but this hasn't been tested)
+* Python 2.6
+
+This plugin has been tested on:
+
+* Mac OS X 10.6.8 (2.6.1 r261:67515, Jun 24 2010, 21:47:49) and 10.7.3 (2.6.7 r267:88850, Jul 31 2011, 19:30:54)
+* Ubuntu 11.10 (2.6.6 r266:84292, Jun 16 2011, 22:35:51)
+* Windows XP (2.6.5 r265:79096, Mar 19 2010, 21:48:26)
+
+
 Installation
 ------------
 
@@ -93,23 +111,6 @@ You can configure:
 * phpmd_command_on_save - Do you want the command to execute on save?
 * phpmd_executable_path - The path to the phpmd executable. If empty string, use PATH to find it
 * phpmd_additional_args - This is the extra information you want to pass to the phpcs command. For example which "rulesets" you want to run
-
-
-Requirements
-------------
-
-Requirements for this plugin, should you want all the options to work:
-
-* PHP_CodeSniffer 1.3+ (potentially works with lower versions, but this hasn't been tested)
-* PHPMD 1.4+ (potentially works with lower versions, but this hasn't been tested)
-* PHP CS Fixer version 0.2+ (potentially works with lower versions, but this hasn't been tested)
-* Python 2.6
-
-This plugin has been tested on:
-
-* Mac OS X 10.6.8 (2.6.1 r261:67515, Jun 24 2010, 21:47:49) and 10.7.3 (2.6.7 r267:88850, Jul 31 2011, 19:30:54)
-* Ubuntu 11.10 (2.6.6 r266:84292, Jun 16 2011, 22:35:51)
-* Windows XP (2.6.5 r265:79096, Mar 19 2010, 21:48:26)
 
 
 FAQ
