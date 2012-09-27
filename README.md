@@ -125,3 +125,14 @@ OSError: [Error 2] No such file or directory
 * Well, first of all you need to check that you have PHP_CodeSniffer, and if being used, the phpmd application.
 * If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path", "phpmd_executable_path" and "php_cs_fixer_executable_path" with the actual paths to those applications
 
+###Why am I seeing an include_path error?
+
+```
+Warning: include_once(PHP/CodeSniffer/CLI.php): failed to open stream: No such file or directory in /usr/bin/phpcs on line 31
+Warning: include_once(): Failed opening 'PHP/CodeSniffer/CLI.php' for inclusion (include_path='.:') in /usr/bin/phpcs on line 31
+Fatal error: Class 'PHP_CodeSniffer_CLI' not found in /usr/bin/phpcs on line 34
+```
+
+* The chances are you have not updated your php.ini file
+* Edit /etc/php.ini and find the line: ;include_path = ".:/php/includes" and change it to:
+include_path = ".:/usr/lib/php/pear"
