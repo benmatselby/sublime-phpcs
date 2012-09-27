@@ -90,9 +90,11 @@ You can configure:
 Requirements
 ------------
 
-Requirements for this plugin:
+Requirements for this plugin, should you want all the options to work:
 
-* PHP_CodeSniffer 1.3.* (potentially works with lower versions, but this hasn't been tested)
+* PHP_CodeSniffer 1.3+ (potentially works with lower versions, but this hasn't been tested)
+* PHPMD 1.4+ (potentially works with lower versions, but this hasn't been tested)
+* PHP CS Fixer version 0.2+ (potentially works with lower versions, but this hasn't been tested)
 * Python 2.6
 
 This plugin has been tested on:
