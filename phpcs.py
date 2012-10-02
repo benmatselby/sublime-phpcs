@@ -279,12 +279,12 @@ class PhpcsCommand():
         self.checkstyle_reports = []
 
         if event != 'on_save':
-            self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
+            self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'dot'])
             self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
             self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
         else:
             if Pref.phpcs_linter_command_on_save == True:
-                self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'cross'])
+                self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'dot'])
             if Pref.phpcs_command_on_save == True:
                 self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
             if Pref.phpmd_command_on_save == True:
