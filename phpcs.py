@@ -45,34 +45,6 @@ class Pref:
 
 Pref.load()
 
-[settings.add_on_change(setting, Pref.load) for setting in [
-    'show_debug',
-    'extensions_to_execute',
-    'phpcs_execute_on_save',
-    'phpcs_show_errors_on_save',
-    'phpcs_show_gutter_marks',
-    'phpcs_outline_for_errors',
-    'phpcs_show_errors_in_status',
-    'phpcs_show_quick_panel',
-    'phpcs_php_prefix_path',
-    'phpcs_sniffer_run',
-    'phpcs_command_on_save',
-    'phpcs_executable_path',
-    'phpcs_additional_args',
-    'php_cs_fixer_on_save',
-    'php_cs_fixer_show_quick_panel',
-    'php_cs_fixer_executable_path',
-    'php_cs_fixer_additional_args',
-    'phpcs_linter_run',
-    'phpcs_linter_command_on_save',
-    'phpcs_php_path',
-    'phpcs_linter_regex',
-    'phpmd_run',
-    'phpmd_command_on_save',
-    'phpmd_executable_path',
-    'phpmd_additional_args']]
-
-
 def debug_message(msg):
     if Pref.show_debug == True:
         print "[Phpcs] " + msg
