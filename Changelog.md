@@ -1,6 +1,11 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.6
+---
+* Fixes for windows based users and the use of phar files. Thanks to [Hamrani ahmed](https://github.com/ahamrani) for raising [GH-47](https://github.com/benmatselby/sublime-phpcs/issues/47)
+* Moved the options to the end of the php-cs-fixer command as per their documentation examples
+
 4.5.1
 -----
 * Minor changes to the README to better explain non package control installation.

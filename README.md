@@ -83,6 +83,8 @@ You can configure:
 * phpcs_outline_for_errors - Do you want the errors to be highlighted in the editor?
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
 * phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
+* phpcs_php_prefix_path - Needed on windows for phar based applications. Also if you cannot make phar executable. Avoid if possible
+
 
 **PHP_CodeSniffer**
 

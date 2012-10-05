@@ -26,6 +26,11 @@
     // Show the errors in the quick panel so you can then goto line
     "phpcs_show_quick_panel": true,
 
+    // The path to the php executable.
+    // Needed for windows, or anyone who doesn't/can't make phars
+    // executable. Avoid setting this if at all possible
+    "phpcs_php_prefix_path": "",
+
 
 
     // PHP_CodeSniffer settings
