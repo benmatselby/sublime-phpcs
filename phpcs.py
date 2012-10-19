@@ -138,10 +138,11 @@ class Fixer(ShellCommand):
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "":
-            args = [Pref.phpcs_php_prefix_path]
-
         if Pref.php_cs_fixer_executable_path != "":
+            
+            if Pref.phpcs_php_prefix_path != "":
+                args = [Pref.phpcs_php_prefix_path]
+
             if (len(args) > 0):
                 args.append(Pref.php_cs_fixer_executable_path)
             else:
@@ -181,10 +182,11 @@ class MessDetector(ShellCommand):
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "":
-            args = [Pref.phpcs_php_prefix_path]
-
         if Pref.phpmd_executable_path != "":
+
+            if Pref.phpcs_php_prefix_path != "":
+                args = [Pref.phpcs_php_prefix_path]
+
             application_path = Pref.phpmd_executable_path
         else:
             application_path = 'phpmd'
