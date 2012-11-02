@@ -84,6 +84,7 @@ You can configure:
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
 * phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
 * phpcs_php_prefix_path - Needed on windows for phar based applications. Also if you cannot make phar executable. Avoid if possible
+* phpcs_commands_to_php_prefix - List of commands you want the php path to prefix
 
 
 **PHP_CodeSniffer**
@@ -126,4 +127,3 @@ OSError: [Error 2] No such file or directory
 
 * Well, first of all you need to check that you have PHP_CodeSniffer, and if being used, the phpmd application.
 * If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path", "phpmd_executable_path" and "php_cs_fixer_executable_path" with the actual paths to those applications
-

@@ -22,6 +22,7 @@ class Pref:
         Pref.phpcs_show_errors_in_status = bool(settings.get('phpcs_show_errors_in_status'))
         Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
         Pref.phpcs_php_prefix_path = settings.get('phpcs_php_prefix_path', '')
+        Pref.phpcs_commands_to_php_prefix = settings.get('phpcs_commands_to_php_prefix', [])
 
         Pref.phpcs_sniffer_run = bool(settings.get('phpcs_sniffer_run'))
         Pref.phpcs_command_on_save = bool(settings.get('phpcs_command_on_save'))
@@ -105,10 +106,18 @@ class Sniffer(ShellCommand):
         if Pref.phpcs_sniffer_run != True:
             return
 
+        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
+            args = [Pref.phpcs_php_prefix_path]
+
         if Pref.phpcs_executable_path != "":
-            args = [Pref.phpcs_executable_path]
+            application_path = Pref.phpcs_executable_path
         else:
-            args = ['phpcs']
+            application_path = 'phpcs'
+
+        if (len(args) > 0):
+            args.append(application_path)
+        else:
+            args = [application_path]
 
         args.append("--report=checkstyle")
 
@@ -138,7 +147,7 @@ class Fixer(ShellCommand):
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "":
+        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
             args = [Pref.phpcs_php_prefix_path]
 
         if Pref.php_cs_fixer_executable_path != "":
@@ -181,7 +190,7 @@ class MessDetector(ShellCommand):
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "":
+        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
             args = [Pref.phpcs_php_prefix_path]
 
         if Pref.phpmd_executable_path != "":

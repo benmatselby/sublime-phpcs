@@ -31,6 +31,16 @@
     // executable. Avoid setting this if at all possible
     "phpcs_php_prefix_path": "",
 
+    // Options include:
+    // - Sniffer
+    // - Fixer
+    // - Mess Detector
+    //
+    // This will prepend the application with the path to php
+    // Needed for windows, or anyone who doesn't/can't make phars
+    // executable. Avoid setting this if at all possible
+    "phpcs_commands_to_php_prefix": [],
+
 
 
     // PHP_CodeSniffer settings
