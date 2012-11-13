@@ -84,7 +84,7 @@ You can configure:
 * phpcs_show_errors_in_status - Do you want the errors to be displayed in status bar when clicking on the line with error?
 * phpcs_show_quick_panel - Do you want the errors to be displayed in the quick panel?
 * phpcs_php_prefix_path - Needed on windows for phar based applications. Also if you cannot make phar executable. Avoid if possible
-* phpcs_commands_to_php_prefix - List of commands you want the php path to prefix
+* phpcs_commands_to_php_prefix - List of commands you want the php path to prefix. This would be useful, if you have some commands as a phar that cannot be run without the php prefix, and others using native command.
 
 
 **PHP_CodeSniffer**
