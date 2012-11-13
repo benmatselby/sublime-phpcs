@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.6.2
+-----
+* Small patch to fix [GH-51](https://github.com/benmatselby/sublime-phpcs/issues/51). Thanks to [mstaatz](https://github.com/mstaatz) for raising the issue.
+
 4.6.1
 -----
 * Provided configuration option "phpcs_commands_to_php_prefix" that allows you to distinguish which commands should have the php path prefixed. Thanks to [Hamrani ahmed](https://github.com/ahamrani) for raising [GH-49](https://github.com/benmatselby/sublime-phpcs/issues/49)
