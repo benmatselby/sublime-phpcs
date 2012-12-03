@@ -517,15 +517,15 @@ class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
 class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
     def on_post_save(self, view):
-        if Pref.phpcs_execute_on_save == True:
-            if PhpcsTextBase.should_execute(view):
+        if PhpcsTextBase.should_execute(view):
+            if Pref.phpcs_execute_on_save == True:
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
 
-        if Pref.php_cs_fixer_on_save == True:
-            cmd = PhpcsCommand.instance(view)
-            cmd.fix_standards_errors(view.file_name())
+            if Pref.php_cs_fixer_on_save == True:
+                cmd = PhpcsCommand.instance(view)
+                cmd.fix_standards_errors(view.file_name())
 
     def on_selection_modified(self, view):
         if not PhpcsTextBase.should_execute(view):
