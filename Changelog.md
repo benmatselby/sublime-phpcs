@@ -1,6 +1,11 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+4.6.3
+-----
+* Patch to fix [GH-53](https://github.com/benmatselby/sublime-phpcs/issues/53) which was php-cs-fixer executing on save for non plugin based files (e.g. running for a python file). Thanks to [John Hoffmann](https://github.com/jhoffmann) for the solution.
+* Minor update to the README to cover off a gotcha on installing php-cs-fixer using Homebrew [GH-52](https://github.com/benmatselby/sublime-phpcs/issues/52)
+
 4.6.2
 -----
 * Small patch to fix [GH-51](https://github.com/benmatselby/sublime-phpcs/issues/51). Thanks to [mstaatz](https://github.com/mstaatz) for raising the issue.
