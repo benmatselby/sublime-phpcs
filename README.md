@@ -127,3 +127,7 @@ OSError: [Error 2] No such file or directory
 
 * Well, first of all you need to check that you have PHP_CodeSniffer, and if being used, the phpmd application.
 * If you have these applications installed, then it sounds like those applications are not in your PATH, or cannot be found in your PATH by the Python runtime, so configure "phpcs_php_path", "phpcs_executable_path", "phpmd_executable_path" and "php_cs_fixer_executable_path" with the actual paths to those applications
+
+###Installed php-cs-fixer via Homebrew?
+
+If you have installed php-cs-fixer via homebrew then please make sure that you define "php_cs_fixer_executable_path" to the .phar application and not the wrapper script that is placed in your bin folder, as this will cause odd behaviour.
