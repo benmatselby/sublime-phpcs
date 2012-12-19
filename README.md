@@ -71,6 +71,7 @@ For more information on how to run this plugin, visit [here](http://soulbroken.c
 Configuration
 -------------
 
+Note: When making modifications to the config, you may need to restart Sublime Text 2 for the changes to take effect.
 You can configure:
 
 **Plugin**
