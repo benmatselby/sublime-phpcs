@@ -6,13 +6,15 @@ import threading
 import time
 import sublime
 import sublime_plugin
-import HTMLParser
-
-settings = sublime.load_settings('phpcs.sublime-settings')
+try:
+    from HTMLParser import HTMLParser
+except:
+    from html.parser import HTMLParser
 
 class Pref:
     @staticmethod
     def load():
+        settings = sublime.load_settings('phpcs.sublime-settings')
         Pref.show_debug = settings.get('show_debug', False)
         Pref.extensions_to_execute = settings.get('extensions_to_execute', ['php'])
         Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
@@ -44,11 +46,20 @@ class Pref:
         Pref.phpmd_executable_path = settings.get('phpmd_executable_path', '')
         Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
 
-Pref.load()
+
+st_version = 2
+if sublime.version() == '' or int(sublime.version()) > 3000:
+    st_version = 3
+
+if st_version == 2:
+    Pref.load()
+
+def plugin_loaded():
+    Pref.load()
 
 def debug_message(msg):
     if Pref.show_debug == True:
-        print "[Phpcs] " + msg
+        print("[Phpcs] " + str(msg))
 
 
 class CheckstyleError():
@@ -62,11 +73,15 @@ class CheckstyleError():
 
     def get_message(self):
         data = self.message
-        try:
-            data = data.decode('utf-8')
-        except UnicodeDecodeError:
-            data = data.decode(sublime.active_window().active_view().settings().get('fallback_encoding'))
-        return HTMLParser.HTMLParser().unescape(data)
+
+        if st_version == 3:
+            return HTMLParser().unescape(data)
+        else:
+            try:
+                data = data.decode('utf-8')
+            except UnicodeDecodeError:
+                data = data.decode(sublime.active_window().active_view().settings().get('fallback_encoding'))
+            return HTMLParser().unescape(data)
 
     def set_point(self, point):
         self.point = point
@@ -88,13 +103,21 @@ class ShellCommand():
         data = None
         debug_message(' '.join(cmd))
 
-        shell = sublime.platform() == "windows"
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=shell)
+        info = None
+        if os.name == 'nt':
+            info = subprocess.STARTUPINFO()
+            info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            info.wShowWindow = subprocess.SW_HIDE
+
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info)
 
         if proc.stdout:
             data = proc.communicate()[0]
 
-        return data
+        if st_version == 3:
+            return data.decode()
+        else:
+            return data
 
     def execute(self, path):
         debug_message('Command not implemented')
@@ -447,7 +470,7 @@ class PhpcsShowPreviousErrors(PhpcsTextBase):
         '''This command is only enabled if it's a PHP buffer with previous errors.'''
         return PhpcsTextBase.should_execute(self.view) \
             and PhpcsCommand.instance(self.view, False) \
-            and len(PhpcsCommand.instance(self.view, False).error_list)
+            and len(PhpcsCommand.instance(self.view, False).error_list) > 0
 
 
 class PhpcsGotoNextErrorCommand(PhpcsTextBase):
@@ -460,9 +483,10 @@ class PhpcsGotoNextErrorCommand(PhpcsTextBase):
 
     def is_enabled(self):
         '''This command is only enabled if it's a PHP buffer with previous errors.'''
+
         return PhpcsTextBase.should_execute(self.view) \
             and PhpcsCommand.instance(self.view, False) \
-            and len(PhpcsCommand.instance(self.view, False).error_list)
+            and len(PhpcsCommand.instance(self.view, False).error_list) > 0
 
 
 class PhpcsClearSnifferMarksCommand(PhpcsTextBase):
