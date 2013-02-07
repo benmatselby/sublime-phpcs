@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+5.1
+---
+* Only run commands if the *_run preferences are true. Thanks to [Rys Sommefeldt](https://github.com/rys) for this patch.
+
 5.0
 ---
 * Support for Sublime Text 3 [GH-60](https://github.com/benmatselby/sublime-phpcs/issues/60)
