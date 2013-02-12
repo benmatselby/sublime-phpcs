@@ -113,7 +113,14 @@ You can configure:
 * phpmd_run - Do you want the PHPMD to run? Off by default
 * phpmd_command_on_save - Do you want the command to execute on save?
 * phpmd_executable_path - The path to the phpmd executable. If empty string, use PATH to find it
-* phpmd_additional_args - This is the extra information you want to pass to the phpcs command. For example which "rulesets" you want to run
+* phpmd_additional_args - This is the extra information you want to pass to the phpmd command. For example which "rulesets" you want to run
+
+**Pfff scheck**
+
+* scheck_run - Do you want the scheck to run? Off by default
+* scheck_command_on_save - Do you want the command to execute on save?
+* scheck_executable_path - The path to the scheck executable. If empty string, use PATH to find it
+* scheck_additional_args - This is the extra information you want to pass to the scheck command. For example "-strict" to run in strict mode.
 
 
 FAQ
