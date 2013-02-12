@@ -303,6 +303,7 @@ class PhpcsCommand():
     def run(self, path, event=None):
         self.event = event
         self.checkstyle_reports = []
+        self.report = []
 
         if event != 'on_save':
             if Pref.phpcs_linter_run:

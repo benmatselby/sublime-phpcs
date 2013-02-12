@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+5.1.1
+-----
+* Minor patch to scrub the last report so the points and line numbers are correct each time. Fixes GH-67
+
 5.1
 ---
 * Only run commands if the *_run preferences are true. Thanks to [Rys Sommefeldt](https://github.com/rys) for this patch.
