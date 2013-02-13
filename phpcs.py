@@ -275,10 +275,9 @@ class SCheck(ShellCommand):
             args = [application_path]
 
         for key, value in Pref.scheck_additional_args.items():
-            arg = key
+            args.append(key)
             if value != "":
-                arg += "=" + value
-            args.append(arg)
+                args.append(value)
 
         args.append(os.path.normpath(path))
 
