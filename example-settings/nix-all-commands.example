@@ -88,4 +88,20 @@
     "phpmd_additional_args": {
         "codesize,unusedcode,naming": ""
     }
+
+    // PHP Scheck settings
+    // Execute scheck
+    "scheck_run": true,
+
+    // Execute the scheck on file save
+    "scheck_command_on_save": false,
+
+    // It seems python/sublime cannot always find the scheck application
+    // If empty, then use PATH version of scheck, else use the set value
+    "scheck_executable_path": "/Users/Ben/git/external/pfff/scheck",
+
+    // Additional arguments you can specify into the application
+    "scheck_additional_args": {
+        "-strict" : ""
+    }
 }

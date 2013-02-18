@@ -132,7 +132,7 @@
     },
 
 
-    // PHP SCheck settings
+    // PHP Scheck settings
 
     // Execute scheck
     "scheck_run": false,

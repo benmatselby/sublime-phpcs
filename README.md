@@ -1,7 +1,7 @@
-Sublime PHP CodeSniffer, PHP Coding Standards Fixer, Linter and Mess Detector Plugin
-====================================================================================
+sublime-phpcs
+=============
 
-This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter and PHP Mess Detector support to Sublime Text.
+This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter, PHP Mess Detector, Scheck support to Sublime Text.
 
 For more information about this plugin such as features, installation requirements etc, please click [here](http://www.soulbroken.co.uk/code/sublimephpcs/)
 
