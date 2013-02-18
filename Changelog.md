@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.0.1
+-----
+* Missed a s/SCheck/scheck/ conversion
+
 6.0
 ---
 * Add support for [scheck](https://github.com/facebook/pfff/wiki/Main). Thanks to [Darby Payne](https://github.com/dpayne) for this patch
