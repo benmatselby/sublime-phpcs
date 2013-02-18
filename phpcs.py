@@ -357,7 +357,7 @@ class PhpcsCommand():
             if Pref.phpmd_run:
                 self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
             if Pref.scheck_run:
-                self.checkstyle_reports.append(['Scheck', SCheck().get_errors(path), 'dot'])
+                self.checkstyle_reports.append(['Scheck', Scheck().get_errors(path), 'dot'])
         else:
             if Pref.phpcs_linter_command_on_save and Pref.phpcs_linter_run:
                 self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'dot'])
@@ -366,7 +366,7 @@ class PhpcsCommand():
             if Pref.phpmd_command_on_save and Pref.phpmd_run:
                 self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
             if Pref.scheck_command_on_save and Pref.scheck_run:
-                self.checkstyle_reports.append(['Scheck', SCheck().get_errors(path), 'dot'])
+                self.checkstyle_reports.append(['Scheck', Scheck().get_errors(path), 'dot'])
 
         sublime.set_timeout(self.generate, 0)
 
