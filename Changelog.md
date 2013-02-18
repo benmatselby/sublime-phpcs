@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.0
+---
+* Add support for [scheck](https://github.com/facebook/pfff/wiki/Main). Thanks to [Darby Payne](https://github.com/dpayne) for this patch
+
 5.1.1
 -----
 * Minor patch to scrub the last report so the points and line numbers are correct each time. Fixes GH-67
