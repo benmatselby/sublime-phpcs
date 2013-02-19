@@ -10,6 +10,7 @@ try:
     from HTMLParser import HTMLParser
 except:
     from html.parser import HTMLParser
+from os.path import expanduser
 
 class Pref:
     @staticmethod
@@ -113,7 +114,15 @@ class ShellCommand():
             info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             info.wShowWindow = subprocess.SW_HIDE
 
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info)
+        """
+        Fixes the fact that PHP_CodeSniffer now caches the reports to cwd()
+         - http://pear.php.net/package/PHP_CodeSniffer/download/1.5.0
+         - https://github.com/benmatselby/sublime-phpcs/issues/68
+        """
+        home = expanduser("~")
+        debug_message("cwd: " + home)
+
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info, cwd=home)
 
         if proc.stdout:
             data = proc.communicate()[0]
