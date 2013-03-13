@@ -87,7 +87,7 @@
     // What args I want to pass to phpmd
     "phpmd_additional_args": {
         "codesize,unusedcode,naming": ""
-    }
+    },
 
     // PHP Scheck settings
     // Execute scheck
