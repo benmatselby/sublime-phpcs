@@ -16,41 +16,41 @@ class Pref:
     @staticmethod
     def load():
         settings = sublime.load_settings('phpcs.sublime-settings')
-        Pref.show_debug = settings.get('show_debug', False)
-        Pref.extensions_to_execute = settings.get('extensions_to_execute', ['php'])
-        Pref.phpcs_execute_on_save = bool(settings.get('phpcs_execute_on_save'))
-        Pref.phpcs_show_errors_on_save = bool(settings.get('phpcs_show_errors_on_save'))
-        Pref.phpcs_show_gutter_marks = bool(settings.get('phpcs_show_gutter_marks'))
-        Pref.phpcs_outline_for_errors = bool(settings.get('phpcs_outline_for_errors'))
-        Pref.phpcs_show_errors_in_status = bool(settings.get('phpcs_show_errors_in_status'))
-        Pref.phpcs_show_quick_panel = bool(settings.get('phpcs_show_quick_panel'))
-        Pref.phpcs_php_prefix_path = settings.get('phpcs_php_prefix_path', '')
-        Pref.phpcs_commands_to_php_prefix = settings.get('phpcs_commands_to_php_prefix', [])
+        Pref.show_debug = get_setting('show_debug')
+        Pref.extensions_to_execute = get_setting('extensions_to_execute')
+        Pref.phpcs_execute_on_save = bool(get_setting('phpcs_execute_on_save'))
+        Pref.phpcs_show_errors_on_save = bool(get_setting('phpcs_show_errors_on_save'))
+        Pref.phpcs_show_gutter_marks = bool(get_setting('phpcs_show_gutter_marks'))
+        Pref.phpcs_outline_for_errors = bool(get_setting('phpcs_outline_for_errors'))
+        Pref.phpcs_show_errors_in_status = bool(get_setting('phpcs_show_errors_in_status'))
+        Pref.phpcs_show_quick_panel = bool(get_setting('phpcs_show_quick_panel'))
+        Pref.phpcs_php_prefix_path = get_setting('phpcs_php_prefix_path')
+        Pref.phpcs_commands_to_php_prefix = get_setting('phpcs_commands_to_php_prefix')
 
-        Pref.phpcs_sniffer_run = bool(settings.get('phpcs_sniffer_run'))
-        Pref.phpcs_command_on_save = bool(settings.get('phpcs_command_on_save'))
-        Pref.phpcs_executable_path = settings.get('phpcs_executable_path', '')
-        Pref.phpcs_additional_args = settings.get('phpcs_additional_args', {})
+        Pref.phpcs_sniffer_run = bool(get_setting('phpcs_sniffer_run'))
+        Pref.phpcs_command_on_save = bool(get_setting('phpcs_command_on_save'))
+        Pref.phpcs_executable_path = get_setting('phpcs_executable_path')
+        Pref.phpcs_additional_args = get_setting('phpcs_additional_args')
 
-        Pref.php_cs_fixer_on_save = bool(settings.get('php_cs_fixer_on_save'))
-        Pref.php_cs_fixer_show_quick_panel = settings.get('php_cs_fixer_show_quick_panel')
-        Pref.php_cs_fixer_executable_path = settings.get('php_cs_fixer_executable_path', '')
-        Pref.php_cs_fixer_additional_args = settings.get('php_cs_fixer_additional_args', {})
+        Pref.php_cs_fixer_on_save = bool(get_setting('php_cs_fixer_on_save'))
+        Pref.php_cs_fixer_show_quick_panel = get_setting('php_cs_fixer_show_quick_panel')
+        Pref.php_cs_fixer_executable_path = get_setting('php_cs_fixer_executable_path')
+        Pref.php_cs_fixer_additional_args = get_setting('php_cs_fixer_additional_args')
 
-        Pref.phpcs_linter_run = bool(settings.get('phpcs_linter_run'))
-        Pref.phpcs_linter_command_on_save = bool(settings.get('phpcs_linter_command_on_save'))
-        Pref.phpcs_php_path = settings.get('phpcs_php_path', '')
-        Pref.phpcs_linter_regex = settings.get('phpcs_linter_regex')
+        Pref.phpcs_linter_run = bool(get_setting('phpcs_linter_run'))
+        Pref.phpcs_linter_command_on_save = bool(get_setting('phpcs_linter_command_on_save'))
+        Pref.phpcs_php_path = get_setting('phpcs_php_path')
+        Pref.phpcs_linter_regex = get_setting('phpcs_linter_regex')
 
-        Pref.phpmd_run = bool(settings.get('phpmd_run'))
-        Pref.phpmd_command_on_save = bool(settings.get('phpmd_command_on_save'))
-        Pref.phpmd_executable_path = settings.get('phpmd_executable_path', '')
-        Pref.phpmd_additional_args = settings.get('phpmd_additional_args')
+        Pref.phpmd_run = bool(get_setting('phpmd_run'))
+        Pref.phpmd_command_on_save = bool(get_setting('phpmd_command_on_save'))
+        Pref.phpmd_executable_path = get_setting('phpmd_executable_path')
+        Pref.phpmd_additional_args = get_setting('phpmd_additional_args')
 
-        Pref.scheck_run = bool(settings.get('scheck_run'))
-        Pref.scheck_command_on_save = bool(settings.get('scheck_command_on_save'))
-        Pref.scheck_executable_path = settings.get('scheck_executable_path', '')
-        Pref.scheck_additional_args = settings.get('scheck_additional_args')
+        Pref.scheck_run = bool(get_setting('scheck_run'))
+        Pref.scheck_command_on_save = bool(get_setting('scheck_command_on_save'))
+        Pref.scheck_executable_path = get_setting('scheck_executable_path')
+        Pref.scheck_additional_args = get_setting('scheck_additional_args')
 
 st_version = 2
 if sublime.version() == '' or int(sublime.version()) > 3000:
@@ -619,3 +619,30 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
             cmd.set_status_bar()
+
+
+
+def get_setting(key):
+    settings = sublime.load_settings('phpcs.sublime-settings')
+    if settings.has(key):
+        return get_project_setting(key) or settings.get(key)
+
+def get_project_setting(key):
+    '''
+    Try to get a project setting stored in the sublime project file
+    as a dictionary:
+    Eg.:
+        "settings":
+        {
+            "phpcs": { "key": "value", ... }
+        }
+
+    '''
+    try:
+        s = sublime.active_window().active_view().settings()
+        phpcs = s.get('phpcs')
+        if phpcs:
+            if key in phpcs:
+                return phpcs[key]
+    except:
+        pass
