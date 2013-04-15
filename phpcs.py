@@ -13,57 +13,80 @@ except:
 from os.path import expanduser
 
 class Pref:
-    @staticmethod
-    def load():
-        settings = sublime.load_settings('phpcs.sublime-settings')
-        Pref.show_debug = get_setting('show_debug')
-        Pref.extensions_to_execute = get_setting('extensions_to_execute')
-        Pref.phpcs_execute_on_save = bool(get_setting('phpcs_execute_on_save'))
-        Pref.phpcs_show_errors_on_save = bool(get_setting('phpcs_show_errors_on_save'))
-        Pref.phpcs_show_gutter_marks = bool(get_setting('phpcs_show_gutter_marks'))
-        Pref.phpcs_outline_for_errors = bool(get_setting('phpcs_outline_for_errors'))
-        Pref.phpcs_show_errors_in_status = bool(get_setting('phpcs_show_errors_in_status'))
-        Pref.phpcs_show_quick_panel = bool(get_setting('phpcs_show_quick_panel'))
-        Pref.phpcs_php_prefix_path = get_setting('phpcs_php_prefix_path')
-        Pref.phpcs_commands_to_php_prefix = get_setting('phpcs_commands_to_php_prefix')
 
-        Pref.phpcs_sniffer_run = bool(get_setting('phpcs_sniffer_run'))
-        Pref.phpcs_command_on_save = bool(get_setting('phpcs_command_on_save'))
-        Pref.phpcs_executable_path = get_setting('phpcs_executable_path')
-        Pref.phpcs_additional_args = get_setting('phpcs_additional_args')
+    keys = [
+        "show_debug",
+        "extensions_to_execute",
+        "phpcs_execute_on_save",
+        "phpcs_show_errors_on_save",
+        "phpcs_show_gutter_marks",
+        "phpcs_outline_for_errors",
+        "phpcs_show_errors_in_status",
+        "phpcs_show_quick_panel",
+        "phpcs_php_prefix_path",
+        "phpcs_commands_to_php_prefix",
+        "phpcs_sniffer_run",
+        "phpcs_command_on_save",
+        "phpcs_executable_path",
+        "phpcs_additional_args",
+        "php_cs_fixer_on_save",
+        "php_cs_fixer_show_quick_panel",
+        "php_cs_fixer_executable_path",
+        "php_cs_fixer_additional_args",
+        "phpcs_linter_run",
+        "phpcs_linter_command_on_save",
+        "phpcs_php_path",
+        "phpcs_linter_regex",
+        "phpmd_run",
+        "phpmd_command_on_save",
+        "phpmd_executable_path",
+        "phpmd_additional_args",
+        "scheck_run",
+        "scheck_command_on_save",
+        "scheck_executable_path",
+        "scheck_additional_args"
+    ]
 
-        Pref.php_cs_fixer_on_save = bool(get_setting('php_cs_fixer_on_save'))
-        Pref.php_cs_fixer_show_quick_panel = get_setting('php_cs_fixer_show_quick_panel')
-        Pref.php_cs_fixer_executable_path = get_setting('php_cs_fixer_executable_path')
-        Pref.php_cs_fixer_additional_args = get_setting('php_cs_fixer_additional_args')
+    def load(self):
+        self.settings = sublime.load_settings('phpcs.sublime-settings')
 
-        Pref.phpcs_linter_run = bool(get_setting('phpcs_linter_run'))
-        Pref.phpcs_linter_command_on_save = bool(get_setting('phpcs_linter_command_on_save'))
-        Pref.phpcs_php_path = get_setting('phpcs_php_path')
-        Pref.phpcs_linter_regex = get_setting('phpcs_linter_regex')
+        if sublime.active_window() is not None:
+            project_settings = sublime.active_window().active_view().settings()
+            if project_settings.has("phpcs"):
+                project_settings.clear_on_change('phpcs')
+                self.project_settings = project_settings.get('phpcs')
+                project_settings.add_on_change('phpcs', pref.load)
+            else:
+                self.project_settings = {}
+        else:
+            self.project_settings = {}
 
-        Pref.phpmd_run = bool(get_setting('phpmd_run'))
-        Pref.phpmd_command_on_save = bool(get_setting('phpmd_command_on_save'))
-        Pref.phpmd_executable_path = get_setting('phpmd_executable_path')
-        Pref.phpmd_additional_args = get_setting('phpmd_additional_args')
+        for key in self.keys:
+            self.settings.clear_on_change(key)
+            setattr(self, key, self.get_setting(key))
+            self.settings.add_on_change(key, pref.load)
 
-        Pref.scheck_run = bool(get_setting('scheck_run'))
-        Pref.scheck_command_on_save = bool(get_setting('scheck_command_on_save'))
-        Pref.scheck_executable_path = get_setting('scheck_executable_path')
-        Pref.scheck_additional_args = get_setting('scheck_additional_args')
+    def get_setting(self, key):
+        if key in self.project_settings:
+            return self.project_settings.get(key)
+        else:
+            return self.settings.get(key)
+
+
+pref = Pref()
 
 st_version = 2
 if sublime.version() == '' or int(sublime.version()) > 3000:
     st_version = 3
 
 if st_version == 2:
-    Pref.load()
+    pref.load()
 
 def plugin_loaded():
-    Pref.load()
+    pref.load()
 
 def debug_message(msg):
-    if Pref.show_debug == True:
+    if pref.show_debug == True:
         print("[Phpcs] " + str(msg))
 
 
@@ -139,16 +162,16 @@ class ShellCommand():
 class Sniffer(ShellCommand):
     """Concrete class for PHP_CodeSniffer"""
     def execute(self, path):
-        if Pref.phpcs_sniffer_run != True:
+        if pref.phpcs_sniffer_run != True:
             return
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
-            args = [Pref.phpcs_php_prefix_path]
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+            args = [pref.phpcs_php_prefix_path]
 
-        if Pref.phpcs_executable_path != "":
-            application_path = Pref.phpcs_executable_path
+        if pref.phpcs_executable_path != "":
+            application_path = pref.phpcs_executable_path
         else:
             application_path = 'phpcs'
 
@@ -160,7 +183,7 @@ class Sniffer(ShellCommand):
         args.append("--report=checkstyle")
 
         # Add the additional arguments from the settings file to the command
-        for key, value in Pref.phpcs_additional_args.items():
+        for key, value in pref.phpcs_additional_args.items():
             arg = key
             if value != "":
                 arg += "=" + value
@@ -185,14 +208,14 @@ class Fixer(ShellCommand):
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
-            args = [Pref.phpcs_php_prefix_path]
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+            args = [pref.phpcs_php_prefix_path]
 
-        if Pref.php_cs_fixer_executable_path != "":
+        if pref.php_cs_fixer_executable_path != "":
             if (len(args) > 0):
-                args.append(Pref.php_cs_fixer_executable_path)
+                args.append(pref.php_cs_fixer_executable_path)
             else:
-                args = [Pref.php_cs_fixer_executable_path]
+                args = [pref.php_cs_fixer_executable_path]
         else:
             debug_message("php_cs_fixer_executable_path is not set, therefore cannot execute")
             return
@@ -202,7 +225,7 @@ class Fixer(ShellCommand):
         args.append("--verbose")
 
         # Add the additional arguments from the settings file to the command
-        for key, value in Pref.php_cs_fixer_additional_args.items():
+        for key, value in pref.php_cs_fixer_additional_args.items():
             arg = key
             if value != "":
                 arg += "=" + value
@@ -223,16 +246,16 @@ class Fixer(ShellCommand):
 class MessDetector(ShellCommand):
     """Concrete class for PHP Mess Detector"""
     def execute(self, path):
-        if Pref.phpmd_run != True:
+        if pref.phpmd_run != True:
             return
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
-            args = [Pref.phpcs_php_prefix_path]
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+            args = [pref.phpcs_php_prefix_path]
 
-        if Pref.phpmd_executable_path != "":
-            application_path = Pref.phpmd_executable_path
+        if pref.phpmd_executable_path != "":
+            application_path = pref.phpmd_executable_path
         else:
             application_path = 'phpmd'
 
@@ -244,7 +267,7 @@ class MessDetector(ShellCommand):
         args.append(os.path.normpath(path))
         args.append('text')
 
-        for key, value in Pref.phpmd_additional_args.items():
+        for key, value in pref.phpmd_additional_args.items():
             arg = key
             if value != "":
                 arg += "=" + value
@@ -265,16 +288,16 @@ class MessDetector(ShellCommand):
 class Scheck(ShellCommand):
     """Concrete class for Scheck"""
     def execute(self, path):
-        if Pref.scheck_run != True:
+        if pref.scheck_run != True:
             return
 
         args = []
 
-        if Pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in Pref.phpcs_commands_to_php_prefix:
-            args = [Pref.phpcs_php_prefix_path]
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+            args = [pref.phpcs_php_prefix_path]
 
-        if Pref.scheck_executable_path != "":
-            application_path = Pref.scheck_executable_path
+        if pref.scheck_executable_path != "":
+            application_path = pref.scheck_executable_path
         else:
             application_path = 'scheck'
 
@@ -283,7 +306,7 @@ class Scheck(ShellCommand):
         else:
             args = [application_path]
 
-        for key, value in Pref.scheck_additional_args.items():
+        for key, value in pref.scheck_additional_args.items():
             args.append(key)
             if value != "":
                 args.append(value)
@@ -305,11 +328,11 @@ class Scheck(ShellCommand):
 class Linter(ShellCommand):
     """Content class for php -l"""
     def execute(self, path):
-        if Pref.phpcs_linter_run != True:
+        if pref.phpcs_linter_run != True:
             return
 
-        if Pref.phpcs_php_path != "":
-            args = [Pref.phpcs_php_path]
+        if pref.phpcs_php_path != "":
+            args = [pref.phpcs_php_path]
         else:
             args = ['php']
 
@@ -322,7 +345,7 @@ class Linter(ShellCommand):
     def parse_report(self, args):
         report = self.shell_out(args)
         debug_message(report)
-        line = re.search(Pref.phpcs_linter_regex, report)
+        line = re.search(pref.phpcs_linter_regex, report)
         if line != None:
             error = CheckstyleError(line.group('line'), line.group('message'))
             self.error_list.append(error)
@@ -359,22 +382,22 @@ class PhpcsCommand():
         self.report = []
 
         if event != 'on_save':
-            if Pref.phpcs_linter_run:
+            if pref.phpcs_linter_run:
                 self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'dot'])
-            if Pref.phpcs_sniffer_run:
+            if pref.phpcs_sniffer_run:
                 self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
-            if Pref.phpmd_run:
+            if pref.phpmd_run:
                 self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
-            if Pref.scheck_run:
+            if pref.scheck_run:
                 self.checkstyle_reports.append(['Scheck', Scheck().get_errors(path), 'dot'])
         else:
-            if Pref.phpcs_linter_command_on_save and Pref.phpcs_linter_run:
+            if pref.phpcs_linter_command_on_save and pref.phpcs_linter_run:
                 self.checkstyle_reports.append(['Linter', Linter().get_errors(path), 'dot'])
-            if Pref.phpcs_command_on_save and Pref.phpcs_sniffer_run:
+            if pref.phpcs_command_on_save and pref.phpcs_sniffer_run:
                 self.checkstyle_reports.append(['Sniffer', Sniffer().get_errors(path), 'dot'])
-            if Pref.phpmd_command_on_save and Pref.phpmd_run:
+            if pref.phpmd_command_on_save and pref.phpmd_run:
                 self.checkstyle_reports.append(['MessDetector', MessDetector().get_errors(path), 'dot'])
-            if Pref.scheck_command_on_save and Pref.scheck_run:
+            if pref.scheck_command_on_save and pref.scheck_run:
                 self.checkstyle_reports.append(['Scheck', Scheck().get_errors(path), 'dot'])
 
         sublime.set_timeout(self.generate, 0)
@@ -384,7 +407,7 @@ class PhpcsCommand():
             self.window.active_view().erase_regions(region)
 
     def set_status_bar(self):
-        if not Pref.phpcs_show_errors_in_status:
+        if not pref.phpcs_show_errors_in_status:
             return
 
         if self.window.active_view().is_scratch():
@@ -418,15 +441,15 @@ class PhpcsCommand():
                 self.error_lines[line] = error.get_message()
 
             if len(self.error_list) > 0:
-                icon = icon if Pref.phpcs_show_gutter_marks else ''
-                outline = sublime.DRAW_OUTLINED if Pref.phpcs_outline_for_errors else sublime.HIDDEN
-                if Pref.phpcs_show_gutter_marks or Pref.phpcs_outline_for_errors:
+                icon = icon if pref.phpcs_show_gutter_marks else ''
+                outline = sublime.DRAW_OUTLINED if pref.phpcs_outline_for_errors else sublime.HIDDEN
+                if pref.phpcs_show_gutter_marks or pref.phpcs_outline_for_errors:
                     self.window.active_view().add_regions(shell_command,
                         region_set, shell_command, icon, outline)
 
-        if Pref.phpcs_show_quick_panel == True:
+        if pref.phpcs_show_quick_panel == True:
             # Skip showing the errors if we ran on save, and the option isn't set.
-            if self.event == 'on_save' and not Pref.phpcs_show_errors_on_save:
+            if self.event == 'on_save' and not pref.phpcs_show_errors_on_save:
                 return
             self.show_quick_panel()
 
@@ -442,7 +465,7 @@ class PhpcsCommand():
         for fix in fixes:
             self.error_list.append(fix.get_message())
 
-        if Pref.php_cs_fixer_show_quick_panel == True:
+        if pref.php_cs_fixer_show_quick_panel == True:
             self.show_quick_panel()
 
     def on_quick_panel_done(self, picked):
@@ -501,7 +524,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
     def should_execute(view):
         if view.file_name() != None:
             ext = os.path.splitext(view.file_name())[1]
-            result = ext[1:] in Pref.extensions_to_execute
+            result = ext[1:] in pref.extensions_to_execute
             return result
 
         return False
@@ -571,7 +594,7 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
         cmd.fix_standards_errors(self.view.file_name())
 
     def is_enabled(self):
-        if Pref.php_cs_fixer_executable_path != '':
+        if pref.php_cs_fixer_executable_path != '':
             return PhpcsTextBase.should_execute(self.view)
         else:
             return False
@@ -584,13 +607,13 @@ class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
         cmd.fix_standards_errors(os.path.normpath(paths[0]))
 
     def is_enabled(self):
-        if Pref.php_cs_fixer_executable_path != '':
+        if pref.php_cs_fixer_executable_path != '':
             return True
         else:
             return False
 
     def is_visible(self, paths=[]):
-        if Pref.php_cs_fixer_executable_path != '':
+        if pref.php_cs_fixer_executable_path != '':
             return True
         else:
             return False
@@ -603,12 +626,12 @@ class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
     def on_post_save(self, view):
         if PhpcsTextBase.should_execute(view):
-            if Pref.phpcs_execute_on_save == True:
+            if pref.phpcs_execute_on_save == True:
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
 
-            if Pref.php_cs_fixer_on_save == True:
+            if pref.php_cs_fixer_on_save == True:
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors(view.file_name())
 
@@ -619,30 +642,3 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
             cmd.set_status_bar()
-
-
-
-def get_setting(key):
-    settings = sublime.load_settings('phpcs.sublime-settings')
-    if settings.has(key):
-        return get_project_setting(key) or settings.get(key)
-
-def get_project_setting(key):
-    '''
-    Try to get a project setting stored in the sublime project file
-    as a dictionary:
-    Eg.:
-        "settings":
-        {
-            "phpcs": { "key": "value", ... }
-        }
-
-    '''
-    try:
-        s = sublime.active_window().active_view().settings()
-        phpcs = s.get('phpcs')
-        if phpcs:
-            if key in phpcs:
-                return phpcs[key]
-    except:
-        pass
