@@ -9,6 +9,10 @@ For more information about this plugin such as features, installation requiremen
 FAQ
 ---
 
+### Can I define project based settings?
+
+Yes, yes you can, go and look [here](http://www.soulbroken.co.uk/2013/04/sublime-phpcs-now-supports-project-based-settings/)
+
 ### What do I do when I get "OSError: [Error 2] No such file or directory"?
 
 
