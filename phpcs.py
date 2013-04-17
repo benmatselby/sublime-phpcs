@@ -17,6 +17,7 @@ class Pref:
     keys = [
         "show_debug",
         "extensions_to_execute",
+        "extensions_to_blacklist",
         "phpcs_execute_on_save",
         "phpcs_show_errors_on_save",
         "phpcs_show_gutter_marks",
@@ -525,6 +526,12 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
         if view.file_name() != None:
             ext = os.path.splitext(view.file_name())[1]
             result = ext[1:] in pref.extensions_to_execute
+
+            for block in pref.extensions_to_blacklist:
+                match = re.search(block, view.file_name())
+                if match != None:
+                    return False
+
             return result
 
         return False

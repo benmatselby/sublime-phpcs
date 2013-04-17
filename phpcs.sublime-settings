@@ -8,6 +8,10 @@
     // execute for
     "extensions_to_execute": ["php"],
 
+    // Do we need to blacklist any sub extensions from extensions_to_execute
+    // An example would be ["twig.php"]
+    "extensions_to_blacklist": [],
+
     // Execute the sniffer on file save
     "phpcs_execute_on_save": true,
 
