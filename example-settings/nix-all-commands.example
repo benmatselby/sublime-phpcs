@@ -8,6 +8,9 @@
     // Only execute for .php files
     "extensions_to_execute": ["php"],
 
+    // Do not execute for twig files
+    "extensions_to_blacklist": ["twig.php"],
+
     // Execute the sniffer on file save
     "phpcs_execute_on_save": false,
 
