@@ -1,6 +1,9 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.3
+* Enhancement to toggle via the context menu or command palette if the plugin should execute on save or not [GH-73](https://github.com/benmatselby/sublime-phpcs/issues/73)
+
 6.2
 ---
 * Enhancement to support per project settings. Thanks to [Handrus Stephan Nogueira](https://github.com/handrus) for the contribution

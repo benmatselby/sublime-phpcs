@@ -18,5 +18,19 @@
     {
         "caption": "PHP Coding Standards Fixer: Fix this file",
         "command": "phpcs_fix_this_file"
+    },
+    {
+        "caption": "PHP Code Sniffer: Turn Execute On Save On",
+        "command": "phpcs_toggle_plugin",
+        "args": {
+            "toggle": true
+        }
+    },
+    {
+        "caption": "PHP Code Sniffer: Turn Execute On Save Off",
+        "command": "phpcs_toggle_plugin",
+        "args": {
+            "toggle": false
+        }
     }
 ]

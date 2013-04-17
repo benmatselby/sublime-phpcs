@@ -622,6 +622,31 @@ class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
         return 'Fix this directory (PHP-CS-Fixer)'
 
 
+class PhpcsTogglePlugin(PhpcsTextBase):
+    """Command to toggle if plugin should execute on save"""
+    def run(self, edit, toggle=None):
+        if toggle == None:
+            if pref.phpcs_execute_on_save == True:
+                pref.phpcs_execute_on_save = False
+            else:
+                pref.phpcs_execute_on_save = True
+        else:
+            if toggle :
+                pref.phpcs_execute_on_save = True
+            else:
+                pref.phpcs_execute_on_save = False
+
+    def is_enabled(self):
+        return PhpcsTextBase.should_execute(self.view)
+
+    def description(self, paths=[]):
+        if pref.phpcs_execute_on_save == True:
+            description = 'Turn Execute On Save Off'
+        else:
+            description = 'Turn Execute On Save On'
+        return description
+
+
 class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
     def on_post_save(self, view):
