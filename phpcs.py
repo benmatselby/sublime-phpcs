@@ -209,7 +209,7 @@ class Fixer(ShellCommand):
 
         args = []
 
-        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix:
             args = [pref.phpcs_php_prefix_path]
 
         if pref.php_cs_fixer_executable_path != "":
@@ -252,7 +252,7 @@ class MessDetector(ShellCommand):
 
         args = []
 
-        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix:
             args = [pref.phpcs_php_prefix_path]
 
         if pref.phpmd_executable_path != "":
@@ -294,7 +294,7 @@ class Scheck(ShellCommand):
 
         args = []
 
-        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix:
             args = [pref.phpcs_php_prefix_path]
 
         if pref.scheck_executable_path != "":
