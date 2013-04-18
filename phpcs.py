@@ -168,7 +168,7 @@ class Sniffer(ShellCommand):
 
         args = []
 
-        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_pref.x:
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix:
             args = [pref.phpcs_php_prefix_path]
 
         if pref.phpcs_executable_path != "":
