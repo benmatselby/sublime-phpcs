@@ -674,3 +674,6 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
             cmd.set_status_bar()
+
+    def on_project_load(self, window):
+        pref.load()
