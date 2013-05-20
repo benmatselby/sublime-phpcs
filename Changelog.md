@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.3.2
+-----
+* Minor enhancement to provide hint with configuration issue [GH-78](https://github.com/benmatselby/sublime-phpcs/issues/78)
+
 6.3.1
 -----
 * Fix for ST2 which does not like trailing commas in the json. Fixes [GH-75](https://github.com/benmatselby/sublime-phpcs/pull/75)

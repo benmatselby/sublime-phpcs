@@ -524,8 +524,13 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
     @staticmethod
     def should_execute(view):
         if view.file_name() != None:
-            ext = os.path.splitext(view.file_name())[1]
-            result = ext[1:] in pref.extensions_to_execute
+
+            try:
+                ext = os.path.splitext(view.file_name())[1]
+                result = ext[1:] in pref.extensions_to_execute
+            except:
+                debug_message("Is 'extensions_to_execute' setup correctly")
+                return False
 
             for block in pref.extensions_to_blacklist:
                 match = re.search(block, view.file_name())
