@@ -1,3 +1,4 @@
+import sys
 import datetime
 import os
 import re
@@ -145,6 +146,9 @@ class ShellCommand():
         """
         home = expanduser("~")
         debug_message("cwd: " + home)
+
+        for index, arg in enumerate(cmd[:]):
+            cmd[index] = arg.encode(sys.getfilesystemencoding())
 
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info, cwd=home)
 
