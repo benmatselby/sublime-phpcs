@@ -679,3 +679,25 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
             cmd.set_status_bar()
+
+    def on_pre_save(self, view):
+        current_project_file = sublime.active_window().project_file_name();
+
+        if current_project_file == None:
+            debug_message('Skipping config reload because no project file is loaded')
+            return
+
+        if hasattr(pref, 'last_project_file'):
+            last_project_file = pref.last_project_file
+        else:
+            last_project_file = None
+
+        debug_message('Current project file: ' + str(current_project_file));
+        debug_message('Last project file: ' + str(last_project_file));
+
+        if last_project_file == current_project_file:
+            debug_message('Skipping reload. Project file did not change')
+        else:
+            debug_message('Reloading config because the project changed')
+            pref.load();
+            setattr(pref, 'last_project_file', current_project_file)
