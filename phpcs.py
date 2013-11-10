@@ -668,7 +668,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
 
-            if pref.php_cs_fixer_on_save == True:
+            if pref.phpcs_execute_on_save == True and pref.php_cs_fixer_on_save == True:
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors(view.file_name())
 
