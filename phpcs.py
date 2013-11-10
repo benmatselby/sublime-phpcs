@@ -377,11 +377,11 @@ class PhpcsCommand():
         if view_id not in PhpcsCommand.instances:
             if not allow_new:
                 return False
-            PhpcsCommand.instances[view_id] = PhpcsCommand(view.window())
+            PhpcsCommand.instances[view_id] = PhpcsCommand(view)
         return PhpcsCommand.instances[view_id]
 
-    def __init__(self, window):
-        self.window = window
+    def __init__(self, view):
+        self.view = view
         self.checkstyle_reports = []
         self.report = []
         self.event = None
@@ -417,21 +417,21 @@ class PhpcsCommand():
 
     def clear_sniffer_marks(self):
         for region in self.shell_commands:
-            self.window.active_view().erase_regions(region)
+            self.view.erase_regions(region)
 
     def set_status_bar(self):
         if not pref.phpcs_show_errors_in_status:
             return
 
-        if self.window.active_view().is_scratch():
+        if self.view.is_scratch():
             return
 
-        line = self.window.active_view().rowcol(self.window.active_view().sel()[0].end())[0]
+        line = self.view.rowcol(self.view.sel()[0].end())[0]
         errors = self.get_errors(line)
         if errors:
-            self.window.active_view().set_status('Phpcs', errors)
+            self.view.set_status('Phpcs', errors)
         else:
-            self.window.active_view().erase_status('Phpcs')
+            self.view.erase_status('Phpcs')
 
     def generate(self):
         self.error_list = []
@@ -439,14 +439,14 @@ class PhpcsCommand():
         self.error_lines = {}
 
         for shell_command, report, icon in self.checkstyle_reports:
-            self.window.active_view().erase_regions('checkstyle')
-            self.window.active_view().erase_regions(shell_command)
+            self.view.erase_regions('checkstyle')
+            self.view.erase_regions(shell_command)
 
             debug_message(shell_command + ' found ' + str(len(report)) + ' errors')
             for error in report:
                 line = int(error.get_line())
-                pt = self.window.active_view().text_point(line - 1, 0)
-                region_line = self.window.active_view().line(pt)
+                pt = self.view.text_point(line - 1, 0)
+                region_line = self.view.line(pt)
                 region_set.append(region_line)
                 self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
@@ -457,7 +457,7 @@ class PhpcsCommand():
                 icon = icon if pref.phpcs_show_gutter_marks else ''
                 outline = sublime.DRAW_OUTLINED if pref.phpcs_outline_for_errors else sublime.HIDDEN
                 if pref.phpcs_show_gutter_marks or pref.phpcs_outline_for_errors:
-                    self.window.active_view().add_regions(shell_command,
+                    self.view.add_regions(shell_command,
                         region_set, shell_command, icon, outline)
 
         if pref.phpcs_show_quick_panel == True:
@@ -467,7 +467,7 @@ class PhpcsCommand():
             self.show_quick_panel()
 
     def show_quick_panel(self):
-        self.window.show_quick_panel(self.error_list, self.on_quick_panel_done)
+        self.view.window().show_quick_panel(self.error_list, self.on_quick_panel_done)
 
     def fix_standards_errors(self, path):
         self.error_lines = {}
@@ -487,9 +487,9 @@ class PhpcsCommand():
 
         if (len(self.report) > 0):
             pt = self.report[picked].get_point()
-            self.window.active_view().sel().clear()
-            self.window.active_view().sel().add(sublime.Region(pt))
-            self.window.active_view().show(pt)
+            self.view.sel().clear()
+            self.view.add(sublime.Region(pt))
+            self.view.show(pt)
             self.set_status_bar()
 
     def get_errors(self, line):
@@ -515,9 +515,9 @@ class PhpcsCommand():
 
         if cache_error != None:
             pt = cache_error.get_point()
-            self.window.active_view().sel().clear()
-            self.window.active_view().sel().add(sublime.Region(pt))
-            self.window.active_view().show(pt)
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(pt))
+            self.view.show(pt)
 
 
 class PhpcsTextBase(sublime_plugin.TextCommand):
