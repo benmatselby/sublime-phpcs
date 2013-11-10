@@ -16,6 +16,8 @@ from os.path import expanduser
 
 class Pref:
 
+    project_file = None
+
     keys = [
         "show_debug",
         "extensions_to_execute",
@@ -693,23 +695,22 @@ class PhpcsEventListener(sublime_plugin.EventListener):
             cmd.set_status_bar()
 
     def on_pre_save(self, view):
-        current_project_file = sublime.active_window().project_file_name();
-
-        if current_project_file == None:
-            debug_message('Skipping config reload because no project file is loaded')
+        """ Project based settings, currently able to see an API based way of doing this! """
+        if not PhpcsTextBase.should_execute(view):
             return
 
-        if hasattr(pref, 'last_project_file'):
-            last_project_file = pref.last_project_file
-        else:
-            last_project_file = None
+        current_project_file = view.window().project_file_name();
+        debug_message('Project files:')
+        debug_message(' Current: ' + str(current_project_file))
+        debug_message(' Last Known: ' + str(pref.project_file))
 
-        debug_message('Current project file: ' + str(current_project_file));
-        debug_message('Last project file: ' + str(last_project_file));
+        if current_project_file == None:
+            debug_message('No project file defined, therefore skipping reload')
+            return
 
-        if last_project_file == current_project_file:
-            debug_message('Skipping reload. Project file did not change')
+        if pref.project_file == current_project_file:
+            debug_message('Project files are the same, skipping reload')
         else:
-            debug_message('Reloading config because the project changed')
+            debug_message('Project files have changed, commence the reload')
             pref.load();
-            setattr(pref, 'last_project_file', current_project_file)
+            pref.project_file = current_project_file
