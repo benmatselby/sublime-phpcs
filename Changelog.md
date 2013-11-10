@@ -6,6 +6,7 @@ next
 * Fix for [GH-93](https://github.com/benmatselby/sublime-phpcs/issues/93). If plugin is off, all sub processes should respect that.
 * Fix for [GH-94](https://github.com/benmatselby/sublime-phpcs/issues/94). Thanks to [WaveHack](https://github.com/WaveHack) for raising this and proposing a solution
 * Fix for [GH-91](https://github.com/benmatselby/sublime-phpcs/issues/91). Thanks to [Alex Russell](https://github.com/alexrussell) for proposing a solution
+* Fix for [GH-85](https://github.com/benmatselby/sublime-phpcs/issues/85). Thanks to [Peter Farsinsen](https://github.com/peterfarsinsen) for this patch
 
 6.3.2
 -----
