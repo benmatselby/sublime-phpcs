@@ -6,6 +6,8 @@ import threading
 import time
 import sublime
 import sublime_plugin
+import sys
+
 try:
     from HTMLParser import HTMLParser
 except:
@@ -130,6 +132,15 @@ class ShellCommand():
 
     def shell_out(self, cmd):
         data = None
+
+        if st_version == 3:
+            debug_message(' '.join(cmd))
+        else:
+            for index, arg in enumerate(cmd[:]):
+                cmd[index] = arg.encode(sys.getfilesystemencoding())
+
+            debug_message(' '.join(cmd))
+
         debug_message(' '.join(cmd))
 
         info = None
@@ -147,6 +158,7 @@ class ShellCommand():
         debug_message("cwd: " + home)
 
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info, cwd=home)
+
 
         if proc.stdout:
             data = proc.communicate()[0]

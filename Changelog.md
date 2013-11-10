@@ -3,8 +3,8 @@ Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 
 next
 ----
-* Fix for [GH-93] https://github.com/benmatselby/sublime-phpcs/issues/93. If plugin is off, all sub processes should respect that.
-
+* Fix for [GH-93](https://github.com/benmatselby/sublime-phpcs/issues/93). If plugin is off, all sub processes should respect that.
+* Fix for [GH-94](https://github.com/benmatselby/sublime-phpcs/issues/94). Thanks to [WaveHack](https://github.com/WaveHack) for raising this and proposing a solution
 
 6.3.2
 -----
