@@ -696,7 +696,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
     def on_pre_save(self, view):
         """ Project based settings, currently able to see an API based way of doing this! """
-        if not PhpcsTextBase.should_execute(view):
+        if not PhpcsTextBase.should_execute(view) or st_version == 2:
             return
 
         current_project_file = view.window().project_file_name();
