@@ -490,7 +490,7 @@ class PhpcsCommand():
         if (len(self.report) > 0):
             pt = self.report[picked].get_point()
             self.view.sel().clear()
-            self.view.add(sublime.Region(pt))
+            self.view.sel().add(sublime.Region(pt))
             self.view.show(pt)
             self.set_status_bar()
 
