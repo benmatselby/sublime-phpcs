@@ -18,6 +18,8 @@ class Pref:
 
     project_file = None
 
+    project_path = None
+
     keys = [
         "show_debug",
         "extensions_to_execute",
@@ -201,6 +203,8 @@ class Sniffer(ShellCommand):
         for key, value in pref.phpcs_additional_args.items():
             arg = key
             if value != "":
+                if pref.project_path != None:
+                    value = value.replace("{$project_path}", pref.project_path)
                 arg += "=" + value
             args.append(arg)
 
@@ -696,6 +700,8 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
     def on_pre_save(self, view):
         """ Project based settings, currently able to see an API based way of doing this! """
+        pref.project_path = view.window().folders()[0]
+
         if not PhpcsTextBase.should_execute(view) or st_version == 2:
             return
 
