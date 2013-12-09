@@ -639,10 +639,7 @@ class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
             return False
 
     def is_visible(self, paths=[]):
-        if pref.php_cs_fixer_executable_path != '':
-            return True
-        else:
-            return False
+        return True
 
     def description(self, paths=[]):
         return 'Fix this directory (PHP-CS-Fixer)'
