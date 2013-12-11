@@ -34,6 +34,7 @@ class Pref:
         "phpcs_command_on_save",
         "phpcs_executable_path",
         "phpcs_additional_args",
+        "phpcs_ignore_sniffs",
         "php_cs_fixer_on_save",
         "php_cs_fixer_show_quick_panel",
         "php_cs_fixer_executable_path",
@@ -210,9 +211,12 @@ class Sniffer(ShellCommand):
     def parse_report(self, args):
         report = self.shell_out(args)
         debug_message(report)
-        lines = re.finditer('.*line="(?P<line>\d+)" column="(?P<column>\d+)" severity="(?P<severity>\w+)" message="(?P<message>.*)" source', report)
+        lines = re.finditer('.*line="(?P<line>\d+)" column="(?P<column>\d+)" severity="(?P<severity>\w+)" message="(?P<message>.*)" source="(?P<source>.*)"', report)
 
         for line in lines:
+            # skip ignored sources (configured as phpcs_ignore_sniffs)
+            if line.group('source') and line.group('source') in pref.phpcs_ignore_sniffs:
+                continue
             error = CheckstyleError(line.group('line'), line.group('message'))
             self.error_list.append(error)
 
