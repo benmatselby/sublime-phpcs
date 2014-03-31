@@ -1,8 +1,8 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
-next
-----
+6.4.0
+-----
 * Enhancement [GH-112](https://github.com/benmatselby/sublime-phpcs/issues/112). Ability to toggle the coding standard being used.
 
 6.3.5
