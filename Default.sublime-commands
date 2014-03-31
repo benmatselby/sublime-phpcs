@@ -32,5 +32,9 @@
         "args": {
             "toggle": false
         }
+    },
+    {
+        "caption": "PHP Code Sniffer: Switch coding standard",
+        "command": "phpcs_switch_coding_standard"
     }
 ]

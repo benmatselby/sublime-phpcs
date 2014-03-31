@@ -77,6 +77,10 @@ class Pref:
         else:
             return self.settings.get(key)
 
+    def set_setting(self, key, value):
+        if key in self.project_settings:
+            self.project_settings[key] = value
+
 
 pref = Pref()
 
@@ -216,6 +220,19 @@ class Sniffer(ShellCommand):
             error = CheckstyleError(line.group('line'), line.group('message'))
             self.error_list.append(error)
 
+    def get_standards_available(self):
+        if pref.phpcs_executable_path != "":
+            application_path = pref.phpcs_executable_path
+        else:
+            application_path = 'phpcs'
+
+        args = []
+        args.append(application_path)
+        args.append('-i')
+
+        output = self.shell_out(args)
+        standards = output[35:].replace('and', ',').strip().split(', ')
+        return standards
 
 class Fixer(ShellCommand):
     """Concrete class for PHP-CS-Fixer"""
@@ -390,6 +407,7 @@ class PhpcsCommand():
         self.error_lines = {}
         self.error_list = []
         self.shell_commands = ['Linter', 'Sniffer', 'MessDetector']
+        self.standards = []
 
     def run(self, path, event=None):
         self.event = event
@@ -482,6 +500,20 @@ class PhpcsCommand():
 
         if pref.php_cs_fixer_show_quick_panel == True:
             self.show_quick_panel()
+
+    def display_coding_standards(self):
+        self.standards = Sniffer().get_standards_available()
+        self.view.window().show_quick_panel(self.standards, self.on_coding_standard_change)
+
+    def on_coding_standard_change(self, picked):
+        if picked == -1:
+            return
+
+        current_additional_args = pref.get_setting('phpcs_additional_args')
+        current_additional_args['--standard'] = self.standards[picked].replace(' ', '')
+
+        pref.set_setting('phpcs_additional_args', current_additional_args)
+        debug_message(current_additional_args)
 
     def on_quick_panel_done(self, picked):
         if picked == -1:
@@ -669,6 +701,18 @@ class PhpcsTogglePlugin(PhpcsTextBase):
             description = 'Turn Execute On Save On'
         return description
 
+
+class PhpcsSwitchCodingStandard(PhpcsTextBase):
+    """Ability to switch the coding standard for this session"""
+    def run(self, args):
+        cmd = PhpcsCommand.instance(self.view)
+        cmd.display_coding_standards()
+
+    def is_enabled(self):
+        if pref.php_cs_fixer_executable_path != '':
+            return PhpcsTextBase.should_execute(self.view)
+        else:
+            return False
 
 class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""

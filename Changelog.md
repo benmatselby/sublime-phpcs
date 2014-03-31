@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+next
+----
+* Enhancement [GH-112](https://github.com/benmatselby/sublime-phpcs/issues/112). Ability to toggle the coding standard being used.
+
 6.3.5
 -----
 * Enhancement: Always show php-cs-fixer support in context menu in side bar, just not enabled if php-cs-fixer is not configured [GH-103](https://github.com/benmatselby/sublime-phpcs/issues/103)
