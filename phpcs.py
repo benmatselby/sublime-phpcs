@@ -709,10 +709,8 @@ class PhpcsSwitchCodingStandard(PhpcsTextBase):
         cmd.display_coding_standards()
 
     def is_enabled(self):
-        if pref.php_cs_fixer_executable_path != '':
-            return PhpcsTextBase.should_execute(self.view)
-        else:
-            return False
+        return PhpcsTextBase.should_execute(self.view)
+
 
 class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
