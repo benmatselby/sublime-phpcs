@@ -80,6 +80,8 @@ class Pref:
     def set_setting(self, key, value):
         if key in self.project_settings:
             self.project_settings[key] = value
+        else:
+            self.settings.set(key, value)
 
 
 pref = Pref()
