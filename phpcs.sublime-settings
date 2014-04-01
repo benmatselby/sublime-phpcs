@@ -67,7 +67,7 @@
     //     "-n"
     // }
     "phpcs_additional_args": {
-        "--standard": "PEAR",
+        "--standard": "PSR2",
         "-n": ""
     },
 
