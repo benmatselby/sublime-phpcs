@@ -1,6 +1,11 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.4.2
+-----
+* Bug fix for switching the coding standard when not using a project.
+* Set the default coding standard when the plugin is installed to PSR2.
+
 6.4.1
 -----
 * Bug fix for switching the coding standard. It does not rely on php-cs-fixer path being set
