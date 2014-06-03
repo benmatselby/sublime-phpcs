@@ -3,20 +3,16 @@ sublime-phpcs
 
 This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter, PHP Mess Detector, Scheck support to Sublime Text.
 
-For more information about this plugin such as features, installation requirements etc, please click [here](http://www.soulbroken.co.uk/code/sublimephpcs/)
+For more information about this plugin such as features, installation requirements etc, please click [here](http://benmatselby.github.io/sublime-phpcs)
 
 Configuration
 -------------
 
-**You will need to configure this plugin to work for your setup**, please view the options [here](http://www.soulbroken.co.uk/code/sublimephpcs#configuration)
+**You will need to configure this plugin to work for your setup**, please view the options [here](http://benmatselby.github.io/sublime-phpcs/#configuration)
 
 
 FAQ
 ---
-
-### Can I define project based settings?
-
-Yes, yes you can, go and look [here](http://www.soulbroken.co.uk/2013/04/sublime-phpcs-now-supports-project-based-settings/)
 
 ### What do I do when I get "OSError: [Errno 8] Exec format error"?
 
