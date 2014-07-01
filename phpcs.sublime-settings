@@ -45,6 +45,10 @@
     // executable. Avoid setting this if at all possible
     "phpcs_commands_to_php_prefix": [],
 
+    // What color to stylise the icon
+    // https://www.sublimetext.com/docs/3/api_reference.html#sublime.View
+    // add_regsions
+    "phpcs_icon_scope_color": "comment",
 
 
     // PHP_CodeSniffer settings
