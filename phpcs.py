@@ -166,7 +166,7 @@ class ShellCommand():
         home = expanduser("~")
         debug_message("cwd: " + home)
 
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=info, cwd=home)
+        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=info, cwd=home)
 
 
         if proc.stdout:
