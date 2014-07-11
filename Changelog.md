@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.5.1
+-----
+* Fix fo [GH-113](https://github.com/benmatselby/sublime-phpcs/issues/113). Thanks to [Rafael Nascimento](https://github.com/Arcane07) for the patch. PHP-CS-Fixer not reporting outcome
+
 6.5.0
 -----
 * Stylise the icon color [GH-114](https://github.com/benmatselby/sublime-phpcs/issues/114)
