@@ -480,6 +480,9 @@ class PhpcsCommand():
                 icon = icon if pref.phpcs_show_gutter_marks else ''
                 outline = sublime.DRAW_OUTLINED if pref.phpcs_outline_for_errors else sublime.HIDDEN
                 if pref.phpcs_show_gutter_marks or pref.phpcs_outline_for_errors:
+                    if pref.phpcs_icon_scope_color == None:
+                        debug_message("WARN: phpcs_icon_scope_color is not defined, so resorting to phpcs colour scope")
+                        pref.phpcs_icon_scope_color = "phpcs"
                     self.view.add_regions(shell_command, region_set, pref.phpcs_icon_scope_color, icon, outline)
 
         if pref.phpcs_show_quick_panel == True:
