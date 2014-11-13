@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.5.3
+-----
+* Fix for [GH-120](https://github.com/benmatselby/sublime-phpcs/issues/120). Thanks to [Hermann Herz](https://github.com/Heart1010) for raising this.
+
 6.5.2
 -----
 * Fix for [GH-117](https://github.com/benmatselby/sublime-phpcs/issues/117). Thanks to [autumnlansing](https://github.com/autumnlansing) for raising.
