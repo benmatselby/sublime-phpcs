@@ -67,7 +67,6 @@
 
     // Additional arguments, run all levels of fixing
     "php_cs_fixer_additional_args": {
-        "--level": "all"
     },
 
 
