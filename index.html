@@ -1,47 +1,37 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="sublime-phpcs : PHP CodeSniffer, PHP Coding Standard Fixer, Linter and Mess Detector Support for Sublime Text" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>sublime-phpcs</title>
+    <meta charset="UTF-8">
+    <title>sublime-phpcs by benmatselby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">sublime-phpcs</h1>
+      <h2 class="project-tagline">PHP CodeSniffer, PHP Coding Standard Fixer, Linter and Mess Detector Support for Sublime Text</h2>
+      <a href="https://github.com/benmatselby/sublime-phpcs" class="btn">View on GitHub</a>
+      <a href="https://github.com/benmatselby/sublime-phpcs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/benmatselby/sublime-phpcs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/benmatselby/sublime-phpcs">View on GitHub</a>
-
-          <h1 id="project_title">sublime-phpcs</h1>
-          <h2 id="project_tagline">PHP CodeSniffer, PHP Coding Standard Fixer, Linter and Mess Detector Support for Sublime Text</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/benmatselby/sublime-phpcs/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/benmatselby/sublime-phpcs/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>This is a plugin for Sublime Text which provides checkstyle reports using the following tools (all optional):</p>
+    <section class="main-content">
+      <p>This is a plugin for Sublime Text which provides checkstyle reports using the following tools (all optional):</p>
 
 <ul>
 <li>PHP_CodeSniffer (phpcs)</li>
 <li>Linter (php -l)</li>
 <li>PHP Mess Detector (phpmd)</li>
 <li>Scheck (scheck, part of Facebook’s pfff toolchain)</li>
-</ul><p>You can also configure the plugin to fix the issues using the PHP Coding Standards Fixer(php-cs-fixer) application</p>
+</ul>
+
+<p>You can also configure the plugin to fix the issues using either the PHP Coding Standards Fixer (php-cs-fixer) application or the PHP Code Beautifier (phpcbf) application</p>
 
 <h2>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
 
 <p>Requirements for this plugin, should you want all the options to work:</p>
 
@@ -50,7 +40,10 @@
 <li>PHPMD 1.4+ (potentially works with lower versions, but this hasn’t been tested)</li>
 <li>PHP CS Fixer version 0.2+ (potentially works with lower versions, but this hasn’t been tested)</li>
 <li>Scheck 0.23+</li>
-</ul><p>This plugin has been tested on:</p>
+<li>PHP Code Beautifier 2.2.0+</li>
+</ul>
+
+<p>This plugin has been tested on:</p>
 
 <ul>
 <li>Mac OS X 10.8.2</li>
@@ -58,8 +51,10 @@
 <li>Windows 7</li>
 <li>Sublime Text 2</li>
 <li>Sublime Text 3</li>
-</ul><h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>Use Sublime Text’s Package Control (Preferences -&gt; Package Control -&gt; Install Package -&gt; Phpcs) to install this plugin. This is the recommended installation path.</p>
 
@@ -78,18 +73,21 @@ $ git clone git://github.com/benmatselby/sublime-phpcs.git Phpcs
 <li>“phpcs_executable_path”</li>
 <li>“phpmd_executable_path”</li>
 <li>“php_cs_fixer_executable_path”</li>
-</ul><p>They are optional for the plugin. The path needs to include the application such as “/usr/local/bin/phpcs”.</p>
+</ul>
+
+<p>They are optional for the plugin. The path needs to include the application such as “/usr/local/bin/phpcs”.</p>
 
 <p>In order to get the path of the application (On a Mac/Linux based environment), you can use:</p>
 
 <pre><code>$ which phpcs
 $ which phpmd
 $ which php-cs-fixer
+$ which phpcbf
 
 </code></pre>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>Ability to run PHP_CodeSniffer</li>
@@ -105,15 +103,18 @@ $ which php-cs-fixer
 <li>Ability to specify the location of the PHP_CodeSniffer application</li>
 <li>Ability to specify the location of the PHP Mess Detector application</li>
 <li>Ability to run the PHP Coding Standards Fixer tool which fixes most issues in your code when you want to follow the PHP coding standards as defined in the PSR-1 and PSR-2 documents</li>
-</ul><p>Once you have right clicked on a file and selected “PHP CodeSniffer” &gt; “Sniff this file…” you will get the output as shown below (depending on the settings you have defined):</p>
+<li>Ability to run the PHP Code Beautifier tool which fixes most issues in your code when you want to follow PHP coding standards</li>
+</ul>
+
+<p>Once you have right clicked on a file and selected “PHP CodeSniffer” &gt; “Sniff this file…” you will get the output as shown below (depending on the settings you have defined):</p>
 
 <h2>
-<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
 <p>You can also define the configuration for the following settings, be it for a project, user settings or the default settings:</p>
 
 <h3>
-<a name="plugin" class="anchor" href="#plugin"><span class="octicon octicon-link"></span></a>Plugin</h3>
+<a id="plugin" class="anchor" href="#plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugin</h3>
 
 <ul>
 <li>show_debug – Do you want the debug information to be sent to the console?</li>
@@ -129,64 +130,84 @@ $ which php-cs-fixer
 <li>phpcs_commands_to_php_prefix – List of commands you want the php path to prefix. This would be useful, if you have some commands as a phar that cannot be run without the php prefix, and others using native command.</li>
 <li>phpcs_icon_scope_color - What colour to stylise the icon. This needs knowledge of theming of Sublime Test, as it uses scope colours from the theme to "tint" the dot icon. See <a href="https://www.sublimetext.com/docs/3/api_reference.html#sublime.View">here</a>
 </li>
-</ul><h3>
-<a name="php_codesniffer" class="anchor" href="#php_codesniffer"><span class="octicon octicon-link"></span></a>PHP_CodeSniffer</h3>
+</ul>
+
+<h3>
+<a id="php_codesniffer" class="anchor" href="#php_codesniffer" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP_CodeSniffer</h3>
 
 <ul>
 <li>phpcs_sniffer_run – Do you want the PHPCS checker to run?</li>
 <li>phpcs_command_on_save – Do you want the command to execute on save?</li>
 <li>phpcs_executable_path – The path to the phpcs executable. If empty string, use PATH to find it</li>
 <li>phpcs_additional_args – This is the extra information you want to pass to the phpcs command. For example which “standard” you want to run, and if you want to show warnings or not</li>
-</ul><h3>
-<a name="php-codesniffer-fixer" class="anchor" href="#php-codesniffer-fixer"><span class="octicon octicon-link"></span></a>PHP CodeSniffer Fixer</h3>
+</ul>
+
+<h3>
+<a id="php-codesniffer-fixer" class="anchor" href="#php-codesniffer-fixer" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP CodeSniffer Fixer</h3>
 
 <ul>
 <li>php_cs_fixer_on_save – Do you want to run the fixer on file save?</li>
 <li>php_cs_fixer_show_quick_panel – Do you want the quick panel to display on execution?</li>
 <li>php_cs_fixer_executable_path – The path to the php-cs-fixer application.</li>
 <li>php_cs_fixer_additional_args – This is the extra information you want to pass to the php-cs-fixer command. For example which “fixers” you want to run</li>
-</ul><h2>
-<a name="php-linter" class="anchor" href="#php-linter"><span class="octicon octicon-link"></span></a>PHP Linter</h2>
+</ul>
+
+<h3>
+<a id="php-codesniffer-fixer-1" class="anchor" href="#php-codesniffer-fixer-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP CodeSniffer Fixer</h3>
+
+<ul>
+<li>phpcbf_on_save – Do you want to run the fixer on file save?</li>
+<li>phpcbf_show_quick_panel – Do you want the quick panel to display on execution?</li>
+<li>phpcbf_executable_path – The path to the phpcbf application.</li>
+<li>phpcbf_additional_args – This is the extra information you want to pass to the phpcbf command. For example which “standard” to use in order to fix the issues</li>
+</ul>
+
+<h2>
+<a id="php-linter" class="anchor" href="#php-linter" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP Linter</h2>
 
 <ul>
 <li>phpcs_linter_run – Do you want the PHP linter to run?</li>
 <li>phpcs_linter_command_on_save – Do you want the command to execute on save?</li>
 <li>phpcs_php_path – The path to the PHP executable. If empty string, use PATH to find it</li>
 <li>phpcs_linter_regex – The regex for the PHP linter output</li>
-</ul><h3>
-<a name="php-mess-detector" class="anchor" href="#php-mess-detector"><span class="octicon octicon-link"></span></a>PHP Mess Detector</h3>
+</ul>
+
+<h3>
+<a id="php-mess-detector" class="anchor" href="#php-mess-detector" aria-hidden="true"><span class="octicon octicon-link"></span></a>PHP Mess Detector</h3>
 
 <ul>
 <li>phpmd_run – Do you want the PHPMD to run? Off by default</li>
 <li>phpmd_command_on_save – Do you want the command to execute on save?</li>
 <li>phpmd_executable_path – The path to the phpmd executable. If empty string, use PATH to find it</li>
 <li>phpmd_additional_args – This is the extra information you want to pass to the phpmd command. For example which “rulesets” you want to run</li>
-</ul><h3>
-<a name="scheck" class="anchor" href="#scheck"><span class="octicon octicon-link"></span></a>Scheck</h3>
+</ul>
+
+<h3>
+<a id="scheck" class="anchor" href="#scheck" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scheck</h3>
 
 <ul>
 <li>scheck_run - Do you want the scheck application to run? Off by default</li>
 <li>scheck_command_on_save - Do you want the command to execute on save?</li>
 <li>scheck_executable_path - The path to the scheck executable. If empty string, use PATH to find it</li>
 <li>scheck_additional_args - This is the extra information you want to pass to the scheck command.</li>
-</ul><p>Examples of the settings files can be found <a href="https://github.com/benmatselby/sublime-phpcs/tree/master/example-settings">here</a></p>
+</ul>
+
+<p>Examples of the settings files can be found <a href="https://github.com/benmatselby/sublime-phpcs/tree/master/example-settings">here</a></p>
 
 <h2>
-<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a>Changelog</h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelog</h2>
 
 <p>To track the changes more frequently, you can review the Changelog <a href="https://github.com/benmatselby/sublime-phpcs/blob/master/Changelog.md">here</a></p>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">sublime-phpcs maintained by <a href="https://github.com/benmatselby">benmatselby</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/benmatselby/sublime-phpcs">sublime-phpcs</a> is maintained by <a href="https://github.com/benmatselby">benmatselby</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-              <script type="text/javascript">
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -197,6 +218,6 @@ $ which php-cs-fixer
             } catch(err) {}
           </script>
 
-
   </body>
 </html>
+
