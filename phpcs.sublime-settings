@@ -100,6 +100,30 @@
 
 
 
+    // phpcbf settings
+
+    // Fix the issues on save
+    "phpcbf_on_save": false,
+
+    // Show the quick panel
+    "phpcbf_show_quick_panel": false,
+
+    // Path to where you have the php-cs-fixer installed
+    "phpcbf_executable_path": "",
+
+    // Additional arguments you can specify into the application
+    //
+    // Example:
+    // {
+    //     "--level": "all"
+    // }
+    "phpcbf_additional_args": {
+        "--standard": "PSR2",
+        "-n": ""
+    },
+
+
+
     // PHP Linter settings
 
     // Are we going to run php -l over the file?

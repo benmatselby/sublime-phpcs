@@ -1,6 +1,10 @@
 Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
 ==================================================================
 
+6.6.0
+-----
+* Support for PHP Code Beautifier and Fixer (phpcbf) [GH-127](https://github.com/benmatselby/sublime-phpcs/issues/127)
+
 6.5.3
 -----
 * Fix for [GH-120](https://github.com/benmatselby/sublime-phpcs/issues/120). Thanks to [Hermann Herz](https://github.com/Heart1010) for raising this.

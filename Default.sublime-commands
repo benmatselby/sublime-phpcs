@@ -16,8 +16,18 @@
         "command": "phpcs_goto_next_error"
     },
     {
-        "caption": "PHP Coding Standards Fixer: Fix this file",
-        "command": "phpcs_fix_this_file"
+        "caption": "PHP Coding Standards Fixer: Fix this file (PHP Code Beautifier)",
+        "command": "phpcs_fix_this_file",
+        "args": {
+            "tool": "CodeBeautifier"
+        }
+    },
+    {
+        "caption": "PHP Coding Standards Fixer: Fix this file (PHP-CS-Fixer)",
+        "command": "phpcs_fix_this_file",
+        "args": {
+            "tool": "Fixer"
+        }
     },
     {
         "caption": "PHP Code Sniffer: Turn Execute On Save On",

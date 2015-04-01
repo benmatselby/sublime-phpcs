@@ -39,6 +39,10 @@ class Pref:
         "php_cs_fixer_show_quick_panel",
         "php_cs_fixer_executable_path",
         "php_cs_fixer_additional_args",
+        "phpcbf_on_save",
+        "phpcbf_show_quick_panel",
+        "phpcbf_executable_path",
+        "phpcbf_additional_args",
         "phpcs_linter_run",
         "phpcs_linter_command_on_save",
         "phpcs_php_path",
@@ -277,6 +281,43 @@ class Fixer(ShellCommand):
             error = CheckstyleError(line.group('line'), line.group('file'))
             self.error_list.append(error)
 
+class CodeBeautifier(ShellCommand):
+    """Concrete class for phpcbf"""
+    def execute(self, path):
+
+        args = []
+
+        if pref.phpcs_php_prefix_path != "" and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix:
+            args = [pref.phpcs_php_prefix_path]
+
+        if pref.phpcbf_executable_path != "":
+            if (len(args) > 0):
+                args.append(pref.phpcbf_executable_path)
+            else:
+                args = [pref.phpcbf_executable_path]
+        else:
+            debug_message("phpcbf_executable_path is not set, therefore cannot execute")
+            return
+
+        args.append(os.path.normpath(path))
+
+        # Add the additional arguments from the settings file to the command
+        for key, value in pref.phpcbf_additional_args.items():
+            arg = key
+            if value != "":
+                arg += "=" + value
+            args.append(arg)
+
+        self.parse_report(args)
+
+    def parse_report(self, args):
+        report = self.shell_out(args)
+        debug_message(report)
+        lines = re.finditer('.*\((?P<number>\d+) fixable violations\)', report)
+
+        for line in lines:
+            error = CheckstyleError(0, line.group('number') + " fixed violations")
+            self.error_list.append(error)
 
 class MessDetector(ShellCommand):
     """Concrete class for PHP Mess Detector"""
@@ -494,11 +535,15 @@ class PhpcsCommand():
     def show_quick_panel(self):
         self.view.window().show_quick_panel(self.error_list, self.on_quick_panel_done)
 
-    def fix_standards_errors(self, path):
+    def fix_standards_errors(self, tool, path):
         self.error_lines = {}
         self.error_list = []
         self.report = []
-        fixes = Fixer().get_errors(path)
+
+        if tool == "CodeBeautifier":
+            fixes = CodeBeautifier().get_errors(path)
+        else:
+            fixes = Fixer().get_errors(path)
 
         for fix in fixes:
             self.error_list.append(fix.get_message())
@@ -652,9 +697,10 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
     """Command to use php-cs-fixer to 'fix' the file"""
     description = 'Fix coding standard issues (php-cs-fixer)'
 
-    def run(self, args):
+    def run(self, args, tool="Fixer"):
+        debug_message(tool)
         cmd = PhpcsCommand.instance(self.view)
-        cmd.fix_standards_errors(self.view.file_name())
+        cmd.fix_standards_errors(tool, self.view.file_name())
 
     def is_enabled(self):
         if pref.php_cs_fixer_executable_path != '':
@@ -665,9 +711,9 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
 
 class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
     """Command to use php-cs-fixer to 'fix' the directory"""
-    def run(self, paths=[]):
+    def run(self, tool="Fixer", paths=[]):
         cmd = PhpcsCommand.instance(self.window.active_view())
-        cmd.fix_standards_errors(os.path.normpath(paths[0]))
+        cmd.fix_standards_errors(tool, os.path.normpath(paths[0]))
 
     def is_enabled(self):
         if pref.php_cs_fixer_executable_path != '':
@@ -728,7 +774,11 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
             if pref.phpcs_execute_on_save == True and pref.php_cs_fixer_on_save == True:
                 cmd = PhpcsCommand.instance(view)
-                cmd.fix_standards_errors(view.file_name())
+                cmd.fix_standards_errors("Fixer", view.file_name())
+
+            if pref.phpcs_execute_on_save == True and pref.phpcbf_on_save == True:
+                cmd = PhpcsCommand.instance(view)
+                cmd.fix_standards_errors("CodeBeautifier", view.file_name())
 
     def on_selection_modified(self, view):
         if not PhpcsTextBase.should_execute(view):

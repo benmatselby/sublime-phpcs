@@ -4,7 +4,27 @@
         "caption": "PHP Code Sniffer",
         "children":
         [
-            { "command": "phpcs_fix_this_directory", "args": { "paths": [] }, "caption": "Fix this file/directory (PHP-CS-Fixer)" }
+            {
+                "caption": "Fix this file",
+                "children": [
+                    {
+                        "command": "phpcs_fix_this_directory",
+                        "caption": "PHP-CS-Fixer (php-cs-fixer)",
+                        "args": {
+                            "paths": [],
+                            "tool": "Fixer"
+                        }
+                    },
+                    {
+                        "command": "phpcs_fix_this_directory",
+                        "caption": "PHP Code Beautifier (phpcbf)",
+                        "args": {
+                            "paths": [],
+                            "tool": "CodeBeautifier"
+                        }
+                    }
+                ]
+            },
         ]
     }
 ]

@@ -1,7 +1,7 @@
 sublime-phpcs
 =============
 
-This plugin adds PHP CodeSniffer, PHP Coding Standards Fixer, the PHP Linter, PHP Mess Detector, Scheck support to Sublime Text.
+This plugin adds PHP CodeSniffer, PHP Code Beautifier and Fixer, PHP Coding Standards Fixer, the PHP Linter, PHP Mess Detector, Scheck support to Sublime Text.
 
 For more information about this plugin such as features, installation requirements etc, please click [here](http://benmatselby.github.io/sublime-phpcs)
 
@@ -54,6 +54,18 @@ In order to achieve this you need to add the following to one of your key bindin
 
 ```json
 { "keys": ["ctrl+super+t"], "command": "phpcs_clear_sniffer_marks" }
+```
+
+To decide which "Fixer" to use, you can do:
+
+```json
+{ "keys": ["super+k", "super+f"], "command": "phpcs_fix_this_file", "args": {"tool": "CodeBeautifier"}},
+```
+
+or
+
+```json
+{ "keys": ["super+k", "super+f"], "command": "phpcs_fix_this_file", "args": {"tool": "Fixer"}},
 ```
 
 You can then change the ctrl+super+t combination to something of your choosing.
