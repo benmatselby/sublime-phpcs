@@ -257,6 +257,7 @@ class Fixer(ShellCommand):
                 args = [pref.php_cs_fixer_executable_path]
         else:
             debug_message("php_cs_fixer_executable_path is not set, therefore cannot execute")
+            sublime.error_message('The "php_cs_fixer_executable_path" is not set, therefore cannot execute this command')
             return
 
         args.append("fix")
@@ -297,6 +298,7 @@ class CodeBeautifier(ShellCommand):
                 args = [pref.phpcbf_executable_path]
         else:
             debug_message("phpcbf_executable_path is not set, therefore cannot execute")
+            sublime.error_message('The "phpcbf_executable_path" is not set, therefore cannot execute this command')
             return
 
         args.append(os.path.normpath(path))
@@ -703,10 +705,7 @@ class PhpcsFixThisFileCommand(PhpcsTextBase):
         cmd.fix_standards_errors(tool, self.view.file_name())
 
     def is_enabled(self):
-        if pref.php_cs_fixer_executable_path != '':
-            return PhpcsTextBase.should_execute(self.view)
-        else:
-            return False
+        return PhpcsTextBase.should_execute(self.view)
 
 
 class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
