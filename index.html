@@ -199,6 +199,31 @@ $ which phpcbf
 
 <p>Examples of the settings files can be found <a href="https://github.com/benmatselby/sublime-phpcs/tree/master/example-settings">here</a></p>
 
+<h4>
+<a id="project-based-settings" class="anchor" href="#project-based-settings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project Based Settings</h4>
+
+<p>Your .project file should look something like this:</p>
+
+<pre><code>{
+    "folders":
+    [
+        {}
+    ],
+    "settings":
+    {
+        "phpcs":
+        {
+            "phpcs_additional_args":
+            {
+                "--standard": "/path/to/.composer/vendor/drupal/coder/coder_sniffer/Drupal"
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>Of course this is a example to apply Drupal code sniffer. This could be anything. Whatever you can have on this package settings it can be overwritten under the settings -&gt; phpcs</p>
+
 <h2>
 <a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Changelog</h2>
 
