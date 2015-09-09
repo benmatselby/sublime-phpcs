@@ -1,0 +1,97 @@
+{
+    // Example for:
+    // - Windows 8.1
+    // - With phpcs and php-cs-fixer support
+    // - You have to change "YOUR_USERNAME_HERE" strings.
+    // - Notice: This uses phpcs which is installed
+    // -         using composer not xampp.
+    // -         Be sure to install phpcs using composer.
+
+    // We want debugging on
+    "show_debug": true,
+
+    // Only execute the plugin for php files
+    "extensions_to_execute": ["php"],
+
+    // Do not execute for twig files
+    "extensions_to_blacklist": ["twig.php"],
+
+    // Execute the sniffer on file save
+    "phpcs_execute_on_save": true,
+
+    // Show the error list after save.
+    "phpcs_show_errors_on_save": true,
+
+    // Show the errors in the gutter
+    "phpcs_show_gutter_marks": true,
+
+    // Show outline for errors
+    "phpcs_outline_for_errors": true,
+
+    // Show the errors in the status bar
+    "phpcs_show_errors_in_status": true,
+
+    // Show the errors in the quick panel so you can then goto line
+    "phpcs_show_quick_panel": true,
+
+    // Path to php on windows installation
+    // This is needed as we cannot run phars on windows, so we run it through php
+    "phpcs_php_prefix_path": "",
+
+    // We want the fixer to be run through the php application
+    "phpcs_commands_to_php_prefix": ["Fixer"],
+
+
+    // PHP_CodeSniffer settings
+    // Yes, run the phpcs command
+    "phpcs_sniffer_run": true,
+
+    // And execute it on save
+    "phpcs_command_on_save": true,
+
+    // This is the path to the bat file when we installed PHP_CodeSniffer
+    "phpcs_executable_path": "C:\\Users\\YOUR_USERNAME_HERE\\AppData\\Roaming\\Composer\\vendor\\bin\\phpcs.bat",
+
+    // I want to run the PSR2 standard, and ignore warnings
+    "phpcs_additional_args": {
+        "--standard": "PSR2",
+        "-n": ""
+    },
+
+
+    // PHP-CS-Fixer settings
+    // Don't want to auto fix issue with php-cs-fixer
+    "php_cs_fixer_on_save": false,
+
+    // Show the quick panel
+    "php_cs_fixer_show_quick_panel": true,
+
+    // The fixer phar file is stored here:
+    "php_cs_fixer_executable_path": "C:\\Users\\YOUR_USERNAME_HERE\\AppData\\Roaming\\Composer\\vendor\\bin\\php-cs-fixer.bat",
+
+    // Additional arguments, run all levels of fixing
+    "php_cs_fixer_additional_args": {
+    },
+
+
+    // PHP Linter settings
+    // Yes, lets lint the files
+    "phpcs_linter_run": true,
+
+    // And execute that on each file when saved (php only as per extensions_to_execute)
+    "phpcs_linter_command_on_save": true,
+
+    // Path to php
+    "phpcs_php_path": "C:\\xampp\\php\\php.exe",
+
+    // This is the regex format of the errors
+    "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)",
+
+
+    // PHP Mess Detector settings
+    // Not turning on the mess detector here
+    "phpmd_run": false,
+    "phpmd_command_on_save": false,
+    "phpmd_executable_path": "",
+    "phpmd_additional_args": {}
+}
