@@ -89,5 +89,7 @@
     "phpmd_run": false,
     "phpmd_command_on_save": false,
     "phpmd_executable_path": "",
-    "phpmd_additional_args": {}
+    "phpmd_additional_args": {
+        "codesize,naming,unusedcode": ""
+    }
 }
