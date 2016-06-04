@@ -1,5 +1,9 @@
-Sublime PHP CodeSniffer, Linter and Mess Detector Plugin Changelog
-==================================================================
+CHANGELOG
+=========
+
+6.6.2
+-----
+* Fix for [GH-155](https://github.com/benmatselby/sublime-phpcs/issues/155). --runtime-set not working correctly
 
 6.6.1
 -----

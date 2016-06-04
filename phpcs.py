@@ -211,7 +211,10 @@ class Sniffer(ShellCommand):
         # Add the additional arguments from the settings file to the command
         for key, value in pref.phpcs_additional_args.items():
             arg = key
-            if value != "":
+            if key == "--runtime-set":
+                args.append(arg)
+                args.append(value)
+            elif value != "":
                 arg += "=" + value
             args.append(arg)
 
