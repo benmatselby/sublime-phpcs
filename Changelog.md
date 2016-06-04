@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+6.6.3
+-----
+* Fix for [GH-100](https://github.com/benmatselby/sublime-phpcs/issues/100). Issues when opening Sublime Text when the last file was an image
+
 6.6.2
 -----
 * Fix for [GH-155](https://github.com/benmatselby/sublime-phpcs/issues/155). --runtime-set not working correctly
