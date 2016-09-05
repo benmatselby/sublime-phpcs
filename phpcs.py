@@ -139,6 +139,12 @@ class ShellCommand():
     def __init__(self):
         self.error_list = []
 
+        # Default the working directory for the shell command to the user's home dir. 
+        self.workingDir = expanduser("~")
+
+    def setWorkingDir(self, dir):
+        self.workingDir = dir
+
     def get_errors(self, path):
         self.execute(path)
         return self.error_list
@@ -162,15 +168,8 @@ class ShellCommand():
             info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             info.wShowWindow = subprocess.SW_HIDE
 
-        """
-        Fixes the fact that PHP_CodeSniffer now caches the reports to cwd()
-         - http://pear.php.net/package/PHP_CodeSniffer/download/1.5.0
-         - https://github.com/benmatselby/sublime-phpcs/issues/68
-        """
-        home = expanduser("~")
-        debug_message("cwd: " + home)
-
-        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=info, cwd=home)
+        debug_message("cwd: " + self.workingDir)
+        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=info, cwd=self.workingDir)
 
 
         if proc.stdout:
@@ -218,7 +217,13 @@ class Sniffer(ShellCommand):
                 arg += "=" + value
             args.append(arg)
 
-        args.append(os.path.normpath(path))
+        target = os.path.normpath(path)
+
+        # Set the working directory for the command to the path of the target file, allowing
+        # phpcs the opportunity to find a default configuration file (phpcs.xml) in the file's path.
+        self.setWorkingDir(os.path.dirname(target))
+
+        args.append(target)
         self.parse_report(args)
 
     def parse_report(self, args):
