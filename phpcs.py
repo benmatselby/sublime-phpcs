@@ -139,7 +139,7 @@ class ShellCommand():
     def __init__(self):
         self.error_list = []
 
-        # Default the working directory for the shell command to the user's home dir. 
+        # Default the working directory for the shell command to the user's home dir.
         self.workingDir = expanduser("~")
 
     def setWorkingDir(self, dir):

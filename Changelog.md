@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+6.7.0
+-----
+* Enhancement for allowing the definition of a `phpcs.xml` in the root of the project. Thanks to [Jason Madrid](https://github.com/jasonmadrid) for the [patch](https://github.com/benmatselby/sublime-phpcs/pull/161)
+
 6.6.3
 -----
 * Fix for [GH-100](https://github.com/benmatselby/sublime-phpcs/issues/100). Issues when opening Sublime Text when the last file was an image
