@@ -151,6 +151,10 @@ class ShellCommand():
 
     def shell_out(self, cmd):
         data = None
+        
+        for i, arg in enumerate(cmd):
+            if isinstance(arg, str) and arg.startswith('~'):
+                cmd[i] = os.path.expanduser(arg)
 
         if st_version == 3:
             debug_message(' '.join(cmd))
