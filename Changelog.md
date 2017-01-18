@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+6.8.0
+-----
+* Enhancement for allowing the configuration to use "~" which will be expanded out to your home directory. Thanks to [Quentin Dreyer](https://github.com/qkdreyer) for the [patch](https://github.com/benmatselby/sublime-phpcs/pull/169)
+
+
 6.7.0
 -----
 * Enhancement for allowing the definition of a `phpcs.xml` in the root of the project. Thanks to [Jason Madrid](https://github.com/jasonmadrid) for the [patch](https://github.com/benmatselby/sublime-phpcs/pull/161)
