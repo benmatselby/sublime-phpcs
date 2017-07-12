@@ -71,16 +71,22 @@ class Pref:
         else:
             self.project_settings = {}
 
+        file_name = sublime.active_window().active_view().file_name()
         for key in self.keys:
             self.settings.clear_on_change(key)
-            setattr(self, key, self.get_setting(key))
+            setattr(self, key, self.get_setting(key, file_name))
             self.settings.add_on_change(key, pref.load)
 
-    def get_setting(self, key):
+    def get_setting(self, key, file_name):
         if key in self.project_settings:
-            return self.project_settings.get(key)
+            value = self.project_settings.get(key)
         else:
-            return self.settings.get(key)
+            value = self.settings.get(key)
+
+        if 'on_save' in key and isinstance(value, str):
+            value = re.search(value, file_name) != None
+
+        return value
 
     def set_setting(self, key, value):
         if key in self.project_settings:
@@ -151,7 +157,7 @@ class ShellCommand():
 
     def shell_out(self, cmd):
         data = None
-        
+
         for i, arg in enumerate(cmd):
             if isinstance(arg, str) and arg.startswith('~'):
                 cmd[i] = os.path.expanduser(arg)
