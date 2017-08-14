@@ -151,7 +151,7 @@ class ShellCommand():
 
     def shell_out(self, cmd):
         data = None
-        
+
         for i, arg in enumerate(cmd):
             if isinstance(arg, str) and arg.startswith('~'):
                 cmd[i] = os.path.expanduser(arg)
@@ -547,7 +547,9 @@ class PhpcsCommand():
             self.show_quick_panel()
 
     def show_quick_panel(self):
-        self.view.window().show_quick_panel(self.error_list, self.on_quick_panel_done)
+        window = self.view.window()
+        if window != None:
+            window.show_quick_panel(self.error_list, self.on_quick_panel_done)
 
     def fix_standards_errors(self, tool, path):
         self.error_lines = {}
@@ -567,7 +569,9 @@ class PhpcsCommand():
 
     def display_coding_standards(self):
         self.standards = Sniffer().get_standards_available()
-        self.view.window().show_quick_panel(self.standards, self.on_coding_standard_change)
+        window = self.view.window()
+        if window != None:
+            window.show_quick_panel(self.standards, self.on_coding_standard_change)
 
     def on_coding_standard_change(self, picked):
         if picked == -1:
