@@ -1,19 +1,18 @@
-import datetime
 import os
 import re
-import subprocess
-import threading
-import time
+import string
 import sublime
 import sublime_plugin
+import subprocess
 import sys
-import string
+import threading
 
 try:
     from HTMLParser import HTMLParser
 except:
     from html.parser import HTMLParser
 from os.path import expanduser
+
 
 class Pref:
 
@@ -129,8 +128,10 @@ if sublime.version() == '' or int(sublime.version()) > 3000:
 if st_version == 2:
     pref.load()
 
+
 def plugin_loaded():
     pref.load()
+
 
 def debug_message(msg):
     if pref.show_debug == True:
@@ -206,7 +207,6 @@ class ShellCommand():
         debug_message("cwd: " + self.workingDir)
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=info, cwd=self.workingDir)
 
-
         if proc.stdout:
             data = proc.communicate()[0]
 
@@ -222,7 +222,7 @@ class ShellCommand():
 class Sniffer(ShellCommand):
     """Concrete class for PHP_CodeSniffer"""
     def execute(self, path):
-        if pref.phpcs_sniffer_run != True:
+        if pref.phpcs_sniffer_run is not True:
             return
 
         args = []
@@ -284,6 +284,7 @@ class Sniffer(ShellCommand):
         standards = output[35:].replace('and', ',').strip().split(', ')
         return standards
 
+
 class Fixer(ShellCommand):
     """Concrete class for PHP-CS-Fixer"""
     def execute(self, path):
@@ -325,6 +326,7 @@ class Fixer(ShellCommand):
             error = CheckstyleError(line.group('line'), line.group('file'))
             self.error_list.append(error)
 
+
 class CodeBeautifier(ShellCommand):
     """Concrete class for phpcbf"""
     def execute(self, path):
@@ -364,10 +366,11 @@ class CodeBeautifier(ShellCommand):
             error = CheckstyleError(0, line.group('number') + " fixed violations")
             self.error_list.append(error)
 
+
 class MessDetector(ShellCommand):
     """Concrete class for PHP Mess Detector"""
     def execute(self, path):
-        if pref.phpmd_run != True:
+        if pref.phpmd_run is not True:
             return
 
         args = []
@@ -409,7 +412,7 @@ class MessDetector(ShellCommand):
 class Scheck(ShellCommand):
     """Concrete class for Scheck"""
     def execute(self, path):
-        if pref.scheck_run != True:
+        if pref.scheck_run is not True:
             return
 
         args = []
@@ -449,7 +452,7 @@ class Scheck(ShellCommand):
 class Linter(ShellCommand):
     """Content class for php -l"""
     def execute(self, path):
-        if pref.phpcs_linter_run != True:
+        if pref.phpcs_linter_run is not True:
             return
 
         if pref.phpcs_php_path != "":
@@ -467,7 +470,7 @@ class Linter(ShellCommand):
         report = self.shell_out(args)
         debug_message(report)
         line = re.search(pref.phpcs_linter_regex, report)
-        if line != None:
+        if line is not None:
             error = CheckstyleError(line.group('line'), line.group('message'))
             self.error_list.append(error)
 
@@ -566,12 +569,12 @@ class PhpcsCommand():
                 icon = icon if pref.phpcs_show_gutter_marks else ''
                 outline = sublime.DRAW_OUTLINED if pref.phpcs_outline_for_errors else sublime.HIDDEN
                 if pref.phpcs_show_gutter_marks or pref.phpcs_outline_for_errors:
-                    if pref.phpcs_icon_scope_color == None:
+                    if pref.phpcs_icon_scope_color is None:
                         debug_message("WARN: phpcs_icon_scope_color is not defined, so resorting to phpcs colour scope")
                         pref.phpcs_icon_scope_color = "phpcs"
                     self.view.add_regions(shell_command, region_set, pref.phpcs_icon_scope_color, icon, outline)
 
-        if pref.phpcs_show_quick_panel == True:
+        if pref.phpcs_show_quick_panel is True:
             # Skip showing the errors if we ran on save, and the option isn't set.
             if self.event == 'on_save' and not pref.phpcs_show_errors_on_save:
                 return
@@ -593,7 +596,7 @@ class PhpcsCommand():
         for fix in fixes:
             self.error_list.append(fix.get_message())
 
-        if pref.php_cs_fixer_show_quick_panel == True:
+        if pref.php_cs_fixer_show_quick_panel is True:
             self.show_quick_panel()
 
     def display_coding_standards(self):
@@ -636,13 +639,13 @@ class PhpcsCommand():
         for error in self.report:
             error_line = error.get_line()
 
-            if cache_error != None:
+            if cache_error is not None:
                 cache_line = cache_error.get_line()
 
             if int(error_line) > int(current_line) and int(error_line) < int(cache_line):
                 cache_error = error
 
-        if cache_error != None:
+        if cache_error is not None:
             pt = cache_error.get_point()
             self.view.sel().clear()
             self.view.sel().add(sublime.Region(pt))
@@ -664,7 +667,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
     @staticmethod
     def should_execute(view):
-        if view.file_name() != None:
+        if view.file_name() is not None:
 
             try:
                 ext = os.path.splitext(view.file_name())[1]
@@ -675,7 +678,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
             for block in pref.extensions_to_blacklist:
                 match = re.search(block, view.file_name())
-                if match != None:
+                if match is not None:
                     return False
 
             return result
@@ -773,8 +776,8 @@ class PhpcsFixThisDirectoryCommand(sublime_plugin.WindowCommand):
 class PhpcsTogglePlugin(PhpcsTextBase):
     """Command to toggle if plugin should execute on save"""
     def run(self, edit, toggle=None):
-        if toggle == None:
-            if pref.phpcs_execute_on_save == True:
+        if toggle is None:
+            if pref.phpcs_execute_on_save is True:
                 pref.phpcs_execute_on_save = False
             else:
                 pref.phpcs_execute_on_save = True
@@ -788,7 +791,7 @@ class PhpcsTogglePlugin(PhpcsTextBase):
         return PhpcsTextBase.should_execute(self.view)
 
     def description(self, paths=[]):
-        if pref.phpcs_execute_on_save == True:
+        if pref.phpcs_execute_on_save is True:
             description = 'Turn Execute On Save Off'
         else:
             description = 'Turn Execute On Save On'
@@ -809,16 +812,16 @@ class PhpcsEventListener(sublime_plugin.EventListener):
     """Event listener for the plugin"""
     def on_post_save(self, view):
         if PhpcsTextBase.should_execute(view):
-            if pref.phpcs_execute_on_save == True:
+            if pref.phpcs_execute_on_save is True:
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(target=cmd.run, args=(view.file_name(), 'on_save'))
                 thread.start()
 
-            if pref.phpcs_execute_on_save == True and pref.php_cs_fixer_on_save == True:
+            if pref.phpcs_execute_on_save is True and pref.php_cs_fixer_on_save is True:
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors("Fixer", view.file_name())
 
-            if pref.phpcs_execute_on_save == True and pref.phpcbf_on_save == True:
+            if pref.phpcs_execute_on_save is True and pref.phpcbf_on_save is True:
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors("CodeBeautifier", view.file_name())
 
@@ -835,12 +838,12 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         if not PhpcsTextBase.should_execute(view) or st_version == 2:
             return
 
-        current_project_file = view.window().project_file_name();
+        current_project_file = view.window().project_file_name()
         debug_message('Project files:')
         debug_message(' Current: ' + str(current_project_file))
         debug_message(' Last Known: ' + str(pref.project_file))
 
-        if current_project_file == None:
+        if current_project_file is None:
             debug_message('No project file defined, therefore skipping reload')
             return
 
@@ -848,5 +851,5 @@ class PhpcsEventListener(sublime_plugin.EventListener):
             debug_message('Project files are the same, skipping reload')
         else:
             debug_message('Project files have changed, commence the reload')
-            pref.load();
+            pref.load()
             pref.project_file = current_project_file
