@@ -1,0 +1,8 @@
+title: sublime-phpcs
+description: PHP CodeSniffer, PHP Coding Standard Fixer, Linter and Mess Detector Support for Sublime Text
+google_analytics: UA-832343-1
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
