@@ -13,11 +13,9 @@ You can also configure the plugin to fix the issues using either
 ##Requirements
 Requirements for this plugin, should you want all the options to work:
 
-* PHP_CodeSniffer 1.3+ (potentially works with lower versions, but this hasn’t been tested)
-* PHPMD 1.4+ (potentially works with lower versions, but this hasn’t been tested)
-* PHP CS Fixer version 0.2+ (potentially works with lower versions, but this hasn’t been tested)
-* Scheck 0.23+
-* PHP Code Beautifier 2.2.0+
+* PHP_CodeSniffer 3.5+ (potentially works with lower versions, but this hasn’t been tested) - **[Install](https://pear.php.net/package/PHP_CodeSniffer/download/1.3.2)**
+* PHPMD 2.8+ (potentially works with lower versions, but this hasn’t been tested) - **[Install](https://github.com/phpmd/phpmd/releases/tag/2.8.1)**
+* PHP CS Fixer version 2.6+ (potentially works with lower versions, but this hasn’t been tested) - **[Install](https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases)**
 
 This plugin has been tested on:
 
