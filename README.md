@@ -3,12 +3,12 @@ sublime-phpcs
 
 This plugin adds PHP CodeSniffer, PHP Code Beautifier and Fixer, PHP Coding Standards Fixer, the PHP Linter, PHP Mess Detector, Scheck support to Sublime Text.
 
-For more information about this plugin such as features, installation requirements etc, please click [here](http://benmatselby.github.io/sublime-phpcs)
+For more information about this plugin such as features, installation requirements etc, please click [here](https://benmatselby.dev/sublime-phpcs/#configuration)
 
 Configuration
 -------------
 
-**You will need to configure this plugin to work for your setup**, please view the options [here](http://benmatselby.github.io/sublime-phpcs/#configuration)
+**You will need to configure this plugin to work for your setup**, please view the options [here](https://benmatselby.dev/sublime-phpcs/#configuration)
 
 
 FAQ
