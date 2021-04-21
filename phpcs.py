@@ -466,6 +466,7 @@ class PhpcsCommand():
         self.error_list = []
         self.shell_commands = ['Linter', 'Sniffer', 'MessDetector']
         self.standards = []
+        self.regions_visible = False
 
     def run(self, path, event=None):
         self.event = event
@@ -496,6 +497,7 @@ class PhpcsCommand():
     def clear_sniffer_marks(self):
         for region in self.shell_commands:
             self.view.erase_regions(region)
+        self.regions_visible = False
 
     def set_status_bar(self):
         if not pref.phpcs_show_errors_in_status:
@@ -538,6 +540,7 @@ class PhpcsCommand():
                     if pref.phpcs_icon_scope_color == None:
                         debug_message("WARN: phpcs_icon_scope_color is not defined, so resorting to phpcs colour scope")
                         pref.phpcs_icon_scope_color = "phpcs"
+                    self.regions_visible = True
                     self.view.add_regions(shell_command, region_set, pref.phpcs_icon_scope_color, icon, outline)
 
         if pref.phpcs_show_quick_panel == True:
@@ -819,3 +822,10 @@ class PhpcsEventListener(sublime_plugin.EventListener):
             debug_message('Project files have changed, commence the reload')
             pref.load();
             pref.project_file = current_project_file
+
+    def on_query_context(self, view, key, operator, operand, match_all):
+        cmd = PhpcsCommand.instance(view, False)
+        if not isinstance(cmd, PhpcsCommand):
+            return None
+        if key == "phpcs.regions_visible":
+            return cmd.regions_visible == operand if operator == sublime.OP_EQUAL else cmd.regions_visible != operand
