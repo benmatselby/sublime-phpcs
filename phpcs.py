@@ -7,6 +7,8 @@ import time
 import sublime
 import sublime_plugin
 import sys
+import json
+from collections import OrderedDict
 
 try:
     from HTMLParser import HTMLParser
@@ -76,11 +78,21 @@ class Pref:
             setattr(self, key, self.get_setting(key))
             self.settings.add_on_change(key, pref.load)
 
-    def get_setting(self, key):
+    def get_source_setting(self, key):
         if key in self.project_settings:
             return self.project_settings.get(key)
         else:
             return self.settings.get(key)
+
+    def get_setting(self, key):
+        setting = self.get_source_setting(key)
+
+        if key == "php_cs_fixer_additional_args":
+            rules = setting.get("--rules", "")
+            if isinstance(rules, list):
+                setting["--rules"] = json.dumps(OrderedDict(rules), ensure_ascii=False)
+
+        return setting
 
     def set_setting(self, key, value):
         if key in self.project_settings:
