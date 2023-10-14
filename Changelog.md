@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 7.0.0
+
+- Removal of Scheck.
+
 ## 6.9.0
 
 - Turn on tagging

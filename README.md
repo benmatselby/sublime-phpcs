@@ -5,7 +5,6 @@ This is a plugin for Sublime Text which provides checkstyle reports using the fo
 - PHP_CodeSniffer (`phpcs`)
 - Linter (`php -l`)
 - PHP Mess Detector (`phpmd`)
-- Scheck (`scheck`, part of Facebook’s pfff toolchain)
 
 You can also configure the plugin to fix the issues using either
 
@@ -65,7 +64,6 @@ which phpcbf
 - Ability to run PHP_CodeSniffer
 - Ability to run php -l on the open file
 - Ability to run PHP Mess Detector on the open file
-- Ability to run Scheck on the open file
 - Show cached results from PHP_CodeSniffer in open file
 - Show errors in the Quick Panel
 - Show errors in the Gutter
@@ -132,14 +130,6 @@ You can also define the configuration for the following settings, be it for a pr
 - `phpmd_command_on_save` – Do you want the command to execute on save?
 - `phpmd_executable_path` – The path to the phpmd executable. If empty string, use PATH to find it
 - `phpmd_additional_args` – This is the extra information you want to pass to the phpmd command. For example which “rulesets” you want to run
-
-### Scheck
-
-- `scheck_run` - Do you want the scheck application to run? Off by default
-- `scheck_command_on_save` - Do you want the command to execute on save?
-- `scheck_executable_path` - The path to the scheck executable. If empty string, use PATH to find it
-- `scheck_additional_args` - This is the extra information you want to pass to the scheck command.
-  Examples of the settings files can be found here
 
 ### Project Based Settings
 
