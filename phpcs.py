@@ -51,10 +51,6 @@ class Pref:
         "phpmd_command_on_save",
         "phpmd_executable_path",
         "phpmd_additional_args",
-        "scheck_run",
-        "scheck_command_on_save",
-        "scheck_executable_path",
-        "scheck_additional_args",
     ]
 
     def load(self):
@@ -419,52 +415,6 @@ class MessDetector(ShellCommand):
             self.error_list.append(error)
 
 
-class Scheck(ShellCommand):
-    """Concrete class for Scheck"""
-
-    def execute(self, path):
-        if pref.scheck_run != True:
-            return
-
-        args = []
-
-        if (
-            pref.phpcs_php_prefix_path != ""
-            and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix
-        ):
-            args = [pref.phpcs_php_prefix_path]
-
-        if pref.scheck_executable_path != "":
-            application_path = pref.scheck_executable_path
-        else:
-            application_path = "scheck"
-
-        if len(args) > 0:
-            args.append(application_path)
-        else:
-            args = [application_path]
-
-        for key, value in pref.scheck_additional_args.items():
-            args.append(key)
-            if value != "":
-                args.append(value)
-
-        args.append(os.path.normpath(path))
-
-        self.parse_report(args)
-
-    def parse_report(self, args):
-        report = self.shell_out(args)
-        debug_message(report)
-        lines = re.finditer(
-            ".*:(?P<line>\d+):(?P<column>\d+): CHECK: (?P<message>.*)", report
-        )
-
-        for line in lines:
-            error = CheckstyleError(line.group("line"), line.group("message"))
-            self.error_list.append(error)
-
-
 class Linter(ShellCommand):
     """Content class for php -l"""
 
@@ -536,10 +486,6 @@ class PhpcsCommand:
                 self.checkstyle_reports.append(
                     ["MessDetector", MessDetector().get_errors(path), "dot"]
                 )
-            if pref.scheck_run:
-                self.checkstyle_reports.append(
-                    ["Scheck", Scheck().get_errors(path), "dot"]
-                )
         else:
             if pref.phpcs_linter_command_on_save and pref.phpcs_linter_run:
                 self.checkstyle_reports.append(
@@ -552,10 +498,6 @@ class PhpcsCommand:
             if pref.phpmd_command_on_save and pref.phpmd_run:
                 self.checkstyle_reports.append(
                     ["MessDetector", MessDetector().get_errors(path), "dot"]
-                )
-            if pref.scheck_command_on_save and pref.scheck_run:
-                self.checkstyle_reports.append(
-                    ["Scheck", Scheck().get_errors(path), "dot"]
                 )
 
         sublime.set_timeout(self.generate, 0)
