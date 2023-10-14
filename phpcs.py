@@ -209,24 +209,7 @@ class Sniffer(ShellCommand):
         if pref.phpcs_sniffer_run != True:
             return
 
-        args = []
-
-        if (
-            pref.phpcs_php_prefix_path != ""
-            and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix
-        ):
-            args = [pref.phpcs_php_prefix_path]
-
-        if pref.phpcs_executable_path != "":
-            application_path = pref.phpcs_executable_path
-        else:
-            application_path = "phpcs"
-
-        if len(args) > 0:
-            args.append(application_path)
-        else:
-            args = [application_path]
-
+        args = self.get_executable_args()
         args.append("--report=checkstyle")
 
         # Add the additional arguments from the settings file to the command
@@ -248,6 +231,30 @@ class Sniffer(ShellCommand):
         args.append(target)
         self.parse_report(args)
 
+    def get_executable_args(self):
+        """
+        Figure out how we are going to construct the executable path for phpcs
+        """
+        args = []
+
+        if (
+            pref.phpcs_php_prefix_path != ""
+            and self.__class__.__name__ in pref.phpcs_commands_to_php_prefix
+        ):
+            args = [pref.phpcs_php_prefix_path]
+
+        if pref.phpcs_executable_path != "":
+            application_path = pref.phpcs_executable_path
+        else:
+            application_path = "phpcs"
+
+        if len(args) > 0:
+            args.append(application_path)
+        else:
+            args = [application_path]
+
+        return args
+
     def parse_report(self, args):
         report = self.shell_out(args)
         debug_message(report)
@@ -261,13 +268,7 @@ class Sniffer(ShellCommand):
             self.error_list.append(error)
 
     def get_standards_available(self):
-        if pref.phpcs_executable_path != "":
-            application_path = pref.phpcs_executable_path
-        else:
-            application_path = "phpcs"
-
-        args = []
-        args.append(application_path)
+        args = self.get_executable_args()
         args.append("-i")
 
         output = self.shell_out(args)
