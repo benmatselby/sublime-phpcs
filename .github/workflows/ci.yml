@@ -1,0 +1,22 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  run-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        st-version: [4]
+        # st-version: [3, 4]
+        # os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
+        os: ["ubuntu-latest"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: SublimeText/UnitTesting/actions/setup@v1
+        with:
+          # Details: https://github.com/SublimeText/UnitTesting/blob/master/actions/setup/action.yaml#L19
+          package-name: Phpcs
+          sublime-text-version: ${{ matrix.st-version }}
+      - uses: SublimeText/UnitTesting/actions/run-tests@v1
