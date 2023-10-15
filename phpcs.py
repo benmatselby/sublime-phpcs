@@ -272,7 +272,7 @@ class Sniffer(ShellCommand):
         args.append("-i")
 
         output = self.shell_out(args)
-        standards = output[35:].replace("and", ",").strip().split(", ")
+        standards = output[35:].replace(" and ", ", ").strip().split(", ")
         return standards
 
 
