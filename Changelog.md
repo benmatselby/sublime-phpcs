@@ -1,8 +1,13 @@
 # CHANGELOG
 
+## next
+
 ## 7.0.0
 
 - Removal of Scheck.
+- Refactor how we generate the phpcs executable
+- Add a test and run in GitHub Action
+- Parse the phpcs standards output a little better
 
 ## 6.9.0
 
