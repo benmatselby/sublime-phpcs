@@ -1,10 +1,10 @@
 import os
 import re
 import sys
-import sublime
-
 from unittest import TestCase
 from unittest.mock import patch
+
+import sublime
 
 from Phpcs.phpcs import Sniffer
 
