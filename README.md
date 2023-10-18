@@ -15,9 +15,9 @@ You can also configure the plugin to fix the issues using either
 
 Requirements for this plugin, should you want all the options to work:
 
-- PHP_CodeSniffer 3.5+ (potentially works with lower versions, but this hasn’t been tested) - Install
-- PHPMD 2.8+ (potentially works with lower versions, but this hasn’t been tested) - Install
-- PHP CS Fixer version 2.6+ (potentially works with lower versions, but this hasn’t been tested) - Install
+- [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)  3.5+
+- [PHPMD](https://phpmd.org) 2.8+
+- [PHP CS Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) 2.6+
 
 This plugin has been tested on:
 
@@ -27,6 +27,8 @@ This plugin has been tested on:
 - Sublime Text 2
 - Sublime Text 3
 - Sublime Text 4
+
+It may work with other versions, but we cannot confirm that.
 
 ## Installation
 
