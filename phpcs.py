@@ -538,7 +538,7 @@ class PhpcsCommand:
                 self.error_lines[line] = error.get_message()
 
             if len(self.error_list) > 0:
-                icon = icon if pref.phpcs_show_gutter_marks else ""
+                icon = icon if pref.get("phpcs_show_gutter_marks") else ""
                 outline = (
                     sublime.DRAW_OUTLINED
                     if pref.get("phpcs_outline_for_errors")
