@@ -1,9 +1,7 @@
-import datetime
 import os
 import re
 import subprocess
 import threading
-import time
 import sublime
 import sublime_plugin
 import sys
@@ -103,7 +101,7 @@ def plugin_loaded():
 
 
 def debug_message(msg):
-    if pref.get("show_debug") == True:
+    if pref.get("show_debug"):
         print("[Phpcs] " + str(msg))
 
 
@@ -206,7 +204,7 @@ class Sniffer(ShellCommand):
     """Concrete class for PHP_CodeSniffer"""
 
     def execute(self, path):
-        if pref.get("phpcs_sniffer_run") != True:
+        if not pref.get("phpcs_sniffer_run"):
             return
 
         args = self.get_executable_args()
@@ -371,7 +369,7 @@ class MessDetector(ShellCommand):
     """Concrete class for PHP Mess Detector"""
 
     def execute(self, path):
-        if pref.get("phpmd_run") != True:
+        if not pref.get("phpmd_run"):
             return
 
         args = []
@@ -416,7 +414,7 @@ class Linter(ShellCommand):
     """Content class for php -l"""
 
     def execute(self, path):
-        if pref.get("phpcs_linter_run") != True:
+        if not pref.get("phpcs_linter_run"):
             return
 
         if pref.get("phpcs_php_path") != "":
@@ -434,7 +432,7 @@ class Linter(ShellCommand):
         report = self.shell_out(args)
         debug_message(report)
         line = re.search(pref.get("phpcs_linter_regex"), report)
-        if line != None:
+        if line is not None:
             error = CheckstyleError(line.group("line"), line.group("message"))
             self.error_list.append(error)
 
@@ -549,7 +547,7 @@ class PhpcsCommand:
                 if pref.get("phpcs_show_gutter_marks") or pref.get(
                     "phpcs_outline_for_errors"
                 ):
-                    if pref.get("phpcs_icon_scope_color") == None:
+                    if pref.get("phpcs_icon_scope_color") is None:
                         debug_message(
                             "WARN: phpcs_icon_scope_color is not defined, so resorting to phpcs colour scope"
                         )
@@ -562,7 +560,7 @@ class PhpcsCommand:
                         outline,
                     )
 
-        if pref.get("phpcs_show_quick_panel") == True:
+        if pref.get("phpcs_show_quick_panel"):
             # Skip showing the errors if we ran on save, and the option isn't set.
             if self.event == "on_save" and not pref.get("phpcs_show_errors_on_save"):
                 return
@@ -584,7 +582,7 @@ class PhpcsCommand:
         for fix in fixes:
             self.error_list.append(fix.get_message())
 
-        if pref.get("php_cs_fixer_show_quick_panel") == True:
+        if pref.get("php_cs_fixer_show_quick_panel"):
             self.show_quick_panel()
 
     def display_coding_standards(self):
@@ -629,7 +627,7 @@ class PhpcsCommand:
         for error in self.report:
             error_line = error.get_line()
 
-            if cache_error != None:
+            if cache_error is not None:
                 cache_line = cache_error.get_line()
 
             if int(error_line) > int(current_line) and int(error_line) < int(
@@ -637,7 +635,7 @@ class PhpcsCommand:
             ):
                 cache_error = error
 
-        if cache_error != None:
+        if cache_error is not None:
             pt = cache_error.get_point()
             self.view.sel().clear()
             self.view.sel().add(sublime.Region(pt))
@@ -660,7 +658,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
     @staticmethod
     def should_execute(view):
-        if view.file_name() != None:
+        if view.file_name() is not None:
             try:
                 ext = os.path.splitext(view.file_name())[1]
                 result = ext[1:] in pref.get("extensions_to_execute")
