@@ -1,6 +1,3 @@
-import os
-import re
-import sys
 from unittest import TestCase
 from unittest.mock import patch
 
