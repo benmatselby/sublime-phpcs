@@ -668,7 +668,7 @@ class PhpcsTextBase(sublime_plugin.TextCommand):
 
             for block in pref.get("extensions_to_blacklist"):
                 match = re.search(block, view.file_name())
-                if match != None:
+                if match is not None:
                     return False
 
             return result
@@ -777,8 +777,8 @@ class PhpcsTogglePlugin(PhpcsTextBase):
     """Command to toggle if plugin should execute on save"""
 
     def run(self, edit, toggle=None):
-        if toggle == None:
-            if pref.get("phpcs_execute_on_save") == True:
+        if toggle is None:
+            if pref.get("phpcs_execute_on_save"):
                 pref.set("phpcs_execute_on_save", False)
             else:
                 pref.set("phpcs_execute_on_save", True)
@@ -792,7 +792,7 @@ class PhpcsTogglePlugin(PhpcsTextBase):
         return PhpcsTextBase.should_execute(self.view)
 
     def description(self, paths=[]):
-        if pref.get("phpcs_execute_on_save") == True:
+        if pref.get("phpcs_execute_on_save"):
             description = "Turn Execute On Save Off"
         else:
             description = "Turn Execute On Save On"
@@ -815,24 +815,18 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
     def on_post_save(self, view):
         if PhpcsTextBase.should_execute(view):
-            if pref.get("phpcs_execute_on_save") == True:
+            if pref.get("phpcs_execute_on_save"):
                 cmd = PhpcsCommand.instance(view)
                 thread = threading.Thread(
                     target=cmd.run, args=(view.file_name(), "on_save")
                 )
                 thread.start()
 
-            if (
-                pref.get("phpcs_execute_on_save") == True
-                and pref.get("php_cs_fixer_on_save") == True
-            ):
+            if pref.get("phpcs_execute_on_save") and pref.get("php_cs_fixer_on_save"):
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors("Fixer", view.file_name())
 
-            if (
-                pref.get("phpcs_execute_on_save") == True
-                and pref.get("phpcbf_on_save") == True
-            ):
+            if pref.get("phpcs_execute_on_save") and pref.get("phpcbf_on_save"):
                 cmd = PhpcsCommand.instance(view)
                 cmd.fix_standards_errors("CodeBeautifier", view.file_name())
 
@@ -854,7 +848,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
         debug_message(" Current: " + str(current_project_file))
         debug_message(" Last Known: " + str(pref.get("project_file")))
 
-        if current_project_file == None:
+        if current_project_file is None:
             debug_message("No project file defined, therefore skipping reload")
             return
 
