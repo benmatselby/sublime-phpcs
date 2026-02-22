@@ -240,7 +240,7 @@ class Sniffer(ShellCommand):
         ) != "" and self.__class__.__name__ in pref.get("phpcs_commands_to_php_prefix"):
             args = [pref.get("phpcs_php_prefix_path")]
 
-        if pref.phpcs_executable_path != "":
+        if pref.get("phpcs_executable_path") != "":
             application_path = pref.get("phpcs_executable_path")
         else:
             application_path = "phpcs"
