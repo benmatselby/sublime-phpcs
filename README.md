@@ -176,6 +176,41 @@ If you use this plugin across multiple operating systems (e.g. syncing settings 
 
 This works for all path settings: `phpcs_executable_path`, `phpcs_php_prefix_path`, `phpcs_php_path`, `php_cs_fixer_executable_path`, `phpcbf_executable_path`, and `phpmd_executable_path`. Plain string values continue to work as before.
 
+### Variable Expansion
+
+All string settings support Sublime Text variable expansion using the `${var}` syntax. This is particularly useful for specifying project-relative config file paths. The most useful variables are:
+
+- `$project_path` — The path to the folder containing the `.sublime-project` file
+- `$folder` — The full path to the first folder listed in the side bar
+
+For example, to point php-cs-fixer at a project-specific config file:
+
+```json
+{
+  "settings": {
+    "phpcs": {
+      "php_cs_fixer_additional_args": {
+        "--config": "${project_path}/.php-cs-fixer.php"
+      }
+    }
+  }
+}
+```
+
+Or to use a project-local installation of phpcs:
+
+```json
+{
+  "settings": {
+    "phpcs": {
+      "phpcs_executable_path": "${folder}/vendor/bin/phpcs"
+    }
+  }
+}
+```
+
+See the full list of available variables in the [Sublime Text documentation](https://www.sublimetext.com/docs/build_systems.html#variables).
+
 ## FAQ
 
 ### What do I do when I get "OSError: [Errno 8] Exec format error"?

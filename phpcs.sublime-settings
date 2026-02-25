@@ -1,5 +1,11 @@
 {
   // Plugin settings
+  //
+  // All string settings support Sublime Text variable expansion using
+  // the ${var} syntax. The most useful variables are:
+  //   $project_path - The path to the folder containing the .sublime-project file
+  //   $folder       - The full path to the first folder in the side bar
+  // See https://www.sublimetext.com/docs/build_systems.html#variables
 
   // Turn the debug output on/off
   "show_debug": false,
@@ -108,6 +114,11 @@
   "php_cs_fixer_executable_path": "",
 
   // Additional arguments you can specify into the application
+  //
+  // Supports ${var} variable expansion, for example:
+  // "php_cs_fixer_additional_args": {
+  //     "--config": "${project_path}/.php-cs-fixer.php"
+  // }
   "php_cs_fixer_additional_args": {},
 
   // phpcbf settings

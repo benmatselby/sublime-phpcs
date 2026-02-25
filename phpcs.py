@@ -78,7 +78,8 @@ class Pref:
             raw = self.project_settings.get(key)
         else:
             raw = self.settings.get(key)
-        return self._resolve_platform_value(raw)
+        value = self._resolve_platform_value(raw)
+        return self._expand_variables(value)
 
     def _resolve_platform_value(self, value):
         """
@@ -97,6 +98,22 @@ class Pref:
             else:
                 return ""
         return value
+
+    def _expand_variables(self, value):
+        """
+        Expand Sublime Text variables in setting values using the ${var} syntax.
+        The most useful variables are $project_path and $folder, which remain
+        stable within a project session. Other variables such as $file and
+        $file_path are available but may not reflect the current file when
+        settings are cached at load time.
+
+        See https://www.sublimetext.com/docs/build_systems.html#variables
+        """
+        window = sublime.active_window()
+        if window is None:
+            return value
+        variables = window.extract_variables()
+        return sublime.expand_variables(value, variables)
 
     def set(self, key, value):
         if key in self.project_settings:
@@ -317,8 +334,14 @@ class Fixer(ShellCommand):
             )
             return
 
+        target = os.path.normpath(path)
+
+        # Set the working directory to the target file's directory, allowing
+        # php-cs-fixer the opportunity to find a config file (e.g. .php_cs) via relative paths.
+        self.setWorkingDir(os.path.dirname(target))
+
         args.append("fix")
-        args.append(os.path.normpath(path))
+        args.append(target)
         args.append("--verbose")
 
         # Add the additional arguments from the settings file to the command
@@ -363,7 +386,13 @@ class CodeBeautifier(ShellCommand):
             )
             return
 
-        args.append(os.path.normpath(path))
+        target = os.path.normpath(path)
+
+        # Set the working directory to the target file's directory, allowing
+        # phpcbf the opportunity to find config files via relative paths.
+        self.setWorkingDir(os.path.dirname(target))
+
+        args.append(target)
 
         # Add the additional arguments from the settings file to the command
         for key, value in pref.get("phpcbf_additional_args").items():
@@ -408,7 +437,13 @@ class MessDetector(ShellCommand):
         else:
             args = [application_path]
 
-        args.append(os.path.normpath(path))
+        target = os.path.normpath(path)
+
+        # Set the working directory to the target file's directory, allowing
+        # phpmd the opportunity to find config files via relative paths.
+        self.setWorkingDir(os.path.dirname(target))
+
+        args.append(target)
         args.append("text")
 
         for key, value in pref.get("phpmd_additional_args").items():
@@ -443,7 +478,14 @@ class Linter(ShellCommand):
 
         args.append("-l")
         args.append("-d display_errors=On")
-        args.append(os.path.normpath(path))
+
+        target = os.path.normpath(path)
+
+        # Set the working directory to the target file's directory for consistency
+        # with other tool commands.
+        self.setWorkingDir(os.path.dirname(target))
+
+        args.append(target)
 
         self.parse_report(args)
 
