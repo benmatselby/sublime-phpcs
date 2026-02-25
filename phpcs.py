@@ -75,9 +75,28 @@ class Pref:
 
     def get(self, key):
         if key in self.project_settings:
-            return self.project_settings.get(key)
+            raw = self.project_settings.get(key)
         else:
-            return self.settings.get(key)
+            raw = self.settings.get(key)
+        return self._resolve_platform_value(raw)
+
+    def _resolve_platform_value(self, value):
+        """
+        If value is a dict, resolve it to the value for the current platform.
+        Supports keys: "osx", "linux", "windows", and "default" as a fallback.
+        If value is not a dict, return it as-is for backward compatibility.
+        """
+        if isinstance(value, dict) and any(
+            k in value for k in ("osx", "linux", "windows", "default")
+        ):
+            platform = sublime.platform()
+            if platform in value:
+                return value[platform]
+            elif "default" in value:
+                return value["default"]
+            else:
+                return ""
+        return value
 
     def set(self, key, value):
         if key in self.project_settings:
