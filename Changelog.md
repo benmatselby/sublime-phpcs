@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 7.2.0
+
+- Support Sublime Text variable expansion (`${project_path}`, `${folder}`, etc.) in all setting values, enabling project-relative config file paths. Resolves [#143](https://github.com/benmatselby/sublime-phpcs/issues/143).
+- Set the working directory to the target file's directory for Fixer, CodeBeautifier, MessDetector, and Linter, matching existing Sniffer behaviour. This allows relative paths in additional args to resolve correctly.
+- Added unit tests for variable expansion and working directory behaviour.
+
 ## 7.1.0
 
 - Provide the ability to have platform specific paths for the tools. Resolves [#183](https://github.com/benmatselby/sublime-phpcs/issues/183).
