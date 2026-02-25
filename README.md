@@ -152,6 +152,30 @@ Your .project file should look something like this:
 
 Of course this is a example to apply Drupal code sniffer. This could be anything. Whatever you can have on this package settings it can be overwritten under the settings -> phpcs
 
+### Multi-Platform Settings
+
+If you use this plugin across multiple operating systems (e.g. syncing settings between Windows and Linux), you can specify platform-specific values for any path setting by using a dictionary instead of a string. The supported platform keys are `"windows"`, `"linux"`, and `"osx"`. You can also specify a `"default"` key as a fallback for platforms not explicitly listed.
+
+```json
+{
+  "phpcs_executable_path": {
+    "windows": "c:\\xampp\\php\\bin\\phpcs",
+    "linux": "/usr/bin/phpcs",
+    "osx": "/usr/local/bin/phpcs"
+  },
+  "php_cs_fixer_executable_path": {
+    "windows": "c:\\xampp\\php\\bin\\php-cs-fixer",
+    "default": "/usr/local/bin/php-cs-fixer"
+  },
+  "phpcs_php_prefix_path": {
+    "windows": "c:\\xampp\\php\\bin\\php",
+    "default": ""
+  }
+}
+```
+
+This works for all path settings: `phpcs_executable_path`, `phpcs_php_prefix_path`, `phpcs_php_path`, `php_cs_fixer_executable_path`, `phpcbf_executable_path`, and `phpmd_executable_path`. Plain string values continue to work as before.
+
 ## FAQ
 
 ### What do I do when I get "OSError: [Errno 8] Exec format error"?
