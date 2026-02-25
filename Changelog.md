@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 7.1.0
+
+- Provide the ability to have platform specific paths for the tools. Resolves [#183](https://github.com/benmatselby/sublime-phpcs/issues/183).
+
 ## 7.0.1
 
 - Minor tidy up of the code.
