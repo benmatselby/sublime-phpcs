@@ -156,8 +156,9 @@ class TestWorkingDirectory(TestCase):
         sniffer.execute(self.test_path)
         self.assertEqual(self.expected_dir, sniffer.workingDir)
 
+    @patch("Phpcs.phpcs.os.path.isfile", return_value=False)
     @patch("Phpcs.phpcs.Fixer.shell_out", return_value="")
-    def test_fixer_sets_working_dir(self, _):
+    def test_fixer_sets_working_dir_to_file_dir_when_no_config(self, _, __):
         s = sublime.load_settings("phpcs.sublime-settings")
         s.set("php_cs_fixer_executable_path", "/usr/bin/php-cs-fixer")
         s.set("phpcs_php_prefix_path", "")
@@ -166,6 +167,28 @@ class TestWorkingDirectory(TestCase):
         fixer = Fixer()
         fixer.execute(self.test_path)
         self.assertEqual(self.expected_dir, fixer.workingDir)
+
+    @patch("Phpcs.phpcs.Fixer.shell_out", return_value="")
+    def test_fixer_sets_working_dir_to_config_dir(self, _):
+        """When a config file exists in a parent directory, cwd should be set there."""
+        s = sublime.load_settings("phpcs.sublime-settings")
+        s.set("php_cs_fixer_executable_path", "/usr/bin/php-cs-fixer")
+        s.set("phpcs_php_prefix_path", "")
+        s.set("php_cs_fixer_additional_args", {})
+
+        # The test path is /home/user/projects/myapp/src/Controller.php
+        # Simulate a config file at /home/user/projects/myapp/.php-cs-fixer.php
+        config_path = os.path.normpath("/home/user/projects/myapp/.php-cs-fixer.php")
+
+        def fake_isfile(path):
+            return os.path.normpath(path) == config_path
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            fixer = Fixer()
+            fixer.execute(self.test_path)
+            self.assertEqual(
+                os.path.normpath("/home/user/projects/myapp"), fixer.workingDir
+            )
 
     @patch("Phpcs.phpcs.CodeBeautifier.shell_out", return_value="")
     def test_code_beautifier_sets_working_dir(self, _):
@@ -267,3 +290,76 @@ class TestPrefVariableExpansion(TestCase):
         with patch("Phpcs.phpcs.sublime.active_window", return_value=None):
             result = self.pref._expand_variables("${project_path}/.php-cs-fixer.php")
             self.assertEqual("${project_path}/.php-cs-fixer.php", result)
+
+
+class TestFixerFindConfigDir(TestCase):
+    """Test that Fixer.find_config_dir walks up the directory tree correctly."""
+
+    def setUp(self):
+        self.fixer = Fixer()
+
+    def test_returns_none_when_no_config_found(self):
+        with patch("Phpcs.phpcs.os.path.isfile", return_value=False):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            self.assertIsNone(result)
+
+    def test_finds_config_in_start_dir(self):
+        config_path = os.path.normpath(
+            "/home/user/projects/myapp/src/.php-cs-fixer.php"
+        )
+
+        def fake_isfile(path):
+            return os.path.normpath(path) == config_path
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            self.assertEqual(os.path.normpath("/home/user/projects/myapp/src"), result)
+
+    def test_finds_config_in_parent_dir(self):
+        config_path = os.path.normpath("/home/user/projects/myapp/.php-cs-fixer.php")
+
+        def fake_isfile(path):
+            return os.path.normpath(path) == config_path
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            self.assertEqual(os.path.normpath("/home/user/projects/myapp"), result)
+
+    def test_finds_dist_config(self):
+        config_path = os.path.normpath(
+            "/home/user/projects/myapp/.php-cs-fixer.dist.php"
+        )
+
+        def fake_isfile(path):
+            return os.path.normpath(path) == config_path
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            self.assertEqual(os.path.normpath("/home/user/projects/myapp"), result)
+
+    def test_finds_legacy_php_cs_config(self):
+        config_path = os.path.normpath("/home/user/projects/myapp/.php_cs")
+
+        def fake_isfile(path):
+            return os.path.normpath(path) == config_path
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            self.assertEqual(os.path.normpath("/home/user/projects/myapp"), result)
+
+    def test_prefers_php_cs_fixer_php_over_dist(self):
+        """When both .php-cs-fixer.php and .php-cs-fixer.dist.php exist,
+        the directory with .php-cs-fixer.php should be returned first
+        since CONFIG_FILES lists it first."""
+        primary_path = os.path.normpath(
+            "/home/user/projects/myapp/src/.php-cs-fixer.php"
+        )
+        dist_path = os.path.normpath("/home/user/projects/myapp/.php-cs-fixer.dist.php")
+
+        def fake_isfile(path):
+            return os.path.normpath(path) in (primary_path, dist_path)
+
+        with patch("Phpcs.phpcs.os.path.isfile", side_effect=fake_isfile):
+            result = self.fixer.find_config_dir("/home/user/projects/myapp/src")
+            # Should find the config in src/ first (closer to the file)
+            self.assertEqual(os.path.normpath("/home/user/projects/myapp/src"), result)

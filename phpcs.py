@@ -312,6 +312,35 @@ class Sniffer(ShellCommand):
 class Fixer(ShellCommand):
     """Concrete class for PHP-CS-Fixer"""
 
+    # Config file names that php-cs-fixer searches for, in priority order.
+    CONFIG_FILES = [
+        ".php-cs-fixer.php",
+        ".php-cs-fixer.dist.php",
+        ".php_cs",
+        ".php_cs.dist",
+    ]
+
+    def find_config_dir(self, start_dir):
+        """Walk up from start_dir looking for a php-cs-fixer config file.
+
+        Returns the directory containing the config file, or None if not found.
+        """
+        current = os.path.normpath(start_dir)
+        while True:
+            for config_file in self.CONFIG_FILES:
+                if os.path.isfile(os.path.join(current, config_file)):
+                    debug_message(
+                        "Found php-cs-fixer config: "
+                        + os.path.join(current, config_file)
+                    )
+                    return current
+            parent = os.path.dirname(current)
+            if parent == current:
+                # Reached filesystem root without finding a config file.
+                break
+            current = parent
+        return None
+
     def execute(self, path):
         args = []
 
@@ -336,9 +365,13 @@ class Fixer(ShellCommand):
 
         target = os.path.normpath(path)
 
-        # Set the working directory to the target file's directory, allowing
-        # php-cs-fixer the opportunity to find a config file (e.g. .php_cs) via relative paths.
-        self.setWorkingDir(os.path.dirname(target))
+        # Walk up from the target file's directory to find a php-cs-fixer config
+        # file. If found, use that directory as the working directory so
+        # php-cs-fixer picks up the config automatically. Otherwise, fall back
+        # to the target file's directory.
+        file_dir = os.path.dirname(target)
+        config_dir = self.find_config_dir(file_dir)
+        self.setWorkingDir(config_dir if config_dir else file_dir)
 
         args.append("fix")
         args.append(target)
