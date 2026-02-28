@@ -111,6 +111,7 @@ You can also define the configuration for the following settings, be it for a pr
 - `php_cs_fixer_show_quick_panel` – Do you want the quick panel to display on execution?
 - `php_cs_fixer_executable_path` – The path to the php-cs-fixer application.
 - `php_cs_fixer_additional_args` – This is the extra information you want to pass to the php-cs-fixer command. For example which “fixers” you want to run
+  - You're likely to want to define `"--cache-file": "${project_path}/php-cs-fixer.cache"`, or equivalent for your project.
 
 ### PHP Code Beautifier
 
@@ -150,7 +151,7 @@ Your .project file should look something like this:
 }
 ```
 
-Of course this is a example to apply Drupal code sniffer. This could be anything. Whatever you can have on this package settings it can be overwritten under the settings -> phpcs
+Of course, this is an example of how to apply Drupal standards for the Code Sniffer. This could be anything. Whatever you can have on this package settings it can be overwritten under the settings -> phpcs.
 
 ### Multi-Platform Settings
 
